@@ -1,0 +1,165 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\KoorPklController;
+use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\GoogleSheetController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DataDosenController;
+use App\Http\Controllers\SeminarController;
+use App\Http\Controllers\PengujiController;
+use App\Http\Controllers\DataMahasiswaController;
+use App\Http\Controllers\BimbinganController;
+use App\Http\Controllers\TempatPKLController;
+use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\SuratPengantarController;
+use App\Http\Controllers\PemberkasanController;
+use App\Http\Controllers\KoorprodiController;
+use App\Http\Controllers\StafController;
+
+/*
+|--------------------------------------------------------------------------
+| Rute untuk Tamu (Guest)
+|--------------------------------------------------------------------------
+| Rute-rute ini hanya bisa diakses oleh pengguna yang BELUM LOGIN.
+*/
+Route::middleware('guest')->group(function () {
+    // Halaman default, arahkan ke login
+    Route::get('/', fn() => view('auth.login'));
+
+    // Autentikasi Biasa
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+
+    // Register
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+
+    // Lupa Password
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetCode'])->name('password.email');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('password.update');
+    
+    // Login dengan Google
+    Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+    Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Rute Terproteksi (Authenticated)
+|--------------------------------------------------------------------------
+| Rute-rute ini HANYA bisa diakses oleh pengguna yang SUDAH LOGIN.
+*/
+Route::middleware('auth')->group(function () {
+    // Logout
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
+    Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
+
+    // Resource Controllers (CRUD)
+    Route::resource('proposal', ProposalController::class);
+    Route::resource('tempatpkl', TempatPKLController::class);
+    Route::resource('penguji', PengujiController::class);
+    Route::resource('seminar', SeminarController::class);
+    Route::resource('datamahasiswa', DataMahasiswaController::class);
+    Route::resource('bimbingan', BimbinganController::class);
+    Route::resource('suratpengantar', SuratPengantarController::class);
+    Route::resource('nilai', NilaiController::class);
+    Route::resource('user', UserController::class);
+    Route::resource('datadosen', DataDosenController::class);
+    Route::resource('pemberkasan', PemberkasanController::class);
+
+    // Koorprodi Routes
+    Route::get('/koorprodi', [KoorprodiController::class, 'index'])->name('koorprodi.index');
+    Route::get('/koorprodi/user', [KoorprodiController::class, 'user_index'])->name('koorprodi.user.index');
+    Route::get('/koorprodi/user/create', [KoorprodiController::class, 'user_create'])->name('koorprodi.user.create');
+    Route::post('/koorprodi/user', [KoorprodiController::class, 'user_store'])->name('koorprodi.user.store');
+    Route::get('/koorprodi/user/{user}', [KoorprodiController::class, 'user_show'])->name('koorprodi.user.show');
+    Route::get('/koorprodi/user/{user}/edit', [KoorprodiController::class, 'user_edit'])->name('koorprodi.user.edit');
+    Route::put('/koorprodi/user/{user}', [KoorprodiController::class, 'user_update'])->name('koorprodi.user.update');
+    Route::delete('/koorprodi/user/{user}', [KoorprodiController::class, 'user_destroy'])->name('koorprodi.user.destroy');
+    Route::get('/koorprodi/datamahasiswa', [KoorprodiController::class, 'datamahasiswa_index'])->name('koorprodi.datamahasiswa.index');
+    Route::get('/koorprodi/datamahasiswa/create', [KoorprodiController::class, 'datamahasiswa_create'])->name('koorprodi.datamahasiswa.create');
+    Route::post('/koorprodi/datamahasiswa', [KoorprodiController::class, 'datamahasiswa_store'])->name('koorprodi.datamahasiswa.store');
+    Route::get('/koorprodi/datamahasiswa/{datamahasiswa}', [KoorprodiController::class, 'datamahasiswa_show'])->name('koorprodi.datamahasiswa.show');
+    Route::get('/koorprodi/datamahasiswa/{datamahasiswa}/edit', [KoorprodiController::class, 'datamahasiswa_edit'])->name('koorprodi.datamahasiswa.edit');
+    Route::put('/koorprodi/datamahasiswa/{datamahasiswa}', [KoorprodiController::class, 'datamahasiswa_update'])->name('koorprodi.datamahasiswa.update');
+    Route::delete('/koorprodi/datamahasiswa/{datamahasiswa}', [KoorprodiController::class, 'datamahasiswa_destroy'])->name('koorprodi.datamahasiswa.destroy');
+    Route::get('/koorprodi/penguji', [KoorprodiController::class, 'penguji_index'])->name('koorprodi.penguji.index');
+    Route::get('/koorprodi/penguji/create', [KoorprodiController::class, 'penguji_create'])->name('koorprodi.penguji.create');
+    Route::post('/koorprodi/penguji', [KoorprodiController::class, 'penguji_store'])->name('koorprodi.penguji.store');
+    Route::get('/koorprodi/penguji/{penguji}', [KoorprodiController::class, 'penguji_show'])->name('koorprodi.penguji.show');
+    Route::get('/koorprodi/penguji/{penguji}/edit', [KoorprodiController::class, 'penguji_edit'])->name('koorprodi.penguji.edit');
+    Route::put('/koorprodi/penguji/{penguji}', [KoorprodiController::class, 'penguji_update'])->name('koorprodi.penguji.update');
+    Route::delete('/koorprodi/penguji/{penguji}', [KoorprodiController::class, 'penguji_destroy'])->name('koorprodi.penguji.destroy');
+
+    Route::get('/koorprodi/proposal', [KoorprodiController::class, 'proposal_index'])->name('koorprodi.proposal.index');
+    Route::get('/koorprodi/proposal/create', [KoorprodiController::class, 'proposal_create'])->name('koorprodi.proposal.create');
+    Route::post('/koorprodi/proposal', [KoorprodiController::class, 'proposal_store'])->name('koorprodi.proposal.store');
+    Route::get('/koorprodi/proposal/{proposal}', [KoorprodiController::class, 'proposal_show'])->name('koorprodi.proposal.show');
+    Route::get('/koorprodi/proposal/{proposal}/edit', [KoorprodiController::class, 'proposal_edit'])->name('koorprodi.proposal.edit');
+    Route::put('/koorprodi/proposal/{proposal}', [KoorprodiController::class, 'proposal_update'])->name('koorprodi.proposal.update');
+    Route::delete('/koorprodi/proposal/{proposal}', [KoorprodiController::class, 'proposal_destroy'])->name('koorprodi.proposal.destroy');
+
+    Route::get('/koorprodi/datadosen', [KoorprodiController::class, 'datadosen_index'])->name('koorprodi.datadosen.index');
+    Route::get('/koorprodi/datadosen/create', [KoorprodiController::class, 'datadosen_create'])->name('koorprodi.datadosen.create');
+    Route::post('/koorprodi/datadosen', [KoorprodiController::class, 'datadosen_store'])->name('koorprodi.datadosen.store');
+    Route::get('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_show'])->name('koorprodi.datadosen.show');
+    Route::get('/koorprodi/datadosen/{datadosen}/edit', [KoorprodiController::class, 'datadosen_edit'])->name('koorprodi.datadosen.edit');
+    Route::put('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_update'])->name('koorprodi.datadosen.update');
+    Route::delete('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_destroy'])->name('koorprodi.datadosen.destroy');
+     
+    // Google Sheet
+    Route::get('/sheets/list', [GoogleSheetController::class, 'index'])->name('sheets.list');
+    Route::post('/nilai/import', [NilaiController::class, 'import'])->name('nilai.import');
+    Route::post('/nilai/import-pdf', [NilaiController::class, 'importPdf'])->name('nilai.importPdf');
+
+    // Staf Routes
+    Route::get('/staf', [StafController::class, 'index'])->name('staf.index');
+    
+    // Staf - User Management
+    Route::get('/staf/user', [StafController::class, 'user_index'])->name('staf.user.index');
+    Route::get('/staf/user/create', [StafController::class, 'user_create'])->name('staf.user.create');
+    Route::post('/staf/user', [StafController::class, 'user_store'])->name('staf.user.store');
+    Route::get('/staf/user/{user}', [StafController::class, 'user_show'])->name('staf.user.show');
+    Route::get('/staf/user/{user}/edit', [StafController::class, 'user_edit'])->name('staf.user.edit');
+    Route::put('/staf/user/{user}', [StafController::class, 'user_update'])->name('staf.user.update');
+    Route::delete('/staf/user/{user}', [StafController::class, 'user_destroy'])->name('staf.user.destroy');
+
+    // Staf - Data Mahasiswa Management
+    Route::get('/staf/datamahasiswa', [StafController::class, 'datamahasiswa_index'])->name('staf.datamahasiswa.index');
+    Route::get('/staf/datamahasiswa/create', [StafController::class, 'datamahasiswa_create'])->name('staf.datamahasiswa.create');
+    Route::post('/staf/datamahasiswa', [StafController::class, 'datamahasiswa_store'])->name('staf.datamahasiswa.store');
+    Route::get('/staf/datamahasiswa/{datamahasiswa}', [StafController::class, 'datamahasiswa_show'])->name('staf.datamahasiswa.show');
+    Route::get('/staf/datamahasiswa/{datamahasiswa}/edit', [StafController::class, 'datamahasiswa_edit'])->name('staf.datamahasiswa.edit');
+    Route::put('/staf/datamahasiswa/{datamahasiswa}', [StafController::class, 'datamahasiswa_update'])->name('staf.datamahasiswa.update');
+    Route::delete('/staf/datamahasiswa/{datamahasiswa}', [StafController::class, 'datamahasiswa_destroy'])->name('staf.datamahasiswa.destroy');
+    
+    // Staf - Resource Controllers
+    // Staf - Nilai Management
+    Route::get('/staf/nilai', [StafController::class, 'nilai_index'])->name('staf.nilai.index');
+    Route::get('/staf/nilai/create', [StafController::class, 'nilai_create'])->name('staf.nilai.create');
+    Route::post('/staf/nilai', [StafController::class, 'nilai_store'])->name('staf.nilai.store');
+    Route::get('/staf/nilai/{nilai}', [StafController::class, 'nilai_show'])->name('staf.nilai.show');
+    Route::get('/staf/nilai/{nilai}/edit', [StafController::class, 'nilai_edit'])->name('staf.nilai.edit');
+    Route::put('/staf/nilai/{nilai}', [StafController::class, 'nilai_update'])->name('staf.nilai.update');
+    Route::delete('/staf/nilai/{nilai}', [StafController::class, 'nilai_destroy'])->name('staf.nilai.destroy');
+    // Staf - Tempat PKL Management
+    Route::get('/staf/tempatpkl', [StafController::class, 'tempatpkl_index'])->name('staf.tempatpkl.index');
+    Route::get('/staf/tempatpkl/create', [StafController::class, 'tempatpkl_create'])->name('staf.tempatpkl.create');
+    Route::post('/staf/tempatpkl', [StafController::class, 'tempatpkl_store'])->name('staf.tempatpkl.store');
+    Route::get('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_show'])->name('staf.tempatpkl.show');
+    Route::get('/staf/tempatpkl/{tempatpkl}/edit', [StafController::class, 'tempatpkl_edit'])->name('staf.tempatpkl.edit');
+    Route::put('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_update'])->name('staf.tempatpkl.update');
+    Route::delete('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_destroy'])->name('staf.tempatpkl.destroy');
+});
