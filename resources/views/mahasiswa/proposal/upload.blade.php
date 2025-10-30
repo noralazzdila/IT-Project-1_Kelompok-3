@@ -284,7 +284,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
+            <a class="nav-link" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
           </li>
           
           <li class="nav-item dropdown">
@@ -314,7 +314,7 @@
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+                  <a href="#"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
                 </div>
               </li>
             </ul>
@@ -324,7 +324,7 @@
             <ul class="dropdown-menu" aria-labelledby="bimbinganDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="#"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
+                  <a href="#"><i class="bi bi-journal-text me-2"></i>Lihat Bimbingan</a>
                 </div>
               </li>
             </ul>
@@ -334,7 +334,8 @@
             <ul class="dropdown-menu" aria-labelledby="proposalDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-file-earmark-check me-2"></i>Status Proposal</a>
                 </div>
               </li>
             </ul>
@@ -344,7 +345,7 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+                  <a href="#"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
                 </div>
               </li>
             </ul>
@@ -365,27 +366,7 @@
                     <a href="#">Tandai Semua Dibaca</a>
                   </div>
                   <div>
-                      <div class="notif-item">
-                        <strong>Bimbingan Dijadwalkan</strong>
-                        <p class="mb-0 small">Bimbingan dengan Dr. Sari Wijaya pada 15 Januari 2024, 10:00 WIB</p>
-                        <small class="text-muted">2 jam yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Proposal Disetujui</strong>
-                        <p class="mb-0 small">Proposal PKL Anda telah disetujui oleh dosen pembimbing.</p>
-                        <small class="text-muted">1 hari yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Deadline Mendekati</strong>
-                        <p class="mb-0 small">Pengumpulan laporan PKL dalam 3 hari lagi.</p>
-                        <small class="text-muted">2 hari yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Seminar Terjadwal</strong>
-                        <p class="mb-0 small">Seminar PKL Anda telah dijadwalkan oleh admin.</p>
-                        <small class="text-muted">3 hari yang lalu</small>
-                      </div>
-                  </div>
+                    
                   <div class="notif-footer">
                     <a href="#">Lihat Semua Notifikasi</a>
                   </div>
@@ -421,136 +402,150 @@
       </div>
     </div>
   </nav>
+  
+        {{-- Konten Navbar Anda bisa diletakkan di sini --}}
+    </nav>
 
-  <section class="hero">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-md-12">
-          <h1 class="mb-3">Sistem PKL <span style="color:#4ba3ff;">Mahasiswa</span></h1>
-          <p class="mb-4">
-            Platform terpadu untuk mengelola seluruh kegiatan Praktik Kerja Lapangan Anda.
-            Dari pendaftaran hingga evaluasi, semua dalam satu sistem yang mudah digunakan.
-          </p>
-          <a href="#" class="btn btn-primary me-2">Mulai PKL</a>
-          <a href="{{ asset('documents/Paduan PKL .pdf') }}" class="btn btn-outline-light" target="_blank">Panduan</a>
+    <div class="container main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0">Status Pengajuan Proposal</h2>
+            
+            @if($proposals->isEmpty())
+                {{-- Tampilkan tombol HANYA jika mahasiswa BELUM pernah upload --}}
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#uploadProposalModal">
+                    <i class="bi bi-cloud-upload-fill me-2"></i> Upload Proposal Baru
+                </button>
+            @else
+                {{-- Jika sudah, nonaktifkan tombol --}}
+                <button type="button" class="btn btn-success btn-lg" disabled>
+                    <i class="bi bi-check-circle-fill me-2"></i> Proposal Telah Diupload
+                </button>
+            @endif
         </div>
-        <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-building-fill fs-1 mb-2"></i>
-                <h6>Tempat PKL</h6>
-                <p>Jelajahi berbagai tempat PKL yang tersedia</p>
-              </div>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-person-video3 fs-1 mb-2"></i>
-                <h6>Dosen Pembimbing</h6>
-                <p>Konsultasi dengan dosen pembimbing</p>
-              </div>
+        @endif
+        
+        @if ($errors->has('nim'))
+            <div class="alert alert-danger">
+                Gagal: Anda sudah pernah mengupload proposal. Anda tidak dapat mengupload proposal baru.
             </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-file-earmark-text-fill fs-1 mb-2"></i>
-                <h6>Proposal</h6>
-                <p>Kelola proposal PKL Anda</p>
-              </div>
+        @endif
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Judul Proposal</th>
+                                <th>Pembimbing</th>
+                                <th>Tempat PKL</th>
+                                <th>Tgl. Pengajuan</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">File</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($proposals as $proposal)
+                            <tr>
+                                <td><strong>{{ $proposal->judul_proposal }}</strong></td>
+                                <td>{{ $proposal->pembimbing }}</td>
+                                <td>{{ $proposal->tempat_pkl }}</td>
+                                <td>{{ \Carbon\Carbon::parse($proposal->tanggal_pengajuan)->translatedFormat('d F Y') }}</td>
+                                <td class="text-center">
+                                    @php
+                                        $badgeClass = match($proposal->status) {
+                                            'Menunggu' => 'bg-warning text-dark',
+                                            'Disetujui' => 'bg-success',
+                                            'Ditolak'  => 'bg-danger',
+                                            default    => 'bg-secondary',
+                                        };
+                                    @endphp
+                                    <span class="badge rounded-pill {{ $badgeClass }}">{{ $proposal->status }}</span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ asset('storage/' . $proposal->file_proposal) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    Anda belum mengupload proposal.
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-easel2-fill fs-1 mb-2"></i>
-                <h6>Seminar</h6>
-                <p>Jadwal dan informasi seminar</p>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
 
-  <div class="container main-content">
-    <div class="row"> 
-      <div class="col-md-8">
-        <div class="card p-4 mb-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Tempat PKL Terfavorit</h5>
-              <a href="#" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
-          </div>
-
-          <div class="ranking-list">
-            <div class="ranking-item" data-rank="1">
-              <div class="ranking-number">1</div>
-              <img src="https://placehold.co/100x100/E30613/FFFFFF?text=Telkom" alt="Logo Telkom" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PT. Telkom Indonesia</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. A. Yani Km. 6, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
+    <div class="modal fade" id="uploadProposalModal" tabindex="-1" aria-labelledby="uploadProposalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="uploadProposalModalLabel">Formulir Upload Proposal PKL</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('mahasiswa.proposal.store') }}" method="POST" enctype="multipart/form-data" id="form-proposal">
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nim" class="form-label">NIM</label>
+                                <input type="text" class="form-control" name="nim" value="2062201015" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="nama_mahasiswa" class="form-label">Nama Mahasiswa</label>
+                                <input type="text" class="form-control" name="nama_mahasiswa" value="Rifki Pratama" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="judul_proposal" class="form-label">Judul Proposal</label>
+                            <input type="text" class="form-control @error('judul_proposal') is-invalid @enderror" name="judul_proposal" value="{{ old('judul_proposal') }}" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="pembimbing" class="form-label">Dosen Pembimbing</label>
+                                <input type="text" class="form-control @error('pembimbing') is-invalid @enderror" name="pembimbing" value="{{ old('pembimbing') }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tempat_pkl" class="form-label">Tempat PKL</label>
+                                <input type="text" class="form-control @error('tempat_pkl') is-invalid @enderror" name="tempat_pkl" value="{{ old('tempat_pkl') }}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="file_proposal" class="form-label">Upload File (PDF, maks. 5MB)</label>
+                                <input class="form-control @error('file_proposal') is-invalid @enderror" type="file" name="file_proposal" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tanggal_pengajuan" class="form-label">Tanggal Pengajuan</label>
+                                <input type="date" class="form-control" name="tanggal_pengajuan" value="{{ date('Y-m-d') }}" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="catatan" class="form-label">Catatan (Opsional)</label>
+                            <textarea class="form-control" name="catatan" rows="2" placeholder="Catatan singkat untuk Koordinator PKL...">{{ old('catatan') }}</textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" form="form-proposal" class="btn btn-primary">Upload Sekarang</button>
+                </div>
             </div>
-            <div class="ranking-item" data-rank="2">
-              <div class="ranking-number">2</div>
-              <img src="https://placehold.co/100x100/00A5E0/FFFFFF?text=B.Kalsel" alt="Logo Bank Kalsel" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Bank Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Lambung Mangkurat No.1, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="3">
-              <div class="ranking-number">3</div>
-              <img src="https://placehold.co/100x100/009647/FFFFFF?text=GoJek" alt="Logo Go-Jek" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Go-Jek Office Banjarmasin</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Gatot Subroto, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="4">
-              <div class="ranking-number">4</div>
-              <img src="https://placehold.co/100x100/231F20/FFFFFF?text=Kominfo" alt="Logo Kominfo" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Dinas Kominfo Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Dharma Praja, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="5">
-              <div class="ranking-number">5</div>
-              <img src="https://placehold.co/100x100/00AEEF/FFFFFF?text=PLN" alt="Logo PLN" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PLN Wilayah Kalselteng</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Panglima Batur, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-          </div>
-
         </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card p-3 mb-3">
-          <h6>Hello, Selamat Datang</h6>
-          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="#">Lihat Detail</a>.</p>
-        </div>
-
-        <div class="card p-3">
-          <h6>Kalender Akademik</h6> 
-            <iframe 
-            src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
-            style="border: 1px solid #ddd; border-radius: 10px;" 
-            width="100%" 
-            height="350" 
-            frameborder="0" 
-            scrolling="no">
-        </iframe> 
-        </div>
-        </div>
-      </div>
     </div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

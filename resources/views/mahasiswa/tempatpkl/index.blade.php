@@ -284,7 +284,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
+            <a class="nav-link" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
           </li>
           
           <li class="nav-item dropdown">
@@ -314,7 +314,7 @@
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+                  <a href="#"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
                 </div>
               </li>
             </ul>
@@ -324,7 +324,7 @@
             <ul class="dropdown-menu" aria-labelledby="bimbinganDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="#"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
+                  <a href="#"><i class="bi bi-journal-text me-2"></i>Lihat Bimbingan</a>
                 </div>
               </li>
             </ul>
@@ -335,6 +335,7 @@
               <li>
                 <div class="dropdown-card">
                   <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-file-earmark-check me-2"></i>Status Proposal</a>
                 </div>
               </li>
             </ul>
@@ -344,7 +345,7 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+                  <a href="#"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
                 </div>
               </li>
             </ul>
@@ -364,29 +365,7 @@
                     <h6>Notifikasi</h6>
                     <a href="#">Tandai Semua Dibaca</a>
                   </div>
-                  <div>
-                      <div class="notif-item">
-                        <strong>Bimbingan Dijadwalkan</strong>
-                        <p class="mb-0 small">Bimbingan dengan Dr. Sari Wijaya pada 15 Januari 2024, 10:00 WIB</p>
-                        <small class="text-muted">2 jam yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Proposal Disetujui</strong>
-                        <p class="mb-0 small">Proposal PKL Anda telah disetujui oleh dosen pembimbing.</p>
-                        <small class="text-muted">1 hari yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Deadline Mendekati</strong>
-                        <p class="mb-0 small">Pengumpulan laporan PKL dalam 3 hari lagi.</p>
-                        <small class="text-muted">2 hari yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Seminar Terjadwal</strong>
-                        <p class="mb-0 small">Seminar PKL Anda telah dijadwalkan oleh admin.</p>
-                        <small class="text-muted">3 hari yang lalu</small>
-                      </div>
-                  </div>
-                  <div class="notif-footer">
+                     <div class="notif-footer">
                     <a href="#">Lihat Semua Notifikasi</a>
                   </div>
                 </div>
@@ -422,61 +401,13 @@
     </div>
   </nav>
 
-  <section class="hero">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-md-12">
-          <h1 class="mb-3">Sistem PKL <span style="color:#4ba3ff;">Mahasiswa</span></h1>
-          <p class="mb-4">
-            Platform terpadu untuk mengelola seluruh kegiatan Praktik Kerja Lapangan Anda.
-            Dari pendaftaran hingga evaluasi, semua dalam satu sistem yang mudah digunakan.
-          </p>
-          <a href="#" class="btn btn-primary me-2">Mulai PKL</a>
-          <a href="{{ asset('documents/Paduan PKL .pdf') }}" class="btn btn-outline-light" target="_blank">Panduan</a>
-        </div>
-        <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-building-fill fs-1 mb-2"></i>
-                <h6>Tempat PKL</h6>
-                <p>Jelajahi berbagai tempat PKL yang tersedia</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-person-video3 fs-1 mb-2"></i>
-                <h6>Dosen Pembimbing</h6>
-                <p>Konsultasi dengan dosen pembimbing</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-file-earmark-text-fill fs-1 mb-2"></i>
-                <h6>Proposal</h6>
-                <p>Kelola proposal PKL Anda</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-easel2-fill fs-1 mb-2"></i>
-                <h6>Seminar</h6>
-                <p>Jadwal dan informasi seminar</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <div class="container main-content">
-    <div class="row"> 
-      <div class="col-md-8">
-        <div class="card p-4 mb-3">
+    <div class="row">
+      <div class="col-md-12">
+      <div class="card p-4 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Tempat PKL Terfavorit</h5>
-              <a href="#" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
+            <h5 class="mb-0">Tempat PKL Terfavorit</h5>
+            <a href="#" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
           </div>
 
           <div class="ranking-list">
@@ -529,28 +460,9 @@
 
         </div>
       </div>
-
-      <div class="col-md-4">
-        <div class="card p-3 mb-3">
-          <h6>Hello, Selamat Datang</h6>
-          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="#">Lihat Detail</a>.</p>
-        </div>
-
-        <div class="card p-3">
-          <h6>Kalender Akademik</h6> 
-            <iframe 
-            src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
-            style="border: 1px solid #ddd; border-radius: 10px;" 
-            width="100%" 
-            height="350" 
-            frameborder="0" 
-            scrolling="no">
-        </iframe> 
-        </div>
-        </div>
-      </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

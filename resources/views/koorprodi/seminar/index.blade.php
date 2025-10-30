@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard Koordinator PKL')</title>
+    <title>Kelola Seminar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
             background: #ffffff;
             min-height: 100vh;
             padding-top: 20px;
-            box-shadow: 2px 0 6px rgba(0,0,0,0.1); /* 👉 Shadow sidebar */
+            box-shadow: 2px 0 6px rgba(0,0,0,0.1);
         }
         .sidebar .nav-link {
             color: #333;
@@ -55,11 +55,15 @@
             text-align: center;
             margin-top: auto;
         }
+        /* Custom breadcrumb */
+        .breadcrumb {
+             background-color: transparent;
+             padding-left: 0;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <!-- Sidebar -->
         <div class="col-2 sidebar">
             <div class="text-center mb-4">
                 <img src="{{ asset('images/Logo_Politala.png') }}" width="80" alt="Logo">
@@ -67,7 +71,7 @@
                 <small class="text-muted">Sistem Informasi PKL</small>
             </div>
             <nav class="nav flex-column px-2">
-                    <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
+                  <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
                 <a href="{{ route('koorprodi.user.index') }}" class="nav-link {{ request()->routeIs('koorprodi.user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
                 <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
                 <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
@@ -79,11 +83,9 @@
             </nav>
         </div>
 
-        <!-- Main Content -->
         <div class="col-10 d-flex flex-column">
-            <!-- Header -->
             <div class="header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">@yield('header-title', 'Dashboard Koordinator Program Studi')</h5>
+                <h5 class="mb-0">Manajemen Seminar</h5>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="fw-semibold">Jaka Permadi, S.Si., M.Cs</span> <br>
@@ -96,13 +98,51 @@
                     </ul>
                 </div>
             </div>
+            <main class="container-fluid mt-4 flex-grow-1">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('koorprodi.index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Kelola Seminar</li>
+                    </ol>
+                </nav>
+                <div class="card rounded-3 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                            <!-- Add Seminar button or other controls can go here -->
+                        </div>
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th>Nama Mahasiswa</th>
+                                        <th>Tanggal Seminar</th>
+                                        <th>Waktu</th>
+                                        <th>Ruangan</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6" class="text-center">
+                                            <div class="alert alert-info mb-0">
+                                                Data Seminar tidak ditemukan atau belum tersedia.
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
 
-            <!-- Content -->
-            <div class="container-fluid mt-4 flex-grow-1 px-4">
-                @yield('content')
-            </div>
-
-            <!-- Footer -->
             <div class="footer">
                 <small>&copy; 2025 SIPRAKELRA - Sistem Informasi PKL | Politala</small>
             </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Data Dosen</title>
+    <title>Kelola Data Mahasiswa PKL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
@@ -71,90 +71,103 @@
                 <small class="text-muted">Sistem Informasi PKL</small>
             </div>
             <nav class="nav flex-column px-2">
-     <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
-                <a href="{{ route('koorprodi.user.index') }}" class="nav-link {{ request()->routeIs('koorprodi.user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
-                <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
-                <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
-                <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a> 
-                <a href="{{ route('koorprodi.proposal.index') }}" class="nav-link {{ request()->routeIs('koorprodi.proposal.index') ? 'active' : '' }}"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-                <a href="{{ route('koorprodi.seminar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.seminar.index') ? 'active' : '' }}"><i class="fa fa-calendar-alt me-2"></i> Kelola Seminar</a>
-                <a href="{{ route('koorprodi.suratpengantar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.suratpengantar.index') ? 'active' : '' }}"><i class="fa fa-envelope-open-text me-2"></i> Kelola Surat Pengantar</a>
-                <a href="{{ route('koorprodi.pemberkasan.index') }}" class="nav-link {{ request()->routeIs('koorprodi.pemberkasan.index') ? 'active' : '' }}"><i class="fa fa-folder-open me-2"></i> Kelola Pemberkasan</a>
+                <a href="{{ route('dosen.dashboard') }}" class="nav-link {{ request()->routeIs('dosen.dashboard') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
+                <a href="{{ route('dosen.user.index') }}" class="nav-link {{ request()->routeIs('dosen.user.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
+                <a href="{{ route('dosen.nilai.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.nilai.*') ? 'active' : '' }}"><i class="fa fa-graduation-cap me-2"></i> Kelola Nilai</a>
+                <a href="{{ route('dosen.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('dosen.datamahasiswa.*') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
+                <a href="{{ route('dosen.datadosen.indexdatadosen') }}" class="nav-link {{ request()->routeIs('datadosen.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a>
+                <a href="{{ route('dosen.bimbingan.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.bimbingan.*') ? 'active' : '' }}"><i class="fa fa-chalkboard-teacher me-2"></i> Kelola Bimbingan</a>
+                <a href="{{ route('dosen.seminar.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.seminar.*') ? 'active' : '' }}"><i class="fa fa-calendar me-2"></i> Kelola Seminar</a>
+                <a href="{{ route('dosen.penguji.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.penguji.*') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
             </nav>
         </div>
 
         <div class="col-10 d-flex flex-column">
             <div class="header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Manajemen Data Dosen</h5>
+                {{-- Judul header diganti sesuai halaman --}}
+                <h5 class="mb-0">Manajemen Data Mahasiswa</h5>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fw-semibold">Jaka Permadi, S.Si., M.Cs</span> <br>
-                        <small>Koordinator Program Studi</small>
+                        <span class="fw-semibold">Dwi Agung Wibowo, M.Kom</span> <br>
+                        <small>Dosen</small>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{{ route('login') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>
             <main class="container-fluid mt-4 flex-grow-1">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('koorprodi.index') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Kelola Dosen</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dosen.dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Kelola Mahasiswa</li>
                     </ol>
                 </nav>
                 <div class="card rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                            <a href="{{ route('koorprodi.datadosen.create') }}" class="btn btn-success">
-                                <i class="fa-solid fa-plus me-2"></i> Tambah Dosen
+                            <a href="{{ route('dosen.datamahasiswa.create') }}" class="btn btn-primary">
+                                <i class="fa-solid fa-plus me-2"></i> Tambah Mahasiswa
                             </a>
-                            <form action="{{ route('koorprodi.datadosen.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
-                                <input type="text" name="search" class="form-control me-2" placeholder="Cari Nama atau NIP..." value="{{ request('search') }}">
+                            <form action="{{ route('dosen.datamahasiswa.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
+                                <input type="text" name="search" class="form-control me-2" placeholder="Cari Nama atau NIM..." value="{{ request('search') }}">
                                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-search"></i></button>
                             </form>
                         </div>
+
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
+
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
                                         <th class="text-center">No</th>
-                                        <th>NIP</th>
+                                        <th>NIM</th>
                                         <th>Nama</th>
-                                        <th>Jabatan</th>
+                                        <th>Prodi</th>
+                                        <th>Kelas</th>
+                                        <th>Dosen Pembimbing</th>
+                                        <th>Tempat PKL</th>
+                                        <th class="text-center">Status</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($dosens as $index => $dosen)
+                                    @forelse ($mahasiswa as $index => $mhs)
                                         <tr>
-                                            <td class="text-center">{{ $dosens->firstItem() + $index }}</td>
-                                            <td>{{ $dosen->nip }}</td>
-                                            <td>{{ $dosen->nama }}</td>
-                                            <td>{{ $dosen->jabatan }}</td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td>{{ $mhs->nim }}</td>
+                                            <td>{{ $mhs->nama }}</td>
+                                            <td>{{ $mhs->prodi }}</td>
+                                            <td>{{ $mhs->kelas }}</td>
+                                            <td>{{ $mhs->dosen_pembimbing }}</td>
+                                            <td>{{ $mhs->tempat_pkl }}</td>
+                                            <td class="text-center"><span class="badge bg-info">{{ $mhs->status_pkl }}</span></td>
                                             <td class="text-center">
-                                                <form onsubmit="return confirm('Apakah Anda Yakin Ingin Menghapus Data Ini?');" action="{{ route('koorprodi.datadosen.destroy', $dosen->id) }}" method="POST">
-                                                    <a href="{{ route('koorprodi.datadosen.show', $dosen->id) }}" class="btn btn-sm btn-info text-white"><i class="fa-solid fa-eye"></i></a>
-                                                    <a href="{{ route('koorprodi.datadosen.edit', $dosen->id) }}" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                                <form action="{{ route('dosen.datamahasiswa.destroy', $mhs->id) }}" method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                                </form>
+                                                    <a href="{{ route('dosen.datamahasiswa.show', $mhs->id) }}" class="btn btn-sm btn-info text-white">
+                                                        <i class="fa-solid fa-eye"></i></a>
+                                                        <a href="{{ route('dosen.datamahasiswa.edit', $mhs->id) }}" class="btn btn-sm btn-warning">
+                                                            <i class="fa-solid fa-pencil"></i></a>
+                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data ini?')">
+                                                                <i class="fa-solid fa-trash"></i></button>
+                                                            </form>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center">
+                                            <td colspan="9" class="text-center">
                                                 <div class="alert alert-warning mb-0">
-                                                    Data Dosen tidak ditemukan atau belum tersedia.
+                                                    Data Mahasiswa tidak ditemukan atau belum tersedia.
                                                 </div>
                                             </td>
                                         </tr>
@@ -162,8 +175,9 @@
                                 </tbody>
                             </table>
                         </div>
-                         <div class="mt-3">
-                            {{ $dosens->links() }}
+
+                        <div class="mt-3">
+                            {{ $mahasiswa->links() }}
                         </div>
                     </div>
                 </div>

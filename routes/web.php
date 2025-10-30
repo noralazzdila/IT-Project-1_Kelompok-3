@@ -22,6 +22,15 @@ use App\Http\Controllers\SuratPengantarController;
 use App\Http\Controllers\PemberkasanController;
 use App\Http\Controllers\KoorprodiController;
 use App\Http\Controllers\StafController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\Dosen\UserDosenController;
+use App\Http\Controllers\Dosen\DataMahasiswaController as DosenDataMahasiswaController;
+use App\Http\Controllers\Dosen\NilaiDosenController;
+use App\Http\Controllers\Dosen\DosenDataDosenController;
+use App\Http\Controllers\Dosen\BimbinganDosenController;
+use App\Http\Controllers\Dosen\PengujiDosenController;
+use App\Http\Controllers\Dosen\SeminarDosenController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
     Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
+     Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
 
     // Resource Controllers (CRUD)
     Route::resource('proposal', ProposalController::class);
@@ -118,6 +128,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/koorprodi/datadosen/{datadosen}/edit', [KoorprodiController::class, 'datadosen_edit'])->name('koorprodi.datadosen.edit');
     Route::put('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_update'])->name('koorprodi.datadosen.update');
     Route::delete('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_destroy'])->name('koorprodi.datadosen.destroy');
+    
+    Route::get('/koorprodi/seminar', [KoorprodiController::class, 'seminar_index'])->name('koorprodi.seminar.index');
+    Route::get('/koorprodi/suratpengantar', [KoorprodiController::class, 'suratpengantar_index'])->name('koorprodi.suratpengantar.index');
+    Route::get('/koorprodi/pemberkasan', [KoorprodiController::class, 'pemberkasan_index'])->name('koorprodi.pemberkasan.index');
      
     // Google Sheet
     Route::get('/sheets/list', [GoogleSheetController::class, 'index'])->name('sheets.list');
@@ -162,4 +176,102 @@ Route::middleware('auth')->group(function () {
     Route::get('/staf/tempatpkl/{tempatpkl}/edit', [StafController::class, 'tempatpkl_edit'])->name('staf.tempatpkl.edit');
     Route::put('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_update'])->name('staf.tempatpkl.update');
     Route::delete('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_destroy'])->name('staf.tempatpkl.destroy');
+});
+// Kelola User-Dosen
+    Route::prefix('dosen/user')->group(function () {
+    Route::get('/', [UserDosenController::class, 'index'])->name('dosen.user.index');
+    Route::get('/create', [UserDosenController::class, 'create'])->name('dosen.user.create');
+    Route::post('/', [UserDosenController::class, 'store'])->name('dosen.user.store');
+    Route::get('/{id}', [UserDosenController::class, 'show'])->name('dosen.user.show');
+    Route::get('/{id}/edit', [UserDosenController::class, 'edit'])->name('dosen.user.edit');
+    Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
+    Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
+});
+
+    // Dosen Data Mahasiswa
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::resource('datamahasiswa', DosenDataMahasiswaController::class);
+});
+
+    //Dosen-Nilai
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('nilai')->name('nilai.')->group(function () {
+        Route::get('/', [NilaiDosenController::class, 'index'])->name('indexdosen');
+        Route::post('/', [NilaiDosenController::class, 'store'])->name('storedosen');
+        Route::get('/create', [NilaiDosenController::class, 'create'])->name('createdosen');
+        Route::get('/{id}/edit', [NilaiDosenController::class, 'edit'])->name('editdosen');
+        Route::get('/{id}', [NilaiDosenController::class, 'show'])->name('showdosen');
+    });
+
+    // Tambahan khusus fitur import
+    Route::post('/import', [NilaiDosenController::class, 'import'])->name('import');
+    Route::post('/import-pdf', [NilaiDosenController::class, 'importPdf'])->name('importpdf');
+});
+
+    //Data Dosen - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('datadosen')->name('datadosen.')->group(function () {
+        Route::get('/', [DosenDataDosenController::class, 'index'])->name('indexdatadosen');
+        Route::get('/create', [DosenDataDosenController::class, 'create'])->name('createdatadosen');
+        Route::post('/', [DosenDataDosenController::class, 'store'])->name('storedatadosen');
+        Route::get('/{datadosen}', [DosenDataDosenController::class, 'show'])->name('showdatadosen');
+        Route::get('/{datadosen}/edit', [DosenDataDosenController::class, 'edit'])->name('editdatadosen');
+        Route::put('/{datadosen}', [DosenDataDosenController::class, 'update'])->name('updatedatadosen');
+        Route::delete('/{datadosen}', [DosenDataDosenController::class, 'destroy'])->name('destroydatadosen');
+    });
+});
+
+    // Bimbingan - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('bimbingan')->name('bimbingan.')->group(function () {
+        Route::get('/', [BimbinganDosenController::class, 'index'])->name('indexdosen');
+        Route::get('/create', [BimbinganDosenController::class, 'create'])->name('createdosen');
+        Route::post('/', [BimbinganDosenController::class, 'store'])->name('store');
+        Route::get('/{bimbingan}', [BimbinganDosenController::class, 'show'])->name('showdosen');
+        Route::get('/{bimbingan}/edit', [BimbinganDosenController::class, 'edit'])->name('editdosen');
+        Route::put('/{bimbingan}', [BimbinganDosenController::class, 'update'])->name('updatedosen');
+        Route::delete('/{bimbingan}', [BimbinganDosenController::class, 'destroy'])->name('destroy');
+    });
+});
+
+    // Penguji - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('penguji')->name('penguji.')->group(function () {
+        Route::get('/', [PengujiDosenController::class, 'index'])->name('indexdosen');
+        Route::get('/create', [PengujiDosenController::class, 'create'])->name('createdosen');
+        Route::post('/', [PengujiDosenController::class, 'store'])->name('store');
+        Route::get('/{penguji}', [PengujiDosenController::class, 'show'])->name('showdosen');
+        Route::get('/{penguji}/edit', [PengujiDosenController::class, 'edit'])->name('editdosen');
+        Route::put('/{penguji}', [PengujiDosenController::class, 'update'])->name('updatedosen');
+        Route::delete('/{penguji}', [PengujiDosenController::class, 'destroy'])->name('destroy');
+    });
+});
+
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::get('/seminar', [SeminarDosenController::class, 'index'])->name('seminar.indexdosen');
+    Route::get('/seminar/{id}', [SeminarDosenController::class, 'show'])->name('seminar.showdosen');
+});
+
+
+Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
+ 
+    Route::get('/dashboard', function () {
+        return view('mahasiswa.mahasiswa'); // Create this view from your template
+    })->name('dashboard');
+
+    // "Lihat Tempat PKL" Route
+    Route::get('/tempat-pkl', [MahasiswaController::class, 'indexMahasiswa'])->name('lihatpkl.index');
+    
+    // "Ajukan Tempat PKL" Routes
+    Route::get('/surat-pengantar/ajukan', [SuratPengantarController::class, 'createMahasiswa'])->name('suratpengantar.create');
+    Route::post('/surat-pengantar/ajukan', [SuratPengantarController::class, 'storeMahasiswa'])->name('suratpengantar.store');
+
+    // "Jadwal Seminar" Route for Mahasiswa
+    Route::get('/seminar/jadwal', [MahasiswaController::class, 'jadwalSeminarIndex'])->name('seminar.jadwal');
+    
+    Route::get('/proposal/upload', [ProposalController::class, 'createMahasiswa'])->name('proposal.create');
+    Route::post('/proposal/upload', [ProposalController::class, 'storeMahasiswa'])->name('proposal.store');
+
+    Route::get('/pemberkasan/upload', [PemberkasanController::class, 'createMahasiswa'])->name('pemberkasan.create');
+    Route::post('/pemberkasan/upload', [PemberkasanController::class, 'storeMahasiswa'])->name('pemberkasan.store');
 });

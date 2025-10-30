@@ -150,9 +150,9 @@
                                 <thead class="table-dark">
                                     <tr>
                                         <th class="text-center" style="width: 5%;">No</th>
-                                        <th style="width: 25%;">Mahasiswa</th>
-                                        <th style="width: 30%;">Tujuan PKL</th>
-                                        <th class="text-center" style="width: 15%;">File Surat</th>
+                                        <th style="width: 25%;">Nama Mahasiswa</th>
+                                        <th style="width: 30%;">Tempat PKL</th>
+                                        <th class="text-center" style="width: 15%;"> Surat Pengantar</th>
                                         <th class="text-center" style="width: 10%;">Status</th>
                                         <th class="text-center" style="width: 15%;">Aksi</th>
                                     </tr>

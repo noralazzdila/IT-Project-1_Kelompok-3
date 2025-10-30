@@ -45,16 +45,6 @@ class DataMahasiswaController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'nim'               => 'required|string|max:20|unique:mahasiswa,nim',
-            'nama'              => 'required|string|max:255',
-            'jenis_kelamin'     => 'required|in:Laki-laki,Perempuan',
-            'tanggal_lahir'     => 'required|date',
-            'prodi'             => 'required|string|max:100',
-            'kelas'             => 'required|string|max:50',
-            'tahun_angkatan'    => 'required|digits:4|integer|min:1900|max:'.(date('Y')+1),
-            'dosen_pembimbing'  => 'required|string|max:255',
-            'tempat_pkl'        => 'required|string|max:255',
-            'status_pkl'        => 'required|in:Belum Mulai,Sedang PKL,Selesai',
             'no_hp'             => 'required|string|max:15',
             'email'             => 'required|email|max:255|unique:mahasiswa,email',
         ]);

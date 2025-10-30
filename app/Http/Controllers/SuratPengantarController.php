@@ -129,4 +129,39 @@ class SuratPengantarController extends Controller
 
         return redirect()->route('suratpengantar.index')->with('success', 'Surat Pengantar berhasil dihapus.');
     }
+    public function createMahasiswa()
+    {
+       
+        $submissions = SuratPengantar::where('nim', '')->latest()->get();
+
+        return view('mahasiswa.suratpengantar.create', compact('submissions'));
+    }
+
+ 
+    public function storeMahasiswa(Request $request)
+    {
+        // Validasi, kolom 'status' sudah dihapus
+        $validatedData = $request->validate([
+            'nim' => 'required|string|max:20',
+            'nama_mahasiswa' => 'required|string|max:255',
+            'prodi' => 'required|string|max:255',
+            'tempat_pkl' => 'required|string|max:255',
+            'alamat_perusahaan' => 'required|string',
+            'tanggal_pengajuan' => 'required|date',
+            'file_surat' => 'nullable|file|mimes:pdf|max:5120',
+            'catatan' => 'nullable|string',
+        ]);
+
+        // Secara otomatis mengatur status menjadi 'Menunggu'
+        $validatedData['status'] = 'Menunggu';
+
+        if ($request->hasFile('file_surat')) {
+            $filePath = $request->file('file_surat')->store('public/surat_pengantar');
+            $validatedData['file_surat'] = str_replace('public/', '', $filePath);
+        }
+
+        SuratPengantar::create($validatedData);
+        
+        return redirect()->back()->with('success', 'Pengajuan surat pengantar berhasil dikirim!');
+    }
 }

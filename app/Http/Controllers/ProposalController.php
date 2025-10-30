@@ -132,4 +132,50 @@ class ProposalController extends Controller
 
         return redirect()->route('proposal.index')->with('success', 'Proposal PKL berhasil dihapus.');
     }
+
+    //MHS
+    public function createMahasiswa()
+    {
+        // Di aplikasi nyata, Anda akan menggunakan ID user yang sedang login.
+        // $user = Auth::user();
+        // $proposals = Proposal::where('nim', $user->nim)->latest()->get();
+        
+        // Untuk sekarang, kita gunakan NIM statis sebagai contoh
+        // Berdasarkan skema database Anda, NIM bersifat unik, jadi kita pakai first() atau get()
+        $proposals = Proposal::where('nim', '2062201015')->latest()->get();
+
+        return view('mahasiswa.proposal.upload', compact('proposals'));
+    }
+
+    /**
+     * Menyimpan proposal baru dari mahasiswa.
+     */
+    public function storeMahasiswa(Request $request)
+    {
+        // Validasi, kolom 'status' dihapus dari form
+        $validatedData = $request->validate([
+            'nim' => 'required|string|max:20|unique:proposals,nim', // NIM harus unik berdasarkan skema Anda
+            'nama_mahasiswa' => 'required|string|max:255',
+            'judul_proposal' => 'required|string|max:255',
+            'pembimbing' => 'required|string|max:255',
+            'tempat_pkl' => 'required|string|max:255',
+            'file_proposal' => 'required|file|mimes:pdf|max:5120',
+            'tanggal_pengajuan' => 'required|date',
+            'catatan' => 'nullable|string',
+        ]);
+
+        // Secara otomatis mengatur status menjadi 'Menunggu'
+        $validatedData['status'] = 'Menunggu';
+
+        // Handle file upload
+        if ($request->hasFile('file_proposal')) {
+            $filePath = $request->file('file_proposal')->store('public/proposals');
+            $validatedData['file_proposal'] = str_replace('public/', '', $filePath);
+        }
+
+        Proposal::create($validatedData);
+        
+        return redirect()->back()->with('success', 'Proposal berhasil di-upload! Harap tunggu review dari Koordinator.');
+    }
+
 }

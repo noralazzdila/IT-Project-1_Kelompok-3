@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIPRAKERLA</title>
+  <title>Jadwal Seminar PKL</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -158,48 +158,6 @@
     .notif-footer { text-align: center; padding: 12px 0; }
     .notif-footer a { font-size: 14px; text-decoration: none; color: #0d6efd; font-weight: 500;}
 
-    /* --- Hero Section --- */
-    .hero {
-      height: calc(100vh - 80px); /* Full height minus navbar */
-      margin-top: -80px; /* Pull up to fill space behind navbar */
-      position: relative;
-      color: var(--light-text);
-      display: flex;
-      align-items: center;
-      background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
-    }
-    .hero::before {
-      content: ""; position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, rgba(13, 59, 102, 0.85) 0%, rgba(0,0,0,0.4) 100%);
-      z-index: 1;
-    }
-    .hero .container { position: relative; z-index: 2; }
-    .hero h1 { font-size: 3.2rem; font-weight: 700; }
-    .hero p { font-size: 1.1rem; max-width: 500px; opacity: 0.9; }
-    .hero .btn { padding: 12px 28px; font-weight: 500; border-radius: 8px; }
-    .hero .btn-primary { background-color: #4ba3ff; border: none; }
-
-    /* Frosted cards in hero */
-    .hero .card-frosted {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        padding: 1.5rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        color: var(--light-text);
-    }
-    .hero .card-frosted:hover {
-        transform: translateY(-8px);
-        background: rgba(255, 255, 255, 0.15);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .hero .card-frosted i { color: #4ba3ff; }
-    .hero .card-frosted h6 { margin-top: 10px; font-weight: 600; color: #fff; }
-    .hero .card-frosted p { font-size: 0.9rem; color: #e0e0e0; margin-bottom: 0; }
-
     /* --- Main Content Cards --- */
     .main-content {
         padding: 40px 0;
@@ -215,57 +173,28 @@
         transform: translateY(-5px);
         box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
-    
-    /* --- NEW: Ranking List Style --- */
-    .ranking-item {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      background-color: #fff;
-      border: 1px solid #e9ecef;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      transition: all 0.2s ease-in-out;
+    .seminar-card {
+      border-left: 5px solid var(--primary-color);
+      transition: all 0.3s ease;
     }
-    .ranking-item:hover {
-      transform: translateY(-3px) scale(1.01);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-      border-color: var(--primary-color);
+    .seminar-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     }
-    .ranking-item .ranking-number {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #adb5bd;
-      min-width: 40px;
+    .seminar-card .card-title {
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .seminar-details li {
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      color: var(--dark-text);
+    }
+    .seminar-details li i {
+      color: var(--primary-color);
+      width: 20px;
       text-align: center;
     }
-    .ranking-item .ranking-logo {
-      width: 50px;
-      height: 50px;
-      object-fit: contain;
-      border-radius: 8px;
-      margin: 0 15px;
-      background-color: #f8f9fa;
-      padding: 5px;
-      border: 1px solid #dee2e6;
-    }
-    .ranking-item .ranking-details {
-      flex-grow: 1;
-    }
-    .ranking-item .ranking-details h6 {
-      font-weight: 600;
-      color: var(--dark-text);
-      margin-bottom: 2px;
-    }
-    .ranking-item .ranking-details p {
-      font-size: 0.85rem;
-      color: #6c757d;
-      margin-bottom: 0;
-    }
-    .ranking-item[data-rank="1"] .ranking-number { color: #FFD700; /* Gold */ }
-    .ranking-item[data-rank="2"] .ranking-number { color: #C0C0C0; /* Silver */ }
-    .ranking-item[data-rank="3"] .ranking-number { color: #CD7F32; /* Bronze */ }
-
   </style>
 </head>
 <body>
@@ -284,7 +213,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
+            <a class="nav-link" href="{{ route('dashboard.mahasiswa') }}">Beranda</a>
           </li>
           
           <li class="nav-item dropdown">
@@ -310,11 +239,12 @@
             </ul>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="seminarDropdown" data-bs-toggle="dropdown">Seminar</a>
+            <a class="nav-link dropdown-toggle active" href="#" id="seminarDropdown" data-bs-toggle="dropdown">Seminar</a>
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
                   <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+                  <a href="#"><i class="bi bi-card-checklist me-2"></i>Daftar Seminar</a>
                 </div>
               </li>
             </ul>
@@ -324,7 +254,7 @@
             <ul class="dropdown-menu" aria-labelledby="bimbinganDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="#"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
+                  <a href="#"><i class="bi bi-journal-text me-2"></i>Lihat Bimbingan</a>
                 </div>
               </li>
             </ul>
@@ -334,7 +264,8 @@
             <ul class="dropdown-menu" aria-labelledby="proposalDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-file-earmark-check me-2"></i>Status Proposal</a>
                 </div>
               </li>
             </ul>
@@ -344,7 +275,7 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+                  <a href="#"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
                 </div>
               </li>
             </ul>
@@ -422,135 +353,49 @@
     </div>
   </nav>
 
-  <section class="hero">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-md-12">
-          <h1 class="mb-3">Sistem PKL <span style="color:#4ba3ff;">Mahasiswa</span></h1>
-          <p class="mb-4">
-            Platform terpadu untuk mengelola seluruh kegiatan Praktik Kerja Lapangan Anda.
-            Dari pendaftaran hingga evaluasi, semua dalam satu sistem yang mudah digunakan.
-          </p>
-          <a href="#" class="btn btn-primary me-2">Mulai PKL</a>
-          <a href="{{ asset('documents/Paduan PKL .pdf') }}" class="btn btn-outline-light" target="_blank">Panduan</a>
-        </div>
-        <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
-          <div class="row g-4">
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-building-fill fs-1 mb-2"></i>
-                <h6>Tempat PKL</h6>
-                <p>Jelajahi berbagai tempat PKL yang tersedia</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-person-video3 fs-1 mb-2"></i>
-                <h6>Dosen Pembimbing</h6>
-                <p>Konsultasi dengan dosen pembimbing</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-file-earmark-text-fill fs-1 mb-2"></i>
-                <h6>Proposal</h6>
-                <p>Kelola proposal PKL Anda</p>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-easel2-fill fs-1 mb-2"></i>
-                <h6>Seminar</h6>
-                <p>Jadwal dan informasi seminar</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <div class="container main-content">
-    <div class="row"> 
-      <div class="col-md-8">
-        <div class="card p-4 mb-3">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Tempat PKL Terfavorit</h5>
-              <a href="#" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
-          </div>
+    <h2 class="fw-bold mb-4">Jadwal Seminar PKL</h2>
 
-          <div class="ranking-list">
-            <div class="ranking-item" data-rank="1">
-              <div class="ranking-number">1</div>
-              <img src="https://placehold.co/100x100/E30613/FFFFFF?text=Telkom" alt="Logo Telkom" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PT. Telkom Indonesia</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. A. Yani Km. 6, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="2">
-              <div class="ranking-number">2</div>
-              <img src="https://placehold.co/100x100/00A5E0/FFFFFF?text=B.Kalsel" alt="Logo Bank Kalsel" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Bank Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Lambung Mangkurat No.1, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="3">
-              <div class="ranking-number">3</div>
-              <img src="https://placehold.co/100x100/009647/FFFFFF?text=GoJek" alt="Logo Go-Jek" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Go-Jek Office Banjarmasin</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Gatot Subroto, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="4">
-              <div class="ranking-number">4</div>
-              <img src="https://placehold.co/100x100/231F20/FFFFFF?text=Kominfo" alt="Logo Kominfo" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Dinas Kominfo Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Dharma Praja, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="5">
-              <div class="ranking-number">5</div>
-              <img src="https://placehold.co/100x100/00AEEF/FFFFFF?text=PLN" alt="Logo PLN" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PLN Wilayah Kalselteng</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Panglima Batur, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-          </div>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
 
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card p-3 mb-3">
-          <h6>Hello, Selamat Datang</h6>
-          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="#">Lihat Detail</a>.</p>
-        </div>
-
-        <div class="card p-3">
-          <h6>Kalender Akademik</h6> 
-            <iframe 
-            src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
-            style="border: 1px solid #ddd; border-radius: 10px;" 
-            width="100%" 
-            height="350" 
-            frameborder="0" 
-            scrolling="no">
-        </iframe> 
-        </div>
-        </div>
-      </div>
+    <div class="row">
+        @forelse ($seminars as $seminar)
+            <div class="col-md-6 mb-4">
+                <div class="card seminar-card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ $seminar->judul }}</h5>
+                        <p class="card-text text-muted mb-2">
+                            <i class="bi bi-person-fill me-2"></i>Mahasiswa: <strong>{{ $seminar->nama_mahasiswa }}</strong> ({{ $seminar->nim }})
+                        </p>
+                        <ul class="list-unstyled seminar-details">
+                            <li><i class="bi bi-person-badge me-2"></i>Pembimbing: {{ $seminar->nama_pembimbing }}</li>
+                            <li><i class="bi bi-person-check me-2"></i>Penguji: {{ $seminar->nama_penguji }}</li>
+                            <li><i class="bi bi-calendar-event me-2"></i>Jadwal: {{ \Carbon\Carbon::parse($seminar->tanggal)->isoFormat('dddd, D MMMM Y') }}</li>
+                            <li><i class="bi bi-clock me-2"></i>Waktu: {{ date('H:i', strtotime($seminar->jam_mulai)) }} - {{ date('H:i', strtotime($seminar->jam_selesai)) }}</li>
+                            <li><i class="bi bi-geo-alt me-2"></i>Ruang: {{ $seminar->ruang }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    Belum ada data seminar yang dijadwalkan.
+                </div>
+            </div>
+        @endforelse
+    </div>
+    {{-- Link Paginasi --}}
+    <div class="d-flex justify-content-center mt-4">
+        {{ $seminars->links() }}
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

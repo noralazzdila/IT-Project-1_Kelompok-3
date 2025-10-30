@@ -71,15 +71,14 @@
                 <small class="text-muted">Sistem Informasi PKL</small>
             </div>
             <nav class="nav flex-column px-2">
-     <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
-                <a href="{{ route('koorprodi.user.index') }}" class="nav-link {{ request()->routeIs('koorprodi.user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
-                <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
-                <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
-                <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a> 
-                <a href="{{ route('koorprodi.proposal.index') }}" class="nav-link {{ request()->routeIs('koorprodi.proposal.index') ? 'active' : '' }}"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-                <a href="{{ route('koorprodi.seminar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.seminar.index') ? 'active' : '' }}"><i class="fa fa-calendar-alt me-2"></i> Kelola Seminar</a>
-                <a href="{{ route('koorprodi.suratpengantar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.suratpengantar.index') ? 'active' : '' }}"><i class="fa fa-envelope-open-text me-2"></i> Kelola Surat Pengantar</a>
-                <a href="{{ route('koorprodi.pemberkasan.index') }}" class="nav-link {{ request()->routeIs('koorprodi.pemberkasan.index') ? 'active' : '' }}"><i class="fa fa-folder-open me-2"></i> Kelola Pemberkasan</a>
+                <a href="{{ route('dosen.dashboard') }}" class="nav-link {{ request()->routeIs('dosen.dashboard') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
+                <a href="{{ route('dosen.user.index') }}" class="nav-link {{ request()->routeIs('dosen.user.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
+                <a href="{{ route('dosen.nilai.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.nilai.*') ? 'active' : '' }}"><i class="fa fa-graduation-cap me-2"></i> Kelola Nilai</a>
+                <a href="{{ route('dosen.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('dosen.datamahasiswa.*') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
+                <a href="{{ route('dosen.datadosen.indexdatadosen') }}" class="nav-link {{ request()->routeIs('datadosen.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a>
+                <a href="{{ route('dosen.bimbingan.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.bimbingan.*') ? 'active' : '' }}"><i class="fa fa-chalkboard-teacher me-2"></i> Kelola Bimbingan</a>
+                <a href="{{ route('dosen.seminar.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.seminar.*') ? 'active' : '' }}"><i class="fa fa-calendar me-2"></i> Kelola Seminar</a>
+                <a href="{{ route('dosen.penguji.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.penguji.*') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
             </nav>
         </div>
 
@@ -88,30 +87,30 @@
                 <h5 class="mb-0">Manajemen Data Dosen</h5>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fw-semibold">Jaka Permadi, S.Si., M.Cs</span> <br>
-                        <small>Koordinator Program Studi</small>
+                        <span class="fw-semibold">Dwi Agung Wibowo, M.Kom</span> <br>
+                        <small>Dosen</small>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profil</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="{{ route('login') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                     </ul>
                 </div>
             </div>
             <main class="container-fluid mt-4 flex-grow-1">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('koorprodi.index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dosen.dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Kelola Dosen</li>
                     </ol>
                 </nav>
                 <div class="card rounded-3 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-                            <a href="{{ route('koorprodi.datadosen.create') }}" class="btn btn-success">
+                            <a href="{{ route('dosen.datadosen.createdatadosen') }}" class="btn btn-success">
                                 <i class="fa-solid fa-plus me-2"></i> Tambah Dosen
                             </a>
-                            <form action="{{ route('koorprodi.datadosen.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
+                            <form action="{{ route('dosen.datadosen.indexdatadosen') }}" method="GET" class="d-flex" style="max-width: 300px;">
                                 <input type="text" name="search" class="form-control me-2" placeholder="Cari Nama atau NIP..." value="{{ request('search') }}">
                                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-search"></i></button>
                             </form>
@@ -141,9 +140,9 @@
                                             <td>{{ $dosen->nama }}</td>
                                             <td>{{ $dosen->jabatan }}</td>
                                             <td class="text-center">
-                                                <form onsubmit="return confirm('Apakah Anda Yakin Ingin Menghapus Data Ini?');" action="{{ route('koorprodi.datadosen.destroy', $dosen->id) }}" method="POST">
-                                                    <a href="{{ route('koorprodi.datadosen.show', $dosen->id) }}" class="btn btn-sm btn-info text-white"><i class="fa-solid fa-eye"></i></a>
-                                                    <a href="{{ route('koorprodi.datadosen.edit', $dosen->id) }}" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
+                                                <form onsubmit="return confirm('Apakah Anda Yakin Ingin Menghapus Data Ini?');" action="{{ route('datadosen.destroy', $dosen->id) }}" method="POST">
+                                                    <a href="{{ route('dosen.datadosen.showdatadosen', $dosen->id) }}" class="btn btn-sm btn-info text-white"><i class="fa-solid fa-eye"></i></a>
+                                                    <a href="{{ route('dosen.datadosen.editdatadosen', $dosen->id) }}" class="btn btn-sm btn-warning"><i class="fa-solid fa-pencil"></i></a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>

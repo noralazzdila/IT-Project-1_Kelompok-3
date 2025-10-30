@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dosen;
 
-use Spatie\PdfToText\Pdf;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
 use App\Models\Nilai;
-use Illuminate\Http\Request;
 use App\Services\GoogleSheetService;
 use Illuminate\Support\Facades\Log;
 use Exception;
 
-class NilaiController extends Controller
+class NilaiDosenController extends Controller
 {
     public function index()
     {
         $nilai = Nilai::with('mahasiswa')->latest()->get(); // Tampilkan data terbaru
-        return view('nilai.index', compact('nilai'));
+        return view('dosen.nilai.indexdosen', compact('nilai'));
     }
 
     public function create()
     {
-        return view('nilai.create');
+        return view('dosen.nilai.createdosen');
     }
 
     public function store(Request $request)
@@ -48,6 +48,8 @@ class NilaiController extends Controller
             ['nim' => $request->nim],
             [
                 'nama' => $request->nama,
+                'jurusan' => $request->jurusan,
+                'angkatan' => $request->angkatan,
             ]
         );
 
@@ -67,7 +69,7 @@ class NilaiController extends Controller
             'pdf_path' => $request->pdf_path,
         ]);
 
-        return redirect()->route('nilai.index')->with('success', 'Data mahasiswa & nilai berhasil disimpan!');
+        return redirect()->route('dosen.nilai.indexdosen')->with('success', 'Data mahasiswa & nilai berhasil disimpan!');
     }
 
     public function import(Request $request, GoogleSheetService $sheetService)
@@ -124,6 +126,8 @@ class NilaiController extends Controller
             $data = [
                 'nim' => $nim,
                 'nama' => $nama,
+                'jurusan' => '', // Sesuaikan jika ada
+                'angkatan' => '', // Sesuaikan jika ada
                 'ipk' => $ipk,
                 'count_a' => $counts['A'],
                 'count_b_plus' => $counts['B+'],
@@ -179,13 +183,13 @@ class NilaiController extends Controller
             }
         }
         
-        return view('nilai.show', compact('nilai', 'rows'));
+        return view('dosen.nilai.showdosen', compact('nilai', 'rows'));
     }
 
     public function edit($id)
     {
         $nilai = Nilai::with('mahasiswa')->findOrFail($id);
-        return view('nilai.edit', compact('nilai'));
+        return view('dosen.nilai.editdosen', compact('nilai'));
     }
 
     public function update(Request $request, $id)
@@ -213,6 +217,8 @@ class NilaiController extends Controller
             $nilai->mahasiswa->update([
                 'nim' => $request->nim,
                 'nama' => $request->nama,
+                'jurusan' => $request->jurusan,
+                'angkatan' => $request->angkatan,
             ]);
         }
 
@@ -229,7 +235,7 @@ class NilaiController extends Controller
             'total_sks' => $request->total_sks ?? 0,
         ]);
 
-        return redirect()->route('nilai.index')->with('success', 'Data mahasiswa & nilai berhasil diperbarui!');
+        return redirect()->route('dosen.nilai.indexdosen')->with('success', 'Data mahasiswa & nilai berhasil diperbarui!');
     }
 
     public function destroy($id)
@@ -237,7 +243,7 @@ class NilaiController extends Controller
         $nilai = Nilai::findOrFail($id);
         $nilai->delete();
 
-        return redirect()->route('nilai.index')->with('success', 'Data nilai berhasil dihapus!');
+        return redirect()->route('dosen.nilai.indexdosen')->with('success', 'Data nilai berhasil dihapus!');
     }
 
  public function importPdf(Request $request)
