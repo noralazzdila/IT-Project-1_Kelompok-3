@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dosen;
 
 use App\Models\Bimbingan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Controllers\Controller;
 
-class BimbinganController extends Controller
+class BimbinganDosenController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,7 +33,7 @@ class BimbinganController extends Controller
 
         $bimbingans = $query->latest()->paginate(10)->withQueryString();
 
-        return view('bimbingan.index', compact('bimbingans'));
+        return view('dosen.bimbingan.indexdosen', compact('bimbingans'));
     }
 
     /**
@@ -40,47 +41,36 @@ class BimbinganController extends Controller
      */
     public function create(): View
     {
-        return view('bimbingan.create');
+        return view('dosen.bimbingan.createdosen');
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
-{
-    $request->validate([
-        'mahasiswa_nama'    => 'required|string|max:255',
-        'nim'               => 'required|string|max:20',
-        'dosen_pembimbing'  => 'required|string|max:255',
-        'tanggal_bimbingan' => 'required|date',
-        'topik_bimbingan'   => 'required|string|max:255',
-        'catatan'           => 'required|string',
-        'status'            => 'required|in:Menunggu,Disetujui,Revisi',
-    ]);
+    {
+        $request->validate([
+            'mahasiswa_nama'    => 'required|string|max:255',
+            'nim'               => 'required|string|max:20',
+            'dosen_pembimbing'  => 'required|string|max:255',
+            'tanggal_bimbingan' => 'required|date',
+            'topik_bimbingan'   => 'required|string|max:255',
+            'catatan'           => 'required|string',
+            'status'            => 'required|in:Menunggu,Disetujui,Revisi',
+        ]);
 
-    // 🟢 Tambahkan user_id dari user yang login
-    Bimbingan::create([
-        'user_id'           => auth()->id(),
-        'mahasiswa_nama'    => $request->mahasiswa_nama,
-        'nim'               => $request->nim,
-        'dosen_pembimbing'  => $request->dosen_pembimbing,
-        'tanggal_bimbingan' => $request->tanggal_bimbingan,
-        'topik_bimbingan'   => $request->topik_bimbingan,
-        'catatan'           => $request->catatan,
-        'status'            => $request->status,
-    ]);
+        Bimbingan::create($request->all());
 
-    return redirect()->route('bimbingan.index')
-                     ->with('success', 'Data Bimbingan berhasil ditambahkan.');
-}
-
+        return redirect()->route('dosen.bimbingan.indexdosen')
+                         ->with('success', 'Data Bimbingan berhasil ditambahkan.');
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(Bimbingan $bimbingan): View
     {
-        return view('bimbingan.show', compact('bimbingan'));
+        return view('dosen.bimbingan.showdosen', compact('bimbingan'));
     }
 
     /**
@@ -88,7 +78,7 @@ class BimbinganController extends Controller
      */
     public function edit(Bimbingan $bimbingan): View
     {
-        return view('bimbingan.edit', compact('bimbingan'));
+        return view('dosen.bimbingan.editdosen', compact('bimbingan'));
     }
 
     /**
@@ -108,7 +98,7 @@ class BimbinganController extends Controller
 
         $bimbingan->update($request->all());
 
-        return redirect()->route('bimbingan.index')
+        return redirect()->route('dosen.bimbingan.indexdosen')
                          ->with('success', 'Data Bimbingan berhasil diperbarui.');
     }
 
@@ -119,7 +109,7 @@ class BimbinganController extends Controller
     {
         $bimbingan->delete();
 
-        return redirect()->route('bimbingan.index')
+        return redirect()->route('dosen.bimbingan.indexdosen')
                          ->with('success', 'Data Bimbingan berhasil dihapus.');
     }
 }
