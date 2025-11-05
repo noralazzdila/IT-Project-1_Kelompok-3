@@ -103,7 +103,7 @@
                     </table>
                 </div>
 
-                {{-- Tombol Kembalii --}}
+                {{-- Tombol Kembali --}}
                 <div class="mt-3">
                     <a href="{{ route('dosen.daftardosen') }}" class="btn btn-secondary">
                         <i class="fa-solid fa-arrow-left me-1"></i> Kembali
