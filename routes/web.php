@@ -22,6 +22,21 @@ use App\Http\Controllers\SuratPengantarController;
 use App\Http\Controllers\PemberkasanController;
 use App\Http\Controllers\KoorprodiController;
 use App\Http\Controllers\StafController;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\Dosen\UserDosenController;
+use App\Http\Controllers\Dosen\DataMahasiswaController as DosenDataMahasiswaController;
+use App\Http\Controllers\Dosen\NilaiDosenController;
+use App\Http\Controllers\Dosen\DosenDataDosenController;
+use App\Http\Controllers\Dosen\BimbinganDosenController;
+use App\Http\Controllers\Dosen\PengujiDosenController;
+use App\Http\Controllers\Dosen\SeminarDosenController;
+use App\Http\Controllers\Mahasiswa\LihatDetailIpkController;
+use App\Http\Controllers\Mahasiswa\ProfilController;
+use App\Http\Controllers\Mahasiswa\PengaturanController;
+use App\Http\Controllers\Mahasiswa\PreferensiController;
+use App\Http\Controllers\Mahasiswa\MahasiswaDosenController;
+use App\Http\Controllers\Mahasiswa\BimbinganController as MahasiswaBimbinganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
     Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
+    Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
 
     // Resource Controllers (CRUD)
     Route::resource('proposal', ProposalController::class);
@@ -162,4 +178,129 @@ Route::middleware('auth')->group(function () {
     Route::get('/staf/tempatpkl/{tempatpkl}/edit', [StafController::class, 'tempatpkl_edit'])->name('staf.tempatpkl.edit');
     Route::put('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_update'])->name('staf.tempatpkl.update');
     Route::delete('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_destroy'])->name('staf.tempatpkl.destroy');
+
+    // kelola status
+    Route::resource('status', StatusController::class);
+
+    // Resource route untuk Pemberkasan
+    Route::resource('pemberkasan', PemberkasanController::class);
+    Route::post('/pemberkasan/upload', [PemberkasanController::class, 'store'])->name('pemberkasan.store');
+
+    // Kelola User-Dosen
+    Route::prefix('dosen/user')->group(function () {
+    Route::get('/', [UserDosenController::class, 'index'])->name('dosen.user.index');
+    Route::get('/create', [UserDosenController::class, 'create'])->name('dosen.user.create');
+    Route::post('/', [UserDosenController::class, 'store'])->name('dosen.user.store');
+    Route::get('/{id}', [UserDosenController::class, 'show'])->name('dosen.user.show');
+    Route::get('/{id}/edit', [UserDosenController::class, 'edit'])->name('dosen.user.edit');
+    Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
+    Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
 });
+
+    // Dosen Data Mahasiswa
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::resource('datamahasiswa', DosenDataMahasiswaController::class);
+});
+
+    //Dosen-Nilai
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('nilai')->name('nilai.')->group(function () {
+        Route::get('/', [NilaiDosenController::class, 'index'])->name('indexdosen');
+        Route::post('/', [NilaiDosenController::class, 'store'])->name('storedosen');
+        Route::get('/create', [NilaiDosenController::class, 'create'])->name('createdosen');
+        Route::get('/{id}/edit', [NilaiDosenController::class, 'edit'])->name('editdosen');
+        Route::get('/{id}', [NilaiDosenController::class, 'show'])->name('showdosen');
+    });
+
+    // Tambahan khusus fitur import
+    Route::post('/import', [NilaiDosenController::class, 'import'])->name('import');
+    Route::post('/import-pdf', [NilaiDosenController::class, 'importPdf'])->name('importpdf');
+});
+
+    //Data Dosen - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('datadosen')->name('datadosen.')->group(function () {
+        Route::get('/', [DosenDataDosenController::class, 'index'])->name('indexdatadosen');
+        Route::get('/create', [DosenDataDosenController::class, 'create'])->name('createdatadosen');
+        Route::post('/', [DosenDataDosenController::class, 'store'])->name('storedatadosen');
+        Route::get('/{datadosen}', [DosenDataDosenController::class, 'show'])->name('showdatadosen');
+        Route::get('/{datadosen}/edit', [DosenDataDosenController::class, 'edit'])->name('editdatadosen');
+        Route::put('/{datadosen}', [DosenDataDosenController::class, 'update'])->name('updatedatadosen');
+        Route::delete('/{datadosen}', [DosenDataDosenController::class, 'destroy'])->name('destroydatadosen');
+    });
+});
+
+    // Bimbingan - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('bimbingan')->name('bimbingan.')->group(function () {
+        Route::get('/', [BimbinganDosenController::class, 'index'])->name('indexdosen');
+        Route::get('/create', [BimbinganDosenController::class, 'create'])->name('createdosen');
+        Route::post('/', [BimbinganDosenController::class, 'store'])->name('store');
+        Route::get('/{bimbingan}', [BimbinganDosenController::class, 'show'])->name('showdosen');
+        Route::get('/{bimbingan}/edit', [BimbinganDosenController::class, 'edit'])->name('editdosen');
+        Route::put('/{bimbingan}', [BimbinganDosenController::class, 'update'])->name('updatedosen');
+        Route::delete('/{bimbingan}', [BimbinganDosenController::class, 'destroy'])->name('destroy');
+    });
+});
+
+    // Penguji - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::prefix('penguji')->name('penguji.')->group(function () {
+        Route::get('/', [PengujiDosenController::class, 'index'])->name('indexdosen');
+        Route::get('/create', [PengujiDosenController::class, 'create'])->name('createdosen');
+        Route::post('/', [PengujiDosenController::class, 'store'])->name('store');
+        Route::get('/{penguji}', [PengujiDosenController::class, 'show'])->name('showdosen');
+        Route::get('/{penguji}/edit', [PengujiDosenController::class, 'edit'])->name('editdosen');
+        Route::put('/{penguji}', [PengujiDosenController::class, 'update'])->name('updatedosen');
+        Route::delete('/{penguji}', [PengujiDosenController::class, 'destroy'])->name('destroy');
+    });
+});
+
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+    Route::get('/seminar', [SeminarDosenController::class, 'index'])->name('seminar.indexdosen');
+    Route::get('/seminar/{id}', [SeminarDosenController::class, 'show'])->name('seminar.showdosen');
+});
+
+    Route::middleware('auth')->group(function () {
+    Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])
+    ->name('mahasiswa.lihatdetailipk.index');
+
+});
+
+    Route::middleware(['auth'])->group(function () {
+
+    // Lihat profil & pengaturan
+    Route::get('/profil', [ProfilController::class, 'index'])->name('mahasiswa.profil');
+    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('mahasiswa.pengaturan');
+
+    // Update profil
+    Route::post('/profil', [ProfilController::class, 'update'])->name('mahasiswa.profil.update');
+
+    // Update password
+    Route::post('/profil/password', [ProfilController::class, 'updatePassword'])
+        ->name('mahasiswa.profil.update_password');
+
+    // Update pengaturan
+    Route::post('/pengaturan', [PengaturanController::class, 'update'])->name('mahasiswa.pengaturan.update');
+
+    // Update preferensi
+    Route::post('/pengaturan/preferensi', [PreferensiController::class, 'update'])->name('mahasiswa.preferensi.update');
+});
+
+    // Daftar Dosen
+    Route::get('/daftardosen', [MahasiswaDosenController::class, 'daftardosen'])
+    ->name('dosen.daftardosen')
+    ->middleware('auth');
+
+    // Dosen Pembimbing
+    Route::get('/dosenpembimbing', [MahasiswaDosenController::class, 'dosenpembimbing'])
+    ->name('dosen.dosenpembimbing')
+    ->middleware('auth');
+
+    // Bimbingan - Mahasiswa
+    Route::prefix('mahasiswa')->middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('/bimbingan', [MahasiswaBimbinganController::class, 'index'])->name('mahasiswa.bimbingan.index');
+});
+
+});
+

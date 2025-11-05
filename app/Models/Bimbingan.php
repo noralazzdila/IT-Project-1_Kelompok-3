@@ -22,6 +22,7 @@ class Bimbingan extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'user_id',
         'mahasiswa_nama',
         'nim',
         'dosen_pembimbing',
