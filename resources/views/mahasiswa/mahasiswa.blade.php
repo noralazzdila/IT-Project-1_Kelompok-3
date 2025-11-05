@@ -385,7 +385,7 @@
                       <div class="notif-item">
                         <strong>Seminar Terjadwal</strong>
                         <p class="mb-0 small">Seminar PKL Anda telah dijadwalkan oleh admin.</p>
-                        <small class="text-muted">3 hari yang lalu</small>
+                        <small class="text-muted">5 hari yang lalu</small>
                       </div>
                   </div>
                   <div class="notif-footer">
