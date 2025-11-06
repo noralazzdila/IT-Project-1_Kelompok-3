@@ -200,16 +200,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
     Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
 });
-// Kelola User-Dosen
-    Route::prefix('dosen/user')->group(function () {
-    Route::get('/', [UserDosenController::class, 'index'])->name('dosen.user.index');
-    Route::get('/create', [UserDosenController::class, 'create'])->name('dosen.user.create');
-    Route::post('/', [UserDosenController::class, 'store'])->name('dosen.user.store');
-    Route::get('/{id}', [UserDosenController::class, 'show'])->name('dosen.user.show');
-    Route::get('/{id}/edit', [UserDosenController::class, 'edit'])->name('dosen.user.edit');
-    Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
-    Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
-});
 
     // Dosen Data Mahasiswa
     Route::prefix('dosen')->name('dosen.')->group(function () {
@@ -275,29 +265,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/seminar/{id}', [SeminarDosenController::class, 'show'])->name('seminar.showdosen');
 });
 
-
-Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
- 
-    Route::get('/dashboard', function () {
-        return view('mahasiswa.mahasiswa'); // Create this view from your template
-    })->name('dashboard');
-
-    // "Lihat Tempat PKL" Route
-    Route::get('/tempat-pkl', [MahasiswaController::class, 'indexMahasiswa'])->name('lihatpkl.index');
-    
-    // "Ajukan Tempat PKL" Routes
-    Route::get('/surat-pengantar/ajukan', [SuratPengantarController::class, 'createMahasiswa'])->name('suratpengantar.create');
-    Route::post('/surat-pengantar/ajukan', [SuratPengantarController::class, 'storeMahasiswa'])->name('suratpengantar.store');
-
-    // "Jadwal Seminar" Route for Mahasiswa
-    Route::get('/seminar/jadwal', [MahasiswaController::class, 'jadwalSeminarIndex'])->name('seminar.jadwal');
-    
-    Route::get('/proposal/upload', [ProposalController::class, 'createMahasiswa'])->name('proposal.create');
-    Route::post('/proposal/upload', [ProposalController::class, 'storeMahasiswa'])->name('proposal.store');
-
-    Route::get('/pemberkasan/upload', [PemberkasanController::class, 'createMahasiswa'])->name('pemberkasan.create');
-    Route::post('/pemberkasan/upload', [PemberkasanController::class, 'storeMahasiswa'])->name('pemberkasan.store');
-});
     Route::middleware('auth')->group(function () {
     Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])
     ->name('mahasiswa.lihatdetailipk.index');
