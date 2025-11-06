@@ -124,7 +124,7 @@
                 <h5 class="fw-bold mb-3">Daftar Role - SIM PKL</h5>
 
     
-                 <div class="role-card" onclick="window.location='{{ route ('dosen.dashboard') }}'"style="cursor:pointer;">
+                 <div class="role-card" onclick="window.location='{{ route('dosen.dashboard') }}'"style="cursor:pointer;">
                     <div class="role-title">Dosen</div>
                     <div class="role-sub">Teknologi Informasi</div>
                 </div>

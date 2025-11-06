@@ -22,6 +22,7 @@ use App\Http\Controllers\SuratPengantarController;
 use App\Http\Controllers\PemberkasanController;
 use App\Http\Controllers\KoorprodiController;
 use App\Http\Controllers\StafController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\Dosen\UserDosenController;
 use App\Http\Controllers\Dosen\DataMahasiswaController as DosenDataMahasiswaController;
@@ -30,7 +31,12 @@ use App\Http\Controllers\Dosen\DosenDataDosenController;
 use App\Http\Controllers\Dosen\BimbinganDosenController;
 use App\Http\Controllers\Dosen\PengujiDosenController;
 use App\Http\Controllers\Dosen\SeminarDosenController;
-
+use App\Http\Controllers\Mahasiswa\LihatDetailIpkController;
+use App\Http\Controllers\Mahasiswa\ProfilController;
+use App\Http\Controllers\Mahasiswa\PengaturanController;
+use App\Http\Controllers\Mahasiswa\PreferensiController;
+use App\Http\Controllers\Mahasiswa\MahasiswaDosenController;
+use App\Http\Controllers\Mahasiswa\BimbinganController as MahasiswaBimbinganController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
     Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
-     Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
+    Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
 
     // Resource Controllers (CRUD)
     Route::resource('proposal', ProposalController::class);
@@ -176,6 +182,23 @@ Route::middleware('auth')->group(function () {
     Route::get('/staf/tempatpkl/{tempatpkl}/edit', [StafController::class, 'tempatpkl_edit'])->name('staf.tempatpkl.edit');
     Route::put('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_update'])->name('staf.tempatpkl.update');
     Route::delete('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_destroy'])->name('staf.tempatpkl.destroy');
+
+    // kelola status
+    Route::resource('status', StatusController::class);
+
+    // Resource route untuk Pemberkasan
+    Route::resource('pemberkasan', PemberkasanController::class);
+    Route::post('/pemberkasan/upload', [PemberkasanController::class, 'store'])->name('pemberkasan.store');
+
+    // Kelola User-Dosen
+    Route::prefix('dosen/user')->group(function () {
+    Route::get('/', [UserDosenController::class, 'index'])->name('dosen.user.index');
+    Route::get('/create', [UserDosenController::class, 'create'])->name('dosen.user.create');
+    Route::post('/', [UserDosenController::class, 'store'])->name('dosen.user.store');
+    Route::get('/{id}', [UserDosenController::class, 'show'])->name('dosen.user.show');
+    Route::get('/{id}/edit', [UserDosenController::class, 'edit'])->name('dosen.user.edit');
+    Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
+    Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
 });
 // Kelola User-Dosen
     Route::prefix('dosen/user')->group(function () {
@@ -275,3 +298,46 @@ Route::prefix('mahasiswa')->name('mahasiswa.')->group(function () {
     Route::get('/pemberkasan/upload', [PemberkasanController::class, 'createMahasiswa'])->name('pemberkasan.create');
     Route::post('/pemberkasan/upload', [PemberkasanController::class, 'storeMahasiswa'])->name('pemberkasan.store');
 });
+    Route::middleware('auth')->group(function () {
+    Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])
+    ->name('mahasiswa.lihatdetailipk.index');
+
+});
+
+    Route::middleware(['auth'])->group(function () {
+
+    // Lihat profil & pengaturan
+    Route::get('/profil', [ProfilController::class, 'index'])->name('mahasiswa.profil');
+    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('mahasiswa.pengaturan');
+
+    // Update profil
+    Route::post('/profil', [ProfilController::class, 'update'])->name('mahasiswa.profil.update');
+
+    // Update password
+    Route::post('/profil/password', [ProfilController::class, 'updatePassword'])
+        ->name('mahasiswa.profil.update_password');
+
+    // Update pengaturan
+    Route::post('/pengaturan', [PengaturanController::class, 'update'])->name('mahasiswa.pengaturan.update');
+
+    // Update preferensi
+    Route::post('/pengaturan/preferensi', [PreferensiController::class, 'update'])->name('mahasiswa.preferensi.update');
+});
+
+    // Daftar Dosen
+    Route::get('/daftardosen', [MahasiswaDosenController::class, 'daftardosen'])
+    ->name('dosen.daftardosen')
+    ->middleware('auth');
+
+    // Dosen Pembimbing
+    Route::get('/dosenpembimbing', [MahasiswaDosenController::class, 'dosenpembimbing'])
+    ->name('dosen.dosenpembimbing')
+    ->middleware('auth');
+
+    // Bimbingan - Mahasiswa
+    Route::prefix('mahasiswa')->middleware(['auth', 'role:mahasiswa'])->group(function () {
+    Route::get('/bimbingan', [MahasiswaBimbinganController::class, 'index'])->name('mahasiswa.bimbingan.index');
+});
+
+});
+

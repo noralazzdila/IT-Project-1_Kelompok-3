@@ -47,22 +47,33 @@ class BimbinganController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'mahasiswa_nama'    => 'required|string|max:255',
-            'nim'               => 'required|string|max:20',
-            'dosen_pembimbing'  => 'required|string|max:255',
-            'tanggal_bimbingan' => 'required|date',
-            'topik_bimbingan'   => 'required|string|max:255',
-            'catatan'           => 'required|string',
-            'status'            => 'required|in:Menunggu,Disetujui,Revisi',
-        ]);
+{
+    $request->validate([
+        'mahasiswa_nama'    => 'required|string|max:255',
+        'nim'               => 'required|string|max:20',
+        'dosen_pembimbing'  => 'required|string|max:255',
+        'tanggal_bimbingan' => 'required|date',
+        'topik_bimbingan'   => 'required|string|max:255',
+        'catatan'           => 'required|string',
+        'status'            => 'required|in:Menunggu,Disetujui,Revisi',
+    ]);
 
-        Bimbingan::create($request->all());
+    // 🟢 Tambahkan user_id dari user yang login
+    Bimbingan::create([
+        'user_id'           => auth()->id(),
+        'mahasiswa_nama'    => $request->mahasiswa_nama,
+        'nim'               => $request->nim,
+        'dosen_pembimbing'  => $request->dosen_pembimbing,
+        'tanggal_bimbingan' => $request->tanggal_bimbingan,
+        'topik_bimbingan'   => $request->topik_bimbingan,
+        'catatan'           => $request->catatan,
+        'status'            => $request->status,
+    ]);
 
-        return redirect()->route('bimbingan.index')
-                         ->with('success', 'Data Bimbingan berhasil ditambahkan.');
-    }
+    return redirect()->route('bimbingan.index')
+                     ->with('success', 'Data Bimbingan berhasil ditambahkan.');
+}
+
 
     /**
      * Display the specified resource.

@@ -303,8 +303,8 @@
             <ul class="dropdown-menu" aria-labelledby="dosenDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="#"><i class="bi bi-person-lines-fill me-2"></i>Daftar Dosen</a>
-                  <a href="#"><i class="bi bi-person-check-fill me-2"></i>Dosen Pembimbing</a>
+                  <a href="{{ route('dosen.daftardosen') }}"><i class="bi bi-person-lines-fill me-2"></i>Daftar Dosen</a>
+                  <a href="{{ route('dosen.dosenpembimbing') }}"><i class="bi bi-person-check-fill me-2"></i>Dosen Pembimbing</a>
                 </div>
               </li>
             </ul>
@@ -324,7 +324,7 @@
             <ul class="dropdown-menu" aria-labelledby="bimbinganDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="#"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
+                  <a href="{{ route('mahasiswa.bimbingan.index') }}"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
                 </div>
               </li>
             </ul>
@@ -383,7 +383,7 @@
                       <div class="notif-item">
                         <strong>Seminar Terjadwal</strong>
                         <p class="mb-0 small">Seminar PKL Anda telah dijadwalkan oleh admin.</p>
-                        <small class="text-muted">3 hari yang lalu</small>
+                        <small class="text-muted">5 hari yang lalu</small>
                       </div>
                   </div>
                   <div class="notif-footer">
@@ -397,19 +397,19 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center p-1 pe-2" style="background-color: rgba(255,255,255,0.1); border-radius: 20px;" href="#" id="profilDropdown" data-bs-toggle="dropdown">
               <img src="{{ asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
-              <span>Rifki Pratama</span>
+              <span>{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profilDropdown">
               <li>
                 <div class="profile-card">
                   <div class="text-center mb-2">
-                    <img src="{{ asset('images/user-fill.png') }}" alt="Profil" class="profile-img mb-2" style="width:60px; height:60px; border-width: 3px;">
-                    <h6>Rifki Pratama</h6>
-                    <p>Mahasiswa - Teknologi Informasi</p>
+                    <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
+                    <h6>{{ Auth::user()->name }}</h6>
+                    <p>Mahasiswa-Teknologi Informasi</p>
                   </div>
                   <div class="profile-actions">
-                    <a href="#"><i class="bi bi-person-circle me-2"></i>Profil Saya</a>
-                    <a href="#"><i class="bi bi-gear me-2"></i>Pengaturan</a>
+                    <a href="{{ route('mahasiswa.profil') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a>
+                    <a href="{{ route('mahasiswa.pengaturan') }}"><i class="bi bi-gear me-2"></i>Pengaturan</a>
                     <hr>
                     <a href={{ route('login') }} class="logout"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
                   </div>
@@ -533,7 +533,7 @@
       <div class="col-md-4">
         <div class="card p-3 mb-3">
           <h6>Hello, Selamat Datang</h6>
-          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="#">Lihat Detail</a>.</p>
+          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="{{ route('mahasiswa.lihatdetailipk.index') }}">Lihat Detail</a>.</p>
         </div>
 
         <div class="card p-3">
