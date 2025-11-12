@@ -27,7 +27,7 @@
         }
         .register-left {
             flex: 1;
-            background: url("{{ asset('images/Bg.png') }}") no-repeat center center;
+            background: url("{{ asset('images/gkt.jpg') }}") no-repeat center center;
             background-size: cover;
             display: flex;
             justify-content: center;
