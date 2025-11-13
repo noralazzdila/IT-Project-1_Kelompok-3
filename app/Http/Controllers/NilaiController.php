@@ -26,7 +26,7 @@ class NilaiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nim' => 'required|string|max:20',
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim',
             'nama' => 'required|string|max:100',
             'jurusan' => 'nullable|string|max:100',
             'angkatan' => 'nullable|string|max:10',

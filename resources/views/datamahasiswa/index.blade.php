@@ -116,9 +116,22 @@
                             <a href="{{ route('datamahasiswa.create') }}" class="btn btn-success">
                                 <i class="fa-solid fa-plus me-2"></i> Tambah Mahasiswa
                             </a>
-                            <form action="{{ route('datamahasiswa.index') }}" method="GET" class="d-flex" style="max-width: 300px;">
-                                <input type="text" name="search" class="form-control me-2" placeholder="Cari Nama atau NIM..." value="{{ request('search') }}">
-                                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-search"></i></button>
+                            <form action="{{ route('datamahasiswa.index') }}" method="GET" class="w-100">
+                                  <div class="input-group">
+                                     <span class="input-group-text bg-light border-end-0">
+                                        <i class="fa fa-search text-muted"></i>
+                                    </span>
+                                 <input 
+                                      type="text" 
+                                      name="search" 
+                                      class="form-control border-start-0" 
+                                      placeholder="Cari mahasiswa berdasarkan NIM, nama, prodi, atau kelas..." 
+                                      value="{{ request('search') }}">
+                                    @if(request('search'))
+                            <a href="{{ route('datamahasiswa.index') }}" class="input-group-text bg-light text-danger" title="Hapus pencarian">
+                         <i class="fa fa-times"></i>  </a>@endif
+                             <button type="submit" class="btn btn-primary">Cari</button>
+                        </div>
                             </form>
                         </div>
                         @if(session('success'))

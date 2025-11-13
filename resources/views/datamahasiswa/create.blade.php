@@ -128,9 +128,20 @@
                         </div>
                     </div>
                      <div class="mb-3">
-                        <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
-                        <input type="text" class="form-control @error('dosen_pembimbing') is-invalid @enderror" id="dosen_pembimbing" name="dosen_pembimbing" value="{{ old('dosen_pembimbing') }}" required>
-                        @error('dosen_pembimbing')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                         <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
+                         <select class="form-select @error('dosen_pembimbing') is-invalid @enderror" id="dosen_pembimbing" name="dosen_pembimbing" required>
+                         <option value="">Pilih Dosen Pembimbing</option>
+                         @php
+                        // Ambil data dosen langsung di view (sementara)
+                        $dosens = \App\Models\Dosen::orderBy('nama')->get();
+                          @endphp
+                          @foreach($dosens as $dosen)
+                         <option value="{{ $dosen->id }}" {{ old('dosen_pembimbing') == $dosen->id ? 'selected' : '' }}>
+                            {{ $dosen->nama }} - {{ $dosen->nip }}
+                         </option>
+                         @endforeach
+                        </select>
+                         @error('dosen_pembimbing')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                      <div class="mb-3">
                         <label for="tempat_pkl" class="form-label">Tempat PKL</label>

@@ -110,11 +110,6 @@
                                             <option value="">-- Memuat daftar sheet... --</option>
                                         </select>
                                     </div>
-                                    <div class="mt-2">
-                                        <button type="button" id="importSheetBtn" class="btn btn-info" disabled>
-                                            <i class="fa fa-cloud-download"></i> Import Data Sheet
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
 
@@ -150,8 +145,9 @@
                     <div class="row">
                         <h6 class="fw-semibold mt-2 mb-2 text-primary">🧑‍🎓 Data Mahasiswa</h6>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">NIM <span class="text-danger">*</span></label>
-                            <input type="text" name="nim" class="form-control" value="{{ old('nim') }}" required>
+                           <label for="nim" class="form-label">NIM</label>
+                           <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
+                           @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama <span class="text-danger">*</span></label>

@@ -89,7 +89,8 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="nim" class="form-label">NIM</label>
-                            <input type="text" class="form-control" name="nim" value="{{ old('nim') }}" placeholder="Ketik NIM">
+                            <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
+                            @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>
 
@@ -100,8 +101,20 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="nama_pembimbing" class="form-label">Nama Pembimbing</label>
-                            <input type="text" class="form-control" name="nama_pembimbing" value="{{ old('nama_pembimbing') }}" placeholder="Ketik nama dosen pembimbing">
+                          <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
+                         <select class="form-select @error('dosen_pembimbing') is-invalid @enderror" id="dosen_pembimbing" name="dosen_pembimbing" required>
+                         <option value="">Pilih Dosen Pembimbing</option>
+                         @php
+                        // Ambil data dosen langsung di view (sementara)
+                        $dosens = \App\Models\Dosen::orderBy('nama')->get();
+                          @endphp
+                          @foreach($dosens as $dosen)
+                         <option value="{{ $dosen->id }}" {{ old('dosen_pembimbing') == $dosen->id ? 'selected' : '' }}>
+                            {{ $dosen->nama }} - {{ $dosen->nip }}
+                         </option>
+                         @endforeach
+                        </select>
+                         @error('dosen_pembimbing')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="nama_penguji" class="form-label">Nama Penguji</label>

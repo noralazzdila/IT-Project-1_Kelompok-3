@@ -73,9 +73,9 @@
                     @csrf
                     
                     <div class="mb-3">
-                        <label for="nim" class="form-label">NIM</label>
-                        <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
-                        @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                         <label for="nim" class="form-label">NIM</label>
+                         <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
+                         @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="mb-3">
@@ -91,9 +91,20 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="pembimbing" class="form-label">Dosen Pembimbing</label>
-                        <input type="text" class="form-control @error('pembimbing') is-invalid @enderror" id="pembimbing" name="pembimbing" value="{{ old('pembimbing') }}" required>
-                        @error('pembimbing')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
+                         <select class="form-select @error('dosen_pembimbing') is-invalid @enderror" id="dosen_pembimbing" name="dosen_pembimbing" required>
+                         <option value="">Pilih Dosen Pembimbing</option>
+                         @php
+                        // Ambil data dosen langsung di view (sementara)
+                        $dosens = \App\Models\Dosen::orderBy('nama')->get();
+                          @endphp
+                          @foreach($dosens as $dosen)
+                         <option value="{{ $dosen->id }}" {{ old('dosen_pembimbing') == $dosen->id ? 'selected' : '' }}>
+                            {{ $dosen->nama }} - {{ $dosen->nip }}
+                         </option>
+                         @endforeach
+                        </select>
+                         @error('dosen_pembimbing')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="mb-3">

@@ -19,6 +19,9 @@
         </div>
         @endif
 
+        {{-- ====================================================== --}}
+        {{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU --}}
+        {{-- ====================================================== --}}
         <div class="card mb-4">
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
@@ -36,6 +39,7 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="importTabContent">
+                    {{-- TAB 1: GOOGLE SHEET --}}
                     <div class="tab-pane fade show active" id="sheet-tab-pane" role="tabpanel" aria-labelledby="sheet-tab" tabindex="0">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
                             <div class="flex-grow-1 me-3">
@@ -44,13 +48,10 @@
                                     <option value="">-- Memuat daftar sheet... --</option>
                                 </select>
                             </div>
-                            <div class="mt-2">
-                                <button type="button" id="importSheetBtn" class="btn btn-info" disabled>
-                                    <i class="fa fa-cloud-download"></i> Import Data Sheet
-                                </button>
-                            </div>
                         </div>
                     </div>
+
+                    {{-- TAB 2: PDF --}}
                     <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
                         <form id="pdfImportForm" enctype="multipart/form-data">
                             <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -70,6 +71,9 @@
             </div>
         </div>
 
+        {{-- ====================================================== --}}
+        {{-- FORM UTAMA UNTUK MENYIMPAN DATA --}}
+        {{-- ====================================================== --}}
         <form action="{{ route('staf.nilai.store') }}" method="POST">
             @csrf
             <input type="hidden" name="sheet_name" id="sheet_name_hidden">
@@ -78,8 +82,9 @@
             <div class="row">
                 <h6 class="fw-semibold mt-2 mb-2 text-primary">🧑‍🎓 Data Mahasiswa</h6>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">NIM <span class="text-danger">*</span></label>
-                    <input type="text" name="nim" class="form-control" value="{{ old('nim') }}" required>
+                    <label for="nim" class="form-label">NIM</label>
+                    <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
+                    @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Nama <span class="text-danger">*</span></label>
@@ -117,15 +122,18 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-between">
-                <a href="{{ route('staf.nilai.index') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Batal</a>
+                <a href="{{ route('nilai.index') }}" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Batal</a>
                 <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Simpan Data</button>
             </div>
         </form>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
+    // === FUNGSI UNTUK MENGISI FORM SECARA OTOMATIS ===
     function populateForm(data) {
         if (!data || data.error) {
             alert('Gagal memuat data: ' + (data ? data.error : 'Respon tidak valid'));
@@ -150,67 +158,31 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('✅ Data berhasil diambil dan form terisi otomatis!');
     }
 
-    const sheetSelect = document.getElementById('sheet_name_select');
-    const importSheetBtn = document.getElementById('importSheetBtn');
-
-    async function fetchSheets() {
-        try {
-            const response = await fetch(`{{ route('sheets.list') }}`);
-            if (!response.ok) throw new Error('Gagal memuat daftar sheet');
-            const sheets = await response.json();
-            sheetSelect.innerHTML = '<option value="">-- Pilih Sheet Mahasiswa --</option>';
-            sheets.forEach(name => {
-                const option = new Option(name, name);
-                sheetSelect.appendChild(option);
-            });
-            importSheetBtn.disabled = false;
-        } catch (error) {
-            console.error(error);
-            sheetSelect.innerHTML = '<option value="">Gagal memuat daftar sheet</option>';
-        }
-    }
-    
-    importSheetBtn.addEventListener('click', async function() {
-        const sheetName = sheetSelect.value;
-        if (!sheetName) return alert('Pilih sheet mahasiswa terlebih dahulu!');
-        this.disabled = true; this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengimpor...';
-
-        try {
-            const response = await fetch(`{{ route('nilai.import') }}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ sheet_name: sheetName })
-            });
-            const data = await response.json();
-            populateForm(data);
-        } catch (err) {
-            alert('Terjadi kesalahan: ' + err.message);
-        } finally {
-            this.disabled = false; this.innerHTML = '<i class="fa fa-cloud-download"></i> Import Data Sheet';
-        }
-    });
-
-    fetchSheets(); 
-
+    // === LOGIKA UNTUK IMPORT PDF ===
     const pdfForm = document.getElementById('pdfImportForm');
     const importPdfBtn = document.getElementById('importPdfBtn');
     const pdfFileInput = document.getElementById('file_pdf');
 
     pdfForm.addEventListener('submit', async function(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         if (!pdfFileInput.files.length) {
             return alert('Pilih file PDF terlebih dahulu!');
         }
-        
-        importPdfBtn.disabled = true; importPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
-        
+
+        importPdfBtn.disabled = true;
+        importPdfBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Memproses...';
+
         const formData = new FormData();
         formData.append('file_pdf', pdfFileInput.files[0]);
 
         try {
+            // ✅ PERBAIKAN ADA DI SINI
             const response = await fetch(`{{ route('nilai.importPdf') }}`, {
-                method: 'POST',
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                method: 'POST', 
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
                 body: formData
             });
             const data = await response.json();
@@ -218,7 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (err) {
             alert('Terjadi kesalahan: ' + err.message);
         } finally {
-            importPdfBtn.disabled = false; importPdfBtn.innerHTML = '<i class="fa fa-upload"></i> Unggah & Proses PDF';
+            importPdfBtn.disabled = false;
+            importPdfBtn.innerHTML = '<i class="fa fa-upload"></i> Unggah & Proses PDF';
         }
     });
 });
