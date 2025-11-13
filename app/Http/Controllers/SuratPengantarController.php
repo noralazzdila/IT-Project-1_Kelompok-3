@@ -46,7 +46,7 @@ class SuratPengantarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nim' => 'required|string|max:20',
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim',
             'nama_mahasiswa' => 'required|string|max:255',
             'prodi' => 'required|string|max:255',
             'tempat_pkl' => 'required|string|max:255',

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 
-class KoorprodiController extends Controller
+class KoorProdiController extends Controller
 {
     public function index()
     {

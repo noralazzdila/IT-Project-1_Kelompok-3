@@ -80,8 +80,8 @@
                 <h5 class="mb-0">@yield('header-title', 'Dashboard Staf')</h5>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fw-semibold">Nama Staf</span> <br>
-                        <small>Staf</small>
+                        <span class="fw-semibold">{{ Auth::user()->name ?? 'Nama Staf' }}</span> <br>
+                        <small>{{ ucfirst(Auth::user()->role ?? 'staf') }}</small>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profil</a></li>
