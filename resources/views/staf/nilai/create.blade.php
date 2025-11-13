@@ -26,11 +26,6 @@
             <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="sheet-tab" data-bs-toggle="tab" data-bs-target="#sheet-tab-pane" type="button" role="tab" aria-controls="sheet-tab-pane" aria-selected="true">
-                            <i class="fa fa-table"></i> Import dari Google Sheet
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
                         <button class="nav-link" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-tab-pane" type="button" role="tab" aria-controls="pdf-tab-pane" aria-selected="false">
                             <i class="fa fa-file-pdf"></i> Import dari PDF
                         </button>
