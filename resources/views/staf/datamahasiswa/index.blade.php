@@ -19,6 +19,32 @@
         </a>
     </div>
 
+    <!-- Fitur Pencarian -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form action="{{ route('staf.datamahasiswa.index') }}" method="GET" class="d-flex align-items-center">
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-end-0">
+                        <i class="fa fa-search text-muted"></i>
+                    </span>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        class="form-control border-start-0" 
+                        placeholder="Cari mahasiswa berdasarkan NIM, nama, prodi, atau kelas..." 
+                        value="{{ request('search') }}"
+                    >
+                    @if(request('search'))
+                        <a href="{{ route('staf.datamahasiswa.index') }}" class="input-group-text bg-light text-danger" title="Hapus pencarian">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    @endif
+                    <button type="submit" class="btn btn-primary">Cari</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="card shadow-sm p-3">
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
@@ -57,7 +83,13 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="text-center">Belum ada data mahasiswa.</td>
+                    <td colspan="9" class="text-center">
+                        @if(request('search'))
+                            Tidak ditemukan data mahasiswa dengan kata kunci "{{ request('search') }}"
+                        @else
+                            Belum ada data mahasiswa.
+                        @endif
+                    </td>
                 </tr>
                 @endforelse
             </tbody>
