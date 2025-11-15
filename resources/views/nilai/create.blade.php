@@ -80,37 +80,22 @@
                     </ul>
                 </div>
                 @endif
-{{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU --}}
 <div class="card mb-4">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
-            {{-- TAB PDF --}}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-tab-pane" type="button" role="tab" aria-controls="pdf-tab-pane" aria-selected="false">
-                    <i class="fa fa-file-pdf"></i> Import dari PDF
-                </button>
-            </li>
-        </ul>
-    </div>
     <div class="card-body">
-        <div class="tab-content" id="importTabContent">
-
-            {{-- TAB 2: PDF --}}
-            <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
-                <form id="pdfImportForm" enctype="multipart/form-data">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div class="flex-grow-1 me-3">
-                            <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
-                            <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
-                        </div>
-                        <div class="mt-2">
-                            <button type="submit" id="importPdfBtn" class="btn btn-danger">
-                                <i class="fa fa-upload"></i> Unggah & Proses PDF
-                            </button>
-                        </div>
+        <div class="tab-pane fade show active" id="pdf-tab-pane" role="tabpanel">
+            <form id="pdfImportForm" enctype="multipart/form-data">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="flex-grow-1 me-3">
+                        <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
+                        <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
                     </div>
-                </form>
-            </div>
+                    <div class="mt-2">
+                        <button type="submit" id="importPdfBtn" class="btn btn-danger">
+                            <i class="fa fa-upload"></i> Unggah & Proses PDF
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
