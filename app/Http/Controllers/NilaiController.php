@@ -26,7 +26,7 @@ class NilaiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nim' => 'required|string|max:20|unique:mahasiswa,nim',
+            'nim' => 'required|string|max:20',
             'nama' => 'required|string|max:100',
             'jurusan' => 'nullable|string|max:100',
             'angkatan' => 'nullable|string|max:10',
@@ -50,6 +50,10 @@ class NilaiController extends Controller
                 'nama' => $request->nama,
             ]
         );
+
+        if (Nilai::where('mahasiswa_id', $mahasiswa->id)->exists()) {
+            return redirect()->back()->withErrors(['nim' => 'Nilai untuk NIM ini sudah ada.'])->withInput();
+        }
 
         Nilai::create([
             'mahasiswa_id' => $mahasiswa->id,
@@ -264,8 +268,8 @@ class NilaiController extends Controller
                 'nama'      => '/Nama\s*:\s*(.*)/',
                 'nim'       => '/NIM\s*:\s*(\d+)/',
                 'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
-                'ipk'       => '/Index Prestasi Kumulatif \(IPK\)\s*:\s*([\d,\.]+)/i',
-                'total_sks' => '/Jumlah SKS Yang Diambil\s*:\s*(\d+)/'
+                'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
+                'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
             ];
 
             foreach ($patterns as $key => $pattern) {
@@ -297,12 +301,13 @@ class NilaiController extends Controller
             }
 
             // 3. Gabungkan semua data menjadi satu format JSON yang konsisten
+            $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : null;
             $data = [
                 'nim' => $dataMahasiswa['nim'],
                 'nama' => $dataMahasiswa['nama'],
                 'jurusan' => 'Teknologi Informasi',
                 'angkatan' => $dataMahasiswa['angkatan'],
-                'ipk' => (float) $dataMahasiswa['ipk'],
+                'ipk' => (float) $ipkValue,
                 'count_a' => $gradeCounts['A'],
                 'count_b_plus' => $gradeCounts['B+'],
                 'count_b' => $gradeCounts['B'],
