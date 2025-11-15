@@ -19,11 +19,12 @@
         .register-container {
             display: flex;
             width: 100%;
-            max-width: 1100px;
-            height: 650px;
-            border-radius: 10px;
+            max-width: 900px;
+            height: 590px;
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            background: white;
         }
         .register-left {
             flex: 1;
@@ -35,6 +36,7 @@
             padding: 30px;
             color: white;
             text-align: left;
+            position: relative;
         }
         .register-left h2 {
             font-weight: bold;
@@ -84,16 +86,16 @@
         <div class="register-left">
             <div>
                 <h5>Selamat Datang</h5>
-                <p>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
-                   Politeknik Negeri Tanah Laut</p>
+                <small>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
+                   Politeknik Negeri Tanah Laut</small>
             </div>
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="register-right">
-            <div class="text-center mb-4">
+            <div class="text-center mb-2">
                 <img src="{{ asset('images/Logo_Politala.png') }}" alt="Logo" width="80">
-                <h5 class="mt-2">Daftar dan Verifikasi</h5>
+                <h6 class="mt-2">Daftar dan Verifikasi</h6>
             </div>
 
             <!-- REGISTER WITH GOOGLE -->
@@ -101,8 +103,6 @@
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
                 Lanjutkan Dengan Google
             </a>
-
-            <div class="text-center my-1 text-muted">Atau</div>
 
             <!-- FORM REGISTER -->
             <form method="POST" action="{{ route('register') }}">
@@ -144,7 +144,7 @@
                 <button type="submit" class="btn btn-primary w-100">Daftar</button>
             </form>
 
-            <div class="text-center mt-2">
+            <div class="text-center mt-1">
                 <small class="text-muted">Sudah memiliki akun? 
                     <a href="{{ route('login') }}">Login</a>
                 </small>

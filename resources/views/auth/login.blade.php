@@ -19,11 +19,11 @@
         .login-container {
             display: flex;
             width: 100%;
-            max-width: 1100px;
-            height: 650px;
-            border-radius: 15px;
+            max-width: 900px;
+            height: 590px;
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
             background: white;
         }
         .login-left {
@@ -36,6 +36,7 @@
             padding: 30px;
             color: white;
             text-align: left;
+            position: relative;
         }
         .login-left h2 {
             font-weight: bold;
@@ -52,9 +53,9 @@
             border: 1px solid #ccc;
             background: white;
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -96,16 +97,16 @@
         <div class="login-left">
             <div>
                 <h5>Selamat Datang</h5>
-                <p>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
-                   Politeknik Negeri Tanah Laut</p>
+                <small>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
+                   Politeknik Negeri Tanah Laut</small>
             </div>
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="login-right">
-            <div class="text-center mb-4">
+            <div class="text-center mb-2">
                 <img src="{{ asset('images/Logo_Politala.png') }}" alt="Logo" width="80">
-                <h5 class="mt-2">Masuk dan Verifikasi</h5>
+                <h6 class="mt-2">Masuk dan Verifikasi</h6>
                 <small>Nikmati kemudahan sistem autentikasi tunggal untuk mengakses semua layanan dengan satu akun.</small>
             </div>
         
@@ -115,19 +116,19 @@
                 Lanjutkan dengan Google
             </a>
 
-            <div class="text-center my-2 text-muted">Atau</div>
+            <div class="text-center my-1 text-muted">Atau</div>
 
             <!-- FORM LOGIN -->
             <form action="{{ url('/login') }}" method="POST">
                 @csrf
-                <div class="mb-3">
+                <div class="mb-2">
                     <label>Email / NIM</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-user"></i></span>
                         <input type="text" name="email" class="form-control" placeholder="Masukkan email" required>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-2">
                     <label>Kata sandi</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-lock"></i></span>
@@ -140,7 +141,7 @@
                 <p class="d-flex justify-content-between mb-3"> <a href="{{ route('password.email') }}" class="text-muted">Lupa kata sandi?</a> </p>
                 <button type="submit" class="btn btn-primary w-100">Masuk</button>
 
-                <p class="text-center mt-3">Belum punya akun? <a href="{{ route('register') }}">Register</a></p>
+                <p class="text-center mt-2">Belum punya akun? <a href="{{ route('register') }}">Register</a></p>
             </form>
         </div>
     </div>
