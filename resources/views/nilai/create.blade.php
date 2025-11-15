@@ -80,59 +80,40 @@
                     </ul>
                 </div>
                 @endif
+{{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU --}}
+<div class="card mb-4">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
+            {{-- TAB PDF --}}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-tab-pane" type="button" role="tab" aria-controls="pdf-tab-pane" aria-selected="false">
+                    <i class="fa fa-file-pdf"></i> Import dari PDF
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="importTabContent">
 
-                {{-- ====================================================== --}}
-                {{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU                --}}
-                {{-- ====================================================== --}}
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="sheet-tab" data-bs-toggle="tab" data-bs-target="#sheet-tab-pane" type="button" role="tab" aria-controls="sheet-tab-pane" aria-selected="true">
-                                    <i class="fa fa-table"></i> Import dari Google Sheet
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-tab-pane" type="button" role="tab" aria-controls="pdf-tab-pane" aria-selected="false">
-                                    <i class="fa fa-file-pdf"></i> Import dari PDF
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="importTabContent">
-                            {{-- TAB 1: GOOGLE SHEET --}}
-                            <div class="tab-pane fade show active" id="sheet-tab-pane" role="tabpanel" aria-labelledby="sheet-tab" tabindex="0">
-                                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                                    <div class="flex-grow-1 me-3">
-                                        <label for="sheet_name_select" class="form-label mb-0">Pilih Sheet Mahasiswa:</label>
-                                        <select id="sheet_name_select" class="form-select mt-2">
-                                            <option value="">-- Memuat daftar sheet... --</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- TAB 2: PDF --}}
-                            <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
-                                <form id="pdfImportForm" enctype="multipart/form-data">
-                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                                        <div class="flex-grow-1 me-3">
-                                            <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
-                                            <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
-                                        </div>
-                                        <div class="mt-2">
-                                            <button type="submit" id="importPdfBtn" class="btn btn-danger">
-                                                <i class="fa fa-upload"></i> Unggah & Proses PDF
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+            {{-- TAB 2: PDF --}}
+            <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
+                <form id="pdfImportForm" enctype="multipart/form-data">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="flex-grow-1 me-3">
+                            <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
+                            <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" id="importPdfBtn" class="btn btn-danger">
+                                <i class="fa fa-upload"></i> Unggah & Proses PDF
+                            </button>
                         </div>
                     </div>
-                </div>
-
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
                 {{-- ====================================================== --}}
                 {{-- FORM UTAMA UNTUK MENYIMPAN DATA                      --}}
@@ -288,7 +269,10 @@
             try {
                 const response = await fetch(`{{ route('nilai.importPdf') }}`, {
                     method: 'POST',
-                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                    headers: { 
+                               'Accept': 'application/json', 
+                               'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                    },
                     body: formData
                 });
                 const data = await response.json();
