@@ -151,17 +151,17 @@
             </div>
             <nav class="nav flex-column px-2">
                 <a href="{{ route('koor.dashboard') }}" class="nav-link active"><i class="fa fa-home me-2"></i> Beranda</a>
-                <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i> Manajemen User</a>
-                <a href="{{ route('nilai.index') }}" class="nav-link"><i class="fa fa-graduation-cap me-2"></i> Manajemen Nilai</a>
-                <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i> Manajemen Tempat PKL</a>
-                <a href="{{ route('datamahasiswa.index') }}" class="nav-link"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
-                <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i> Kelola Bimbingan</a>
-                <a href="{{ route('seminar.index') }}" class="nav-link"><i class="fa fa-calendar me-2"></i> Kelola Seminar</a>
-                <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
-                <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a>
-                <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-                <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa-solid fa-envelope me-2"></i> Kelola Surat Pengantar</a>
-                <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i> Kelola Pemberkasan</a>
+                <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>User</a>
+                <a href="{{ route('nilai.index') }}" class="nav-link"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
+                <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i>Tempat PKL</a>
+                <a href="{{ route('datamahasiswa.index') }}" class="nav-link"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
+                <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i>Bimbingan</a>
+                <a href="{{ route('seminar.index') }}" class="nav-link "><i class="fa fa-calendar me-2"></i>Seminar</a>
+                <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i>Penguji</a>
+                <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>Data Dosen</a>
+                <a href="{{ route('proposal.index') }}" class="nav-link "><i class="fa fa-file-signature me-2"></i>Proposal</a>
+                <a href="{{ route('suratpengantar.index') }}" class="nav-link "><i class="fa fa-envelope me-2"></i>Surat Pengantar</a>
+                <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa fa-folder me-2"></i>Pemberkasan</a>
             </nav>
             </nav>
         </div>

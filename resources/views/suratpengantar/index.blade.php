@@ -80,10 +80,10 @@
                 <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i>Bimbingan</a>
                 <a href="{{ route('seminar.index') }}" class="nav-link "><i class="fa fa-calendar me-2"></i>Seminar</a>
                 <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i>Penguji</a>
-                <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>  Data Dosen</a>
-                <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-                <a href="{{ route('suratpengantar.index') }}" class="nav-link active"><i class="fa fa-envelope me-2"></i>  Surat Pengantar</a>
-                <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa fa-folder me-2"></i>  Pemberkasan</a>
+                <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>Data Dosen</a>
+                <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i>Proposal</a>
+                <a href="{{ route('suratpengantar.index') }}" class="nav-link active"><i class="fa fa-envelope me-2"></i>Surat Pengantar</a>
+                <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa fa-folder me-2"></i>Pemberkasan</a>
             </nav>
         </div>
  
