@@ -7,6 +7,11 @@ use App\Models\User;
 use App\Models\DataMahasiswa;
 use App\Models\Penguji;
 use App\Models\Dosen;
+<<<<<<< HEAD
+=======
+use App\Models\SuratPengantar;
+use App\Models\Pemberkasan;
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
 use App\Models\Proposal;
 use Illuminate\Http\Request;
@@ -416,4 +421,25 @@ class KoorProdiController extends Controller
         return redirect()->route('koorprodi.datadosen.index')
                          ->with('success', 'Data Dosen berhasil dihapus.');
     }
+<<<<<<< HEAD
+=======
+
+    public function seminar_index()
+    {
+        $seminars = Seminar::latest()->paginate(10);
+        return view('koorprodi.seminar.index', compact('seminars'));
+    }
+
+    public function suratpengantar_index()
+    {
+        $suratpengantars = SuratPengantar::latest()->paginate(10);
+        return view('koorprodi.suratpengantar.index', compact('suratpengantars'));
+    }
+
+    public function pemberkasan_index()
+    {
+        $pemberkasans = Pemberkasan::latest()->paginate(10);
+        return view('koorprodi.pemberkasan.index', compact('pemberkasans'));
+    }
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 }

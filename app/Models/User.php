@@ -49,5 +49,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+<<<<<<< HEAD
     
+=======
+
+    public function mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class, 'nim', 'identifier');
+    }
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 }

@@ -284,7 +284,11 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
           <li class="nav-item">
+<<<<<<< HEAD
             <a class="nav-link active" href="mahasiswa.blade.php">Beranda</a>
+=======
+            <a class="nav-link active" href="{{ route ('dashboard.mahasiswa') }}">Beranda</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
           </li>
           
           <li class="nav-item dropdown">
@@ -292,8 +296,13 @@
             <ul class="dropdown-menu" aria-labelledby="tempatDropdown">
               <li>
                 <div class="dropdown-card">
+<<<<<<< HEAD
                   <a href="#"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
                   <a href="#"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+=======
+                    <a href="{{ route('mahasiswa.lihatpkl.index') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
+                   <a href="{{ route('mahasiswa.suratpengantar.create') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 </div>
               </li>
             </ul>
@@ -314,8 +323,12 @@
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
+<<<<<<< HEAD
                   <a href="#"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
                   <a href="#"><i class="bi bi-card-checklist me-2"></i>Daftar Seminar</a>
+=======
+                  <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 </div>
               </li>
             </ul>
@@ -325,7 +338,11 @@
             <ul class="dropdown-menu" aria-labelledby="bimbinganDropdown">
               <li>
                 <div class="dropdown-card">
+<<<<<<< HEAD
                   <a href="{{ route('mahasiswa.bimbingan.index') }}"><i class="bi bi-journal-text me-2"></i>Lihat Bimbingan</a>
+=======
+                  <a href="{{ route('mahasiswa.bimbingan.index') }}"><i class="bi bi-journal-text me-2"></i> Konsultasi</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 </div>
               </li>
             </ul>
@@ -335,8 +352,12 @@
             <ul class="dropdown-menu" aria-labelledby="proposalDropdown">
               <li>
                 <div class="dropdown-card">
+<<<<<<< HEAD
                   <a href="#"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
                   <a href="#"><i class="bi bi-file-earmark-check me-2"></i>Status Proposal</a>
+=======
+                  <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 </div>
               </li>
             </ul>
@@ -346,7 +367,11 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
+<<<<<<< HEAD
                   <a href="#"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+=======
+                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 </div>
               </li>
             </ul>
@@ -473,7 +498,11 @@
   </section>
 
   <div class="container main-content">
+<<<<<<< HEAD
     <div class="row">
+=======
+    <div class="row"> 
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
       <div class="col-md-8">
         <div class="card p-4 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
@@ -539,7 +568,11 @@
         </div>
 
         <div class="card p-3">
+<<<<<<< HEAD
           <h6>Kalender Akademik</h6>
+=======
+          <h6>Kalender Akademik</h6> 
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             <iframe 
             src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
             style="border: 1px solid #ddd; border-radius: 10px;" 
@@ -547,13 +580,20 @@
             height="350" 
             frameborder="0" 
             scrolling="no">
+<<<<<<< HEAD
         </iframe>
+=======
+        </iframe> 
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         </div>
         </div>
       </div>
     </div>
   </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

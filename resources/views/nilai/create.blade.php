@@ -44,6 +44,7 @@
         </div>
         <nav class="nav flex-column px-2">
             <a href="{{ route('koor.dashboard') }}" class="nav-link"><i class="fa fa-home me-2"></i> Beranda</a>
+<<<<<<< HEAD
             <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i> Kelola User</a>
             <a href="{{ route('nilai.index') }}" class="nav-link active"><i class="fa fa-graduation-cap me-2"></i> Kelola Nilai</a>
             <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i> Kelola Tempat PKL</a>
@@ -57,6 +58,19 @@
             <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i> Kelola Pemberkasan</a>
         </nav>
     </div>
+=======
+                <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>User</a>
+                <a href="{{ route('nilai.index') }}" class="nav-link active"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
+                <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i>Tempat PKL</a>
+                <a href="{{ route('datamahasiswa.index') }}" class="nav-link"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
+                <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i>Bimbingan</a>
+                <a href="{{ route('seminar.index') }}" class="nav-link"><i class="fa fa-calendar me-2"></i>Seminar</a>
+                <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i>Penguji</a>
+                <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>Data Dosen</a>
+                <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
+                <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa-solid fa-envelope me-2"></i>Surat Pengantar</a>
+                <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i>Pemberkasan</a>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
     <div class="col-10 d-flex flex-column">
         <div class="header d-flex justify-content-between align-items-center">
@@ -80,6 +94,7 @@
                     </ul>
                 </div>
                 @endif
+<<<<<<< HEAD
 {{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU --}}
 <div class="card mb-4">
     <div class="card-header">
@@ -114,6 +129,27 @@
         </div>
     </div>
 </div>
+=======
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form id="pdfImportForm" enctype="multipart/form-data">
+                            <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="flex-grow-1 me-3">
+                                    <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
+                                    <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="submit" id="importPdfBtn" class="btn btn-danger">
+                                        <i class="fa fa-upload"></i> Unggah & Proses PDF
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
                 {{-- ====================================================== --}}
                 {{-- FORM UTAMA UNTUK MENYIMPAN DATA                      --}}
@@ -126,9 +162,14 @@
                     <div class="row">
                         <h6 class="fw-semibold mt-2 mb-2 text-primary">🧑‍🎓 Data Mahasiswa</h6>
                         <div class="col-md-6 mb-3">
+<<<<<<< HEAD
                            <label for="nim" class="form-label">NIM</label>
                            <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
                            @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
+=======
+                            <label class="form-label">NIM <span class="text-danger">*</span></label>
+                            <input type="text" name="nim" class="form-control" value="{{ old('nim') }}" required>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama <span class="text-danger">*</span></label>
@@ -207,6 +248,7 @@
             alert('✅ Data berhasil diambil dan form terisi otomatis!');
         }
 
+<<<<<<< HEAD
         // === LOGIKA UNTUK IMPORT GOOGLE SHEET ===
         const sheetSelect = document.getElementById('sheet_name_select');
         const importSheetBtn = document.getElementById('importSheetBtn');
@@ -250,6 +292,8 @@
 
         fetchSheets(); 
 
+=======
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         // === LOGIKA UNTUK IMPORT PDF ===
         const pdfForm = document.getElementById('pdfImportForm');
         const importPdfBtn = document.getElementById('importPdfBtn');
@@ -269,10 +313,14 @@
             try {
                 const response = await fetch(`{{ route('nilai.importPdf') }}`, {
                     method: 'POST',
+<<<<<<< HEAD
                     headers: { 
                                'Accept': 'application/json', 
                                'X-CSRF-TOKEN': '{{ csrf_token() }}' 
                     },
+=======
+                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                     body: formData
                 });
                 const data = await response.json();

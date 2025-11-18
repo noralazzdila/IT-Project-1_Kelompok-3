@@ -19,6 +19,7 @@
         .register-container {
             display: flex;
             width: 100%;
+<<<<<<< HEAD
             max-width: 1100px;
             height: 650px;
             border-radius: 10px;
@@ -28,6 +29,18 @@
         .register-left {
             flex: 1;
             background: url("{{ asset('images/Bg.png') }}") no-repeat center center;
+=======
+            max-width: 900px;
+            height: 590px;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            background: white;
+        }
+        .register-left {
+            flex: 1;
+            background: url("{{ asset('images/gkt.jpg') }}") no-repeat center center;
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             background-size: cover;
             display: flex;
             justify-content: center;
@@ -35,6 +48,10 @@
             padding: 30px;
             color: white;
             text-align: left;
+<<<<<<< HEAD
+=======
+            position: relative;
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         }
         .register-left h2 {
             font-weight: bold;
@@ -84,16 +101,27 @@
         <div class="register-left">
             <div>
                 <h5>Selamat Datang</h5>
+<<<<<<< HEAD
                 <p>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
                    Politeknik Negeri Tanah Laut</p>
+=======
+                <small>Sistem Informasi Pengelolaan Praktik Kerja Lapangan<br>
+                   Politeknik Negeri Tanah Laut</small>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             </div>
         </div>
 
         <!-- RIGHT SIDE -->
         <div class="register-right">
+<<<<<<< HEAD
             <div class="text-center mb-4">
                 <img src="{{ asset('images/Logo_Politala.png') }}" alt="Logo" width="80">
                 <h5 class="mt-2">Daftar dan Verifikasi</h5>
+=======
+            <div class="text-center mb-2">
+                <img src="{{ asset('images/Logo_Politala.png') }}" alt="Logo" width="80">
+                <h6 class="mt-2">Daftar dan Verifikasi</h6>
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             </div>
 
             <!-- REGISTER WITH GOOGLE -->
@@ -102,8 +130,11 @@
                 Lanjutkan Dengan Google
             </a>
 
+<<<<<<< HEAD
             <div class="text-center my-1 text-muted">Atau</div>
 
+=======
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             <!-- FORM REGISTER -->
             <form method="POST" action="{{ route('register') }}">
                 @csrf
@@ -144,7 +175,11 @@
                 <button type="submit" class="btn btn-primary w-100">Daftar</button>
             </form>
 
+<<<<<<< HEAD
             <div class="text-center mt-2">
+=======
+            <div class="text-center mt-1">
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 <small class="text-muted">Sudah memiliki akun? 
                     <a href="{{ route('login') }}">Login</a>
                 </small>

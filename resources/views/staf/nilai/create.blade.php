@@ -34,6 +34,7 @@
             </div>
             <div class="card-body">
                 <div class="tab-content" id="importTabContent">
+<<<<<<< HEAD
                     {{-- TAB 1: GOOGLE SHEET --}}
                     <div class="tab-pane fade show active" id="sheet-tab-pane" role="tabpanel" aria-labelledby="sheet-tab" tabindex="0">
                         <div class="d-flex justify-content-between align-items-center flex-wrap">
@@ -45,6 +46,9 @@
                             </div>
                         </div>
                     </div>
+=======
+
+>>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
                     {{-- TAB 2: PDF --}}
                     <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
