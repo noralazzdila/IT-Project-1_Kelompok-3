@@ -162,14 +162,8 @@
                     <div class="row">
                         <h6 class="fw-semibold mt-2 mb-2 text-primary">🧑‍🎓 Data Mahasiswa</h6>
                         <div class="col-md-6 mb-3">
-<<<<<<< HEAD
-                           <label for="nim" class="form-label">NIM</label>
-                           <input type="text" class="form-control @error('nim') is-invalid @enderror" id="nim" name="nim" value="{{ old('nim') }}" required>
-                           @error('nim')<div class="invalid-feedback">{{ $message }}</div>@enderror
-=======
                             <label class="form-label">NIM <span class="text-danger">*</span></label>
                             <input type="text" name="nim" class="form-control" value="{{ old('nim') }}" required>
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nama <span class="text-danger">*</span></label>
@@ -248,52 +242,6 @@
             alert('✅ Data berhasil diambil dan form terisi otomatis!');
         }
 
-<<<<<<< HEAD
-        // === LOGIKA UNTUK IMPORT GOOGLE SHEET ===
-        const sheetSelect = document.getElementById('sheet_name_select');
-        const importSheetBtn = document.getElementById('importSheetBtn');
-
-        async function fetchSheets() {
-            try {
-                const response = await fetch(`{{ route('sheets.list') }}`);
-                if (!response.ok) throw new Error('Gagal memuat daftar sheet');
-                const sheets = await response.json();
-                sheetSelect.innerHTML = '<option value="">-- Pilih Sheet Mahasiswa --</option>';
-                sheets.forEach(name => {
-                    const option = new Option(name, name);
-                    sheetSelect.appendChild(option);
-                });
-                importSheetBtn.disabled = false;
-            } catch (error) {
-                console.error(error);
-                sheetSelect.innerHTML = '<option value="">Gagal memuat daftar sheet</option>';
-            }
-        }
-        
-        importSheetBtn.addEventListener('click', async function() {
-            const sheetName = sheetSelect.value;
-            if (!sheetName) return alert('Pilih sheet mahasiswa terlebih dahulu!');
-            this.disabled = true; this.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengimpor...';
-
-            try {
-                const response = await fetch(`{{ route('nilai.import') }}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                    body: JSON.stringify({ sheet_name: sheetName })
-                });
-                const data = await response.json();
-                populateForm(data);
-            } catch (err) {
-                alert('Terjadi kesalahan: ' + err.message);
-            } finally {
-                this.disabled = false; this.innerHTML = '<i class="fa fa-cloud-download"></i> Import Data Sheet';
-            }
-        });
-
-        fetchSheets(); 
-
-=======
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         // === LOGIKA UNTUK IMPORT PDF ===
         const pdfForm = document.getElementById('pdfImportForm');
         const importPdfBtn = document.getElementById('importPdfBtn');
@@ -313,14 +261,7 @@
             try {
                 const response = await fetch(`{{ route('nilai.importPdf') }}`, {
                     method: 'POST',
-<<<<<<< HEAD
-                    headers: { 
-                               'Accept': 'application/json', 
-                               'X-CSRF-TOKEN': '{{ csrf_token() }}' 
-                    },
-=======
                     headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                     body: formData
                 });
                 const data = await response.json();
