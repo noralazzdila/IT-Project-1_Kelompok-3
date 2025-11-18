@@ -26,11 +26,7 @@ class NilaiController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-<<<<<<< HEAD
             'nim' => 'required|string|max:20|unique:mahasiswa,nim',
-=======
-            'nim' => 'required|string|max:20',
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             'nama' => 'required|string|max:100',
             'jurusan' => 'nullable|string|max:100',
             'angkatan' => 'nullable|string|max:10',
@@ -52,13 +48,6 @@ class NilaiController extends Controller
             ['nim' => $request->nim],
             [
                 'nama' => $request->nama,
-<<<<<<< HEAD
-                'jurusan' => $request->jurusan,
-                'angkatan' => $request->angkatan,
-            ]
-        );
-
-=======
             ]
         );
 
@@ -66,7 +55,6 @@ class NilaiController extends Controller
             return redirect()->back()->withErrors(['nim' => 'Nilai untuk NIM ini sudah ada.'])->withInput();
         }
 
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         Nilai::create([
             'mahasiswa_id' => $mahasiswa->id,
             'ipk' => $request->ipk,
@@ -140,11 +128,6 @@ class NilaiController extends Controller
             $data = [
                 'nim' => $nim,
                 'nama' => $nama,
-<<<<<<< HEAD
-                'jurusan' => '', // Sesuaikan jika ada
-                'angkatan' => '', // Sesuaikan jika ada
-=======
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 'ipk' => $ipk,
                 'count_a' => $counts['A'],
                 'count_b_plus' => $counts['B+'],
@@ -234,11 +217,6 @@ class NilaiController extends Controller
             $nilai->mahasiswa->update([
                 'nim' => $request->nim,
                 'nama' => $request->nama,
-<<<<<<< HEAD
-                'jurusan' => $request->jurusan,
-                'angkatan' => $request->angkatan,
-=======
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             ]);
         }
 
@@ -290,13 +268,8 @@ class NilaiController extends Controller
                 'nama'      => '/Nama\s*:\s*(.*)/',
                 'nim'       => '/NIM\s*:\s*(\d+)/',
                 'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
-<<<<<<< HEAD
-                'ipk'       => '/Index Prestasi Kumulatif \(IPK\)\s*:\s*([\d,\.]+)/i',
-                'total_sks' => '/Jumlah SKS Yang Diambil\s*:\s*(\d+)/'
-=======
                 'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
                 'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             ];
 
             foreach ($patterns as $key => $pattern) {
@@ -328,20 +301,13 @@ class NilaiController extends Controller
             }
 
             // 3. Gabungkan semua data menjadi satu format JSON yang konsisten
-<<<<<<< HEAD
-=======
             $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : null;
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             $data = [
                 'nim' => $dataMahasiswa['nim'],
                 'nama' => $dataMahasiswa['nama'],
                 'jurusan' => 'Teknologi Informasi',
                 'angkatan' => $dataMahasiswa['angkatan'],
-<<<<<<< HEAD
-                'ipk' => (float) $dataMahasiswa['ipk'],
-=======
                 'ipk' => (float) $ipkValue,
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                 'count_a' => $gradeCounts['A'],
                 'count_b_plus' => $gradeCounts['B+'],
                 'count_b' => $gradeCounts['B'],

@@ -110,10 +110,7 @@ class TempatPKLController extends Controller
         return redirect()->route('tempatpkl.index')
                          ->with('success', 'Data Tempat PKL berhasil dihapus.');
     }
-<<<<<<< HEAD
-=======
 
 
 
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 }

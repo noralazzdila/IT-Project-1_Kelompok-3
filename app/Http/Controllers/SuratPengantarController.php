@@ -129,8 +129,6 @@ class SuratPengantarController extends Controller
 
         return redirect()->route('suratpengantar.index')->with('success', 'Surat Pengantar berhasil dihapus.');
     }
-<<<<<<< HEAD
-=======
     public function createMahasiswa()
     {
        
@@ -166,5 +164,4 @@ class SuratPengantarController extends Controller
         
         return redirect()->back()->with('success', 'Pengajuan surat pengantar berhasil dikirim!');
     }
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 }

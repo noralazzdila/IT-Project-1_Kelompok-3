@@ -8,10 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-<<<<<<< HEAD
-=======
 use Illuminate\Support\Facades\Auth;
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
 class PemberkasanController extends Controller
 {
@@ -127,13 +124,8 @@ class PemberkasanController extends Controller
     // Hapus & simpan ulang FORM BIMBINGAN
     if ($request->hasFile('form_bimbingan')) {
         // hapus file lama jika ada
-<<<<<<< HEAD
-        if ($pemberkasan->form_bimbingan_path && \Storage::disk('public')->exists($pemberkasan->form_bimbingan_path)) {
-            \Storage::disk('public')->delete($pemberkasan->form_bimbingan_path);
-=======
         if ($pemberkasan->form_bimbingan_path && Storage::disk('public')->exists($pemberkasan->form_bimbingan_path)) {
             Storage::disk('public')->delete($pemberkasan->form_bimbingan_path);
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         }
 
         $originalName = $request->file('form_bimbingan')->getClientOriginalName();
@@ -143,13 +135,8 @@ class PemberkasanController extends Controller
 
     // Hapus & simpan ulang SERTIFIKAT
     if ($request->hasFile('sertifikat')) {
-<<<<<<< HEAD
-        if ($pemberkasan->sertifikat_path && \Storage::disk('public')->exists($pemberkasan->sertifikat_path)) {
-            \Storage::disk('public')->delete($pemberkasan->sertifikat_path);
-=======
         if ($pemberkasan->sertifikat_path && Storage::disk('public')->exists($pemberkasan->sertifikat_path)) {
             Storage::disk('public')->delete($pemberkasan->sertifikat_path);
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         }
 
         $originalName = $request->file('sertifikat')->getClientOriginalName();
@@ -159,13 +146,8 @@ class PemberkasanController extends Controller
 
     // Hapus & simpan ulang LAPORAN FINAL
     if ($request->hasFile('laporan_final')) {
-<<<<<<< HEAD
-        if ($pemberkasan->laporan_final_path && \Storage::disk('public')->exists($pemberkasan->laporan_final_path)) {
-            \Storage::disk('public')->delete($pemberkasan->laporan_final_path);
-=======
         if ($pemberkasan->laporan_final_path && Storage::disk('public')->exists($pemberkasan->laporan_final_path)) {
             Storage::disk('public')->delete($pemberkasan->laporan_final_path);
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
         }
 
         $originalName = $request->file('laporan_final')->getClientOriginalName();
@@ -196,8 +178,6 @@ class PemberkasanController extends Controller
         $pemberkasan->delete();
         return redirect()->route('pemberkasan.index')->with('success', 'Data pemberkasan berhasil dihapus.');
     }
-<<<<<<< HEAD
-=======
 public function createMahasiswa(): View
     {
         // 1. Dapatkan ID mahasiswa yang sedang login.
@@ -273,5 +253,4 @@ public function createMahasiswa(): View
 
         return redirect()->back()->with('success', 'Berkas berhasil diunggah!');
     }
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 }

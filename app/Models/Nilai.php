@@ -38,14 +38,9 @@ class Nilai extends Model
         $ipkOk = $this->ipk >= 2.5;
         $sksDOk = $this->sks_d <= 6;
         $nilaiEOk = $this->count_e == 0;
-<<<<<<< HEAD
-
-        if ($ipkOk && $sksDOk && $nilaiEOk) {
-=======
         $totalSksOk = $this->total_sks >= 80;
 
         if ($ipkOk && $sksDOk && $nilaiEOk && $totalSksOk) {
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             return 'Memenuhi Syarat';
         }
 

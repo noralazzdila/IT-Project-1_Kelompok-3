@@ -134,13 +134,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/koorprodi/datadosen/{datadosen}/edit', [KoorprodiController::class, 'datadosen_edit'])->name('koorprodi.datadosen.edit');
     Route::put('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_update'])->name('koorprodi.datadosen.update');
     Route::delete('/koorprodi/datadosen/{datadosen}', [KoorprodiController::class, 'datadosen_destroy'])->name('koorprodi.datadosen.destroy');
-<<<<<<< HEAD
-=======
     
     Route::get('/koorprodi/seminar', [KoorprodiController::class, 'seminar_index'])->name('koorprodi.seminar.index');
     Route::get('/koorprodi/suratpengantar', [KoorprodiController::class, 'suratpengantar_index'])->name('koorprodi.suratpengantar.index');
     Route::get('/koorprodi/pemberkasan', [KoorprodiController::class, 'pemberkasan_index'])->name('koorprodi.pemberkasan.index');
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
      
     // Google Sheet
     Route::get('/sheets/list', [GoogleSheetController::class, 'index'])->name('sheets.list');
@@ -310,4 +307,3 @@ Route::middleware('auth')->group(function () {
 });
 
 });
-
