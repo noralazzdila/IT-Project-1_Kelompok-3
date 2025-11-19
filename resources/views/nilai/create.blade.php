@@ -44,21 +44,6 @@
         </div>
         <nav class="nav flex-column px-2">
             <a href="{{ route('koor.dashboard') }}" class="nav-link"><i class="fa fa-home me-2"></i> Beranda</a>
-<<<<<<< HEAD
-            <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i> Kelola User</a>
-            <a href="{{ route('nilai.index') }}" class="nav-link active"><i class="fa fa-graduation-cap me-2"></i> Kelola Nilai</a>
-            <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i> Kelola Tempat PKL</a>
-            <a href="{{ route('datamahasiswa.index') }}" class="nav-link"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
-            <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i> Kelola Bimbingan</a>
-            <a href="{{ route('seminar.index') }}" class="nav-link"><i class="fa fa-calendar me-2"></i> Kelola Seminar</a>
-            <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
-            <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a>
-            <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-            <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa-solid fa-envelope me-2"></i> Kelola Surat Pengantar</a>
-            <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i> Kelola Pemberkasan</a>
-        </nav>
-    </div>
-=======
                 <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>User</a>
                 <a href="{{ route('nilai.index') }}" class="nav-link active"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
                 <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i>Tempat PKL</a>
@@ -70,7 +55,6 @@
                 <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
                 <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa-solid fa-envelope me-2"></i>Surat Pengantar</a>
                 <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i>Pemberkasan</a>
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
     <div class="col-10 d-flex flex-column">
         <div class="header d-flex justify-content-between align-items-center">
@@ -94,42 +78,6 @@
                     </ul>
                 </div>
                 @endif
-<<<<<<< HEAD
-{{-- BAGIAN IMPORT DENGAN SISTEM TAB BARU --}}
-<div class="card mb-4">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs" id="importTab" role="tablist">
-            {{-- TAB PDF --}}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pdf-tab" data-bs-toggle="tab" data-bs-target="#pdf-tab-pane" type="button" role="tab" aria-controls="pdf-tab-pane" aria-selected="false">
-                    <i class="fa fa-file-pdf"></i> Import dari PDF
-                </button>
-            </li>
-        </ul>
-    </div>
-    <div class="card-body">
-        <div class="tab-content" id="importTabContent">
-
-            {{-- TAB 2: PDF --}}
-            <div class="tab-pane fade" id="pdf-tab-pane" role="tabpanel" aria-labelledby="pdf-tab" tabindex="0">
-                <form id="pdfImportForm" enctype="multipart/form-data">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap">
-                        <div class="flex-grow-1 me-3">
-                            <label for="file_pdf" class="form-label mb-0">Pilih File Transkrip (PDF):</label>
-                            <input type="file" class="form-control mt-2" id="file_pdf" name="file_pdf" accept=".pdf" required>
-                        </div>
-                        <div class="mt-2">
-                            <button type="submit" id="importPdfBtn" class="btn btn-danger">
-                                <i class="fa fa-upload"></i> Unggah & Proses PDF
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-=======
 
                 <div class="card mb-4">
                     <div class="card-body">
@@ -149,7 +97,6 @@
                     </div>
                 </div>
 
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
 
                 {{-- ====================================================== --}}
                 {{-- FORM UTAMA UNTUK MENYIMPAN DATA                      --}}

@@ -136,11 +136,7 @@
                     </div>
     
              
-<<<<<<< HEAD
-                 <div class="role-card" onclick="window.location='/staf'"style="cursor:pointer;">
-=======
                  <div class="role-card" onclick="window.location='{{ route ('staf.index') }}'"style="cursor:pointer;">
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
                     <div class="role-title">Staf</div>
                     <div class="role-sub">Teknologi Informasi</div>
                 </div>

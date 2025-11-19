@@ -320,7 +320,7 @@ class StafController extends Controller
 
         $request->validate([
 
-            'nim'               => ['required','string','max:20', Rule::unique('mahasiswa')->ignore($datamahasiswa->id)],
+            'nim'               => ['required','string','max:20|unique:mahasiswa,nim', Rule::unique('mahasiswa')->ignore($datamahasiswa->id)],
 
             'nama'              => 'required|string|max:255',
 
@@ -598,7 +598,7 @@ class StafController extends Controller
 
         $request->validate([
 
-            'nim' => 'required|string|max:20',
+            'nim' => 'required|string|max:20|unique:mahasiswa,nim',
 
             'nama' => 'required|string|max:100',
 

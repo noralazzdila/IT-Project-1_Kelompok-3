@@ -152,13 +152,6 @@
             <nav class="nav flex-column px-2">
                  <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
                 <a href="{{ route('koorprodi.user.index') }}" class="nav-link {{ request()->routeIs('koorprodi.user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola User</a>
-<<<<<<< HEAD
-
-                <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
-                <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
-                <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a>
-                <a href="{{ route('koorprodi.proposal.index') }}" class="nav-link {{ request()->routeIs('koorprodi.proposal.index') ? 'active' : '' }}"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-=======
                 <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i> Kelola Data Mahasiswa</a>
                 <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i> Kelola Penguji</a>
                 <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i> Kelola Data Dosen</a> 
@@ -166,7 +159,6 @@
                 <a href="{{ route('koorprodi.seminar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.seminar.index') ? 'active' : '' }}"><i class="fa fa-calendar-alt me-2"></i> Kelola Seminar</a>
                 <a href="{{ route('koorprodi.suratpengantar.index') }}" class="nav-link {{ request()->routeIs('koorprodi.suratpengantar.index') ? 'active' : '' }}"><i class="fa fa-envelope-open-text me-2"></i> Kelola Surat Pengantar</a>
                 <a href="{{ route('koorprodi.pemberkasan.index') }}" class="nav-link {{ request()->routeIs('koorprodi.pemberkasan.index') ? 'active' : '' }}"><i class="fa fa-folder-open me-2"></i> Kelola Pemberkasan</a>
->>>>>>> 2f83dfbf7faf974a6ad9fb9857c241ed8e374a93
             </nav>
             </nav>
         </div>
