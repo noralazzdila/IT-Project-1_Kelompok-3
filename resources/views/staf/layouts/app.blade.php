@@ -66,10 +66,11 @@
             </div>
             <nav class="nav flex-column px-2">
                  <a href="{{ route('staf.index') }}" class="nav-link {{ request()->routeIs('staf.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
-                <a href="{{ route('staf.user.index') }}" class="nav-link {{ request()->routeIs('staf.user.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>User</a>
                 <a href="{{ route('staf.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('staf.datamahasiswa.*') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
+                <a href="{{ route('staf.datadosen.index') }}" class="nav-link {{ request()->routeIs('staf.datadosen.*') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Data Dosen</a>
                 <a href="{{ route('staf.tempatpkl.index') }}" class="nav-link {{ request()->routeIs('staf.tempatpkl.*') ? 'active' : '' }}"><i class="fa fa-building me-2"></i>Tempat PKL</a>
                 <a href="{{ route('staf.nilai.index') }}" class="nav-link {{ request()->routeIs('staf.nilai.*') ? 'active' : '' }}"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
+                <a href="{{ route('staf.seminar.index') }}" class="nav-link {{ request()->routeIs('staf.seminar.*') ? 'active' : '' }}"><i class="fa fa-calendar-check me-2"></i>Seminar</a>
             </nav>
         </div>
 

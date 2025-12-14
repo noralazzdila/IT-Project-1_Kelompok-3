@@ -9,6 +9,8 @@ use App\Models\Nilai;
 use App\Services\GoogleSheetService;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Spatie\PdfToText\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class NilaiDosenController extends Controller
 {
@@ -48,10 +50,12 @@ class NilaiDosenController extends Controller
             ['nim' => $request->nim],
             [
                 'nama' => $request->nama,
-                'jurusan' => $request->jurusan,
-                'angkatan' => $request->angkatan,
             ]
         );
+
+        if (Nilai::where('mahasiswa_id', $mahasiswa->id)->exists()) {
+            return redirect()->back()->withErrors(['nim' => 'Nilai untuk NIM ini sudah ada.'])->withInput();
+        }
 
         Nilai::create([
             'mahasiswa_id' => $mahasiswa->id,
@@ -126,8 +130,6 @@ class NilaiDosenController extends Controller
             $data = [
                 'nim' => $nim,
                 'nama' => $nama,
-                'jurusan' => '', // Sesuaikan jika ada
-                'angkatan' => '', // Sesuaikan jika ada
                 'ipk' => $ipk,
                 'count_a' => $counts['A'],
                 'count_b_plus' => $counts['B+'],
@@ -135,7 +137,7 @@ class NilaiDosenController extends Controller
                 'count_c_plus' => $counts['C+'],
                 'count_c' => $counts['C'],
                 'count_d' => $counts['D'],
-                'sks_d' => $sksD, // 👈 Kirim data SKS D
+                'sks_d' => $sksD, // Kirim data SKS D
                 'count_e' => $counts['E'],
                 'total_sks' => $totalSks,
                 'sheet_name' => $sheetName,
@@ -217,8 +219,6 @@ class NilaiDosenController extends Controller
             $nilai->mahasiswa->update([
                 'nim' => $request->nim,
                 'nama' => $request->nama,
-                'jurusan' => $request->jurusan,
-                'angkatan' => $request->angkatan,
             ]);
         }
 
@@ -230,7 +230,7 @@ class NilaiDosenController extends Controller
             'count_c_plus' => $request->count_c_plus ?? 0,
             'count_c' => $request->count_c ?? 0,
             'count_d' => $request->count_d ?? 0,
-            'sks_d' => $request->sks_d ?? 0, // 👈 Tambahkan data
+            'sks_d' => $request->sks_d ?? 0, //  Tambahkan data
             'count_e' => $request->count_e ?? 0,
             'total_sks' => $request->total_sks ?? 0,
         ]);
@@ -270,8 +270,8 @@ class NilaiDosenController extends Controller
                 'nama'      => '/Nama\s*:\s*(.*)/',
                 'nim'       => '/NIM\s*:\s*(\d+)/',
                 'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
-                'ipk'       => '/Index Prestasi Kumulatif \(IPK\)\s*:\s*([\d,\.]+)/i',
-                'total_sks' => '/Jumlah SKS Yang Diambil\s*:\s*(\d+)/'
+                'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
+                'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
             ];
 
             foreach ($patterns as $key => $pattern) {
@@ -303,12 +303,13 @@ class NilaiDosenController extends Controller
             }
 
             // 3. Gabungkan semua data menjadi satu format JSON yang konsisten
+            $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : null;
             $data = [
                 'nim' => $dataMahasiswa['nim'],
                 'nama' => $dataMahasiswa['nama'],
                 'jurusan' => 'Teknologi Informasi',
                 'angkatan' => $dataMahasiswa['angkatan'],
-                'ipk' => (float) $dataMahasiswa['ipk'],
+                'ipk' => (float) $ipkValue,
                 'count_a' => $gradeCounts['A'],
                 'count_b_plus' => $gradeCounts['B+'],
                 'count_b' => $gradeCounts['B'],
@@ -328,5 +329,17 @@ class NilaiDosenController extends Controller
             Log::error('Gagal import PDF: ' . $e->getMessage());
             return response()->json(['error' => 'Gagal memproses file PDF: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function servePdf($id)
+    {
+        $nilai = Nilai::findOrFail($id);
+        $path = $nilai->pdf_path;
+
+        if (!$path || !Storage::disk('public')->exists($path)) {
+            abort(404, 'File PDF tidak ditemukan.');
+        }
+
+        return Storage::disk('public')->response($path);
     }
 }

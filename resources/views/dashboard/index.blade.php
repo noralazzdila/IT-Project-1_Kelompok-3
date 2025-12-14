@@ -1,6 +1,22 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Pengelolaan PKL</title>
 
-@section('content')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons (opsional untuk icon profil/logout) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+</head>
+<body class="bg-light" data-user="{{ json_encode($user) }}">
+
+  
 <div class="container-fluid p-0">
     <!-- HEADER -->
     <div class="d-flex justify-content-between align-items-center px-4 py-3 header-custom text-white">
@@ -29,7 +45,7 @@
                 <h5 class="fw-bold mb-3">Daftar Modul</h5>
                 <div class="row g-3">
                     <div class="col-6">
-                        <div class="modul-card text-center" onclick="showRoles('sim-akademik')">
+                        <div class="modul-card text-center">
                             <img src="{{ asset('images/Logo ti.png') }}" width="60" class="mx-auto mb-3">
                             <h6 class="fw-semibold">SIM PKL</h6>
                         </div>
@@ -70,89 +86,19 @@
     </div>
 </div>
 
-<style>
-    /* Header biru */
-    .header-custom {
-        background: #004080 url("{{ asset('images/pattern.png') }}") repeat;
-    }
-
-    /* Modul card */
-    .modul-card {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        background-color: #fff;
-        transition: all 0.2s ease-in-out;
-        cursor: pointer;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .modul-card:hover {
-        background-color: #f8f9fa;
-        transform: translateY(-3px);
-    }
-
-    /* Role card */
-    .role-card {
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 15px 20px;
-        background: #fff;
-        margin-bottom: 15px;
-        transition: all 0.2s ease-in-out;
-    }
-    .role-card:hover {
-        background: #f8f9fa;
-        transform: translateY(-2px);
-    }
-    .role-title {
-        font-weight: 600;
-        color: #0056b3;
-        margin-bottom: 3px;
-    }
-    .role-sub {
-        font-size: 0.9rem;
-        color: #666;
-    }
-</style>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    function showRoles(module) {
-        let roleContainer = document.getElementById('role-container');
-
-        if (module === 'sim-akademik') {
-            roleContainer.innerHTML = `
-                <h5 class="fw-bold mb-3">Daftar Role - SIM PKL</h5>
-
-    
-                 <div class="role-card" onclick="window.location='{{ route('dosen.dashboard') }}'"style="cursor:pointer;">
-                    <div class="role-title">Dosen</div>
-                    <div class="role-sub">Teknologi Informasi</div>
-                </div>
-                
-        
-               <div class="role-card" onclick="window.location='{{ route('koor.dashboard') }}'"style="cursor:pointer;">
-                            <div class="role-title">Koordinator PKL</div>
-                            <pdiv class="role-sub">Teknologi Informasi</div>
-                    </div>
-    
-             
-                 <div class="role-card" onclick="window.location='{{ route ('staf.index') }}'"style="cursor:pointer;">
-                    <div class="role-title">Staf</div>
-                    <div class="role-sub">Teknologi Informasi</div>
-                </div>
-
-            
-                 <div class="role-card" onclick="window.location='{{ route('koorprodi.index') }}'"style="cursor:pointer;">
-                    <div class="role-title">Koordinator Prodi</div>
-                    <div class="role-sub">Teknologi Informasi</div>
-                </div>
-
-                <div class="role-card" onclick="window.location='{{ route('dashboard.mahasiswa') }}'"style="cursor:pointer;">
-                    <div class="role-title">Mahasiswa</div>
-                    <div class="role-sub">Teknologi Informasi</div>
-                </div>
-            `;
-        }
-    }
+    var routes = {
+        dashboardMahasiswa: "{{ route('dashboard.mahasiswa') }}",
+        koorDashboard: "{{ route('koor.dashboard') }}",
+        dosenDashboard: "{{ route('dosen.dashboard') }}",
+        stafIndex: "{{ route('staf.index') }}",
+        koorprodiIndex: "{{ route('koorprodi.index') }}"
+    };
 </script>
-@endsection
+<script src="{{ asset('js/dashboard.js') }}"></script>
+
+</body>
+</html>

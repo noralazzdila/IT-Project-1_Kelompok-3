@@ -94,7 +94,7 @@
         <!-- RIGHT SIDE -->
         <div class="register-right">
             <div class="text-center mb-2">
-                <img src="{{ asset('images/Logo_Politala.png') }}" alt="Logo" width="80">
+
                 <h6 class="mt-2">Daftar dan Verifikasi</h6>
             </div>
 
@@ -119,6 +119,19 @@
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
                         <input type="text" name="name" class="form-control" placeholder="Masukkan nama lengkap" required>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <label>Role</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person-fill-gear"></i></span>
+                        <select name="role" class="form-control" required>
+                            <option value="">Pilih Role</option>
+                            <option value="mahasiswa">Mahasiswa</option>
+                            <option value="dosen">Dosen</option>
+                            <option value="staf">Staf</option>
+                            <option value="koor_prodi">Koor Prodi</option>
+                        </select>
                     </div>
                 </div>
                 <div class="mb-2">

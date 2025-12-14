@@ -46,7 +46,7 @@ class SuratPengantarController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'nim' => 'required|string|max:20|unique:mahasiswa,nim',
+            'nim' => 'required|string|max:20',
             'nama_mahasiswa' => 'required|string|max:255',
             'prodi' => 'required|string|max:255',
             'tempat_pkl' => 'required|string|max:255',
@@ -163,5 +163,14 @@ class SuratPengantarController extends Controller
         SuratPengantar::create($validatedData);
         
         return redirect()->back()->with('success', 'Pengajuan surat pengantar berhasil dikirim!');
+    }
+
+    public function file(SuratPengantar $suratpengantar)
+    {
+        if (!$suratpengantar->file_surat || !Storage::exists('public/' . $suratpengantar->file_surat)) {
+            abort(404);
+        }
+
+        return Storage::response('public/' . $suratpengantar->file_surat);
     }
 }

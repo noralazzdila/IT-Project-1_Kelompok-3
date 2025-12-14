@@ -410,7 +410,7 @@
                             <small class="text-muted">Formulir bimbingan yang telah disetujui dosen.</small>
                         </div>
                         @if($pemberkasan && $pemberkasan->form_bimbingan_path)
-                            <a href="{{ asset('storage/' . $pemberkasan->form_bimbingan_path) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
+                            <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'form_bimbingan']) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
                                 <i class="bi bi-check-circle-fill me-1"></i> Terupload
                             </a>
                         @else
@@ -423,7 +423,7 @@
                             <small class="text-muted">Sertifikat resmi dari tempat PKL.</small>
                         </div>
                         @if($pemberkasan && $pemberkasan->sertifikat_path)
-                            <a href="{{ asset('storage/' . $pemberkasan->sertifikat_path) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
+                            <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'sertifikat']) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
                                 <i class="bi bi-check-circle-fill me-1"></i> Terupload
                             </a>
                         @else
@@ -436,7 +436,7 @@
                             <small class="text-muted">Laporan PKL final yang sudah di-ACC.</small>
                         </div>
                         @if($pemberkasan && $pemberkasan->laporan_final_path)
-                            <a href="{{ asset('storage/' . $pemberkasan->laporan_final_path) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
+                            <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'laporan_final']) }}" target="_blank" class="badge bg-success rounded-pill px-3 py-2 text-decoration-none">
                                 <i class="bi bi-check-circle-fill me-1"></i> Terupload
                             </a>
                         @else

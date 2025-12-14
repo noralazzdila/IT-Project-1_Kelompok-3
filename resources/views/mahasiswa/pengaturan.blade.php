@@ -43,7 +43,7 @@
                         <label class="form-label">Foto Profil</label>
                         <input type="file" name="profile_photo" class="form-control frosted-input">
                         @if($user->profile_photo)
-                        <img src="{{ asset('storage/'.$user->profile_photo) }}" alt="Profil" class="mt-2 rounded-circle shadow-sm" style="width:100px; height:100px;">
+                        <img src="{{ route('user.photo', $user) }}" alt="Profil" class="mt-2 rounded-circle shadow-sm" style="width:100px; height:100px;">
                         @endif
                     </div>
                     <button type="submit" class="btn frosted-btn">Simpan Perubahan</button>

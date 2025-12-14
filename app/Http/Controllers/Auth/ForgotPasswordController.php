@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -25,6 +27,13 @@ class ForgotPasswordController extends Controller
             'email' => 'required|email|exists:users,email',
         ]);
 
+        if (RateLimiter::tooManyAttempts('send-reset-code:'.$request->email, 1)) {
+            $seconds = RateLimiter::availableIn('send-reset-code:'.$request->email);
+            return back()->withErrors(['email' => 'Terlalu banyak percobaan. Silakan coba lagi dalam '.$seconds.' detik.']);
+        }
+
+        RateLimiter::hit('send-reset-code:'.$request->email, 60);
+
         $code = rand(100000, 999999);
 
         // simpan ke database (tabel password_resets)
@@ -34,10 +43,7 @@ class ForgotPasswordController extends Controller
         );
 
         // kirim email
-        Mail::raw("Kode reset password Anda adalah: $code", function ($message) use ($request) {
-            $message->to($request->email)
-                ->subject('Kode Reset Password');
-        });
+        Mail::to($request->email)->send(new ResetPasswordMail($code));
 
         return back()->with('success', 'Kode verifikasi telah dikirim ke email Anda.');
     }
@@ -58,7 +64,7 @@ class ForgotPasswordController extends Controller
             ->first();
 
         if (!$reset) {
-            return back()->withErrors(['code' => 'Kode verifikasi salah.']);
+            return back()->withErrors(['code' => 'Kode verifikasi salah.'])->withInput($request->only('email'));
         }
 
         // update password user

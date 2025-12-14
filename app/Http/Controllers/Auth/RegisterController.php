@@ -21,17 +21,24 @@ class RegisterController extends Controller
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
+            'role' => 'required|string|in:mahasiswa,dosen,staf,koor_prodi,koor_pkl',
         ]);
+
+        $isValidated = str_ends_with($request->email, '@mhs.politala.ac.id');
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'is_validated' => $isValidated,
         ]);
 
-        Auth::login($user);
+        if ($isValidated) {
+            Auth::login($user);
+            return redirect()->route('login')->with('success', 'Pendaftaran berhasil, silakan login');
+        }
 
-        // setelah daftar otomatis login, redirect ke login page
-        return redirect()->route('login')->with('success', 'Pendaftaran berhasil, silakan login');
+        return redirect()->route('login')->with('success', 'Pendaftaran berhasil, harap tunggu validasi dari admin.');
     }
 }

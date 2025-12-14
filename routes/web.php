@@ -30,13 +30,19 @@ use App\Http\Controllers\Dosen\NilaiDosenController;
 use App\Http\Controllers\Dosen\DosenDataDosenController;
 use App\Http\Controllers\Dosen\BimbinganDosenController;
 use App\Http\Controllers\Dosen\PengujiDosenController;
+use App\Http\Controllers\Dosen\PemberkasanDosenController;
+use App\Http\Controllers\Dosen\ProposalDosenController;
 use App\Http\Controllers\Dosen\SeminarDosenController;
+use App\Http\Controllers\Dosen\SuratPengantarDosenController;
 use App\Http\Controllers\Mahasiswa\LihatDetailIpkController;
 use App\Http\Controllers\Mahasiswa\ProfilController;
 use App\Http\Controllers\Mahasiswa\PengaturanController;
 use App\Http\Controllers\Mahasiswa\PreferensiController;
 use App\Http\Controllers\Mahasiswa\MahasiswaDosenController;
 use App\Http\Controllers\Mahasiswa\BimbinganController as MahasiswaBimbinganController;
+use App\Http\Controllers\TPKController;
+
+Route::get('/mahasiswa/tempat-pkl-terbaik', [TPKController::class, 'hitung']);
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +60,7 @@ Route::middleware('guest')->group(function () {
 
     // Register
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
+    Route::post('/register', [RegisterController::class, 'register'])->middleware('check_role_registration');
 
     // Lupa Password
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
@@ -84,14 +90,20 @@ Route::middleware('auth')->group(function () {
 
     // Resource Controllers (CRUD)
     Route::resource('proposal', ProposalController::class);
+    Route::get('/proposal/{proposal}/file', [ProposalController::class, 'file'])->name('proposal.file');
     Route::resource('tempatpkl', TempatPKLController::class);
     Route::resource('penguji', PengujiController::class);
     Route::resource('seminar', SeminarController::class);
     Route::resource('datamahasiswa', DataMahasiswaController::class);
     Route::resource('bimbingan', BimbinganController::class);
     Route::resource('suratpengantar', SuratPengantarController::class);
+    Route::get('/suratpengantar/{suratpengantar}/file', [SuratPengantarController::class, 'file'])->name('suratpengantar.file');
+
     Route::resource('nilai', NilaiController::class);
+    Route::get('/nilai/{id}/pdf', [NilaiController::class, 'servePdf'])->name('nilai.pdf');
     Route::resource('user', UserController::class);
+    Route::get('/user/{user}/photo', [UserController::class, 'photo'])->name('user.photo');
+    Route::post('/user/{user}/validate', [UserController::class, 'validate'])->name('user.validate');
     Route::resource('datadosen', DataDosenController::class);
     Route::resource('pemberkasan', PemberkasanController::class);
 
@@ -147,15 +159,6 @@ Route::middleware('auth')->group(function () {
     // Staf Routes
     Route::get('/staf', [StafController::class, 'index'])->name('staf.index');
     
-    // Staf - User Management
-    Route::get('/staf/user', [StafController::class, 'user_index'])->name('staf.user.index');
-    Route::get('/staf/user/create', [StafController::class, 'user_create'])->name('staf.user.create');
-    Route::post('/staf/user', [StafController::class, 'user_store'])->name('staf.user.store');
-    Route::get('/staf/user/{user}', [StafController::class, 'user_show'])->name('staf.user.show');
-    Route::get('/staf/user/{user}/edit', [StafController::class, 'user_edit'])->name('staf.user.edit');
-    Route::put('/staf/user/{user}', [StafController::class, 'user_update'])->name('staf.user.update');
-    Route::delete('/staf/user/{user}', [StafController::class, 'user_destroy'])->name('staf.user.destroy');
-
     // Staf - Data Mahasiswa Management
     Route::get('/staf/datamahasiswa', [StafController::class, 'datamahasiswa_index'])->name('staf.datamahasiswa.index');
     Route::get('/staf/datamahasiswa/create', [StafController::class, 'datamahasiswa_create'])->name('staf.datamahasiswa.create');
@@ -174,6 +177,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/staf/nilai/{nilai}/edit', [StafController::class, 'nilai_edit'])->name('staf.nilai.edit');
     Route::put('/staf/nilai/{nilai}', [StafController::class, 'nilai_update'])->name('staf.nilai.update');
     Route::delete('/staf/nilai/{nilai}', [StafController::class, 'nilai_destroy'])->name('staf.nilai.destroy');
+    Route::get('/staf/nilai/{id}/pdf', [StafController::class, 'nilai_serve_pdf'])->name('staf.nilai.pdf');
+    Route::post('/staf/nilai/import-pdf', [StafController::class, 'nilai_import_pdf'])->name('staf.nilai.importPdf');
     // Staf - Tempat PKL Management
     Route::get('/staf/tempatpkl', [StafController::class, 'tempatpkl_index'])->name('staf.tempatpkl.index');
     Route::get('/staf/tempatpkl/create', [StafController::class, 'tempatpkl_create'])->name('staf.tempatpkl.create');
@@ -183,11 +188,30 @@ Route::middleware('auth')->group(function () {
     Route::put('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_update'])->name('staf.tempatpkl.update');
     Route::delete('/staf/tempatpkl/{tempatpkl}', [StafController::class, 'tempatpkl_destroy'])->name('staf.tempatpkl.destroy');
 
+    // Staf - Seminar Management
+    Route::get('/staf/seminar', [StafController::class, 'seminar_index'])->name('staf.seminar.index');
+    Route::get('/staf/seminar/create', [StafController::class, 'seminar_create'])->name('staf.seminar.create');
+    Route::post('/staf/seminar', [StafController::class, 'seminar_store'])->name('staf.seminar.store');
+    Route::get('/staf/seminar/{seminar}', [StafController::class, 'seminar_show'])->name('staf.seminar.show');
+    Route::get('/staf/seminar/{seminar}/edit', [StafController::class, 'seminar_edit'])->name('staf.seminar.edit');
+    Route::put('/staf/seminar/{seminar}', [StafController::class, 'seminar_update'])->name('staf.seminar.update');
+    Route::delete('/staf/seminar/{seminar}', [StafController::class, 'seminar_destroy'])->name('staf.seminar.destroy');
+
+
+    // Staf - Data Dosen Management
+    Route::get('/staf/datadosen', [StafController::class, 'datadosen_index'])->name('staf.datadosen.index');
+    Route::get('/staf/datadosen/create', [StafController::class, 'datadosen_create'])->name('staf.datadosen.create');
+    Route::post('/staf/datadosen', [StafController::class, 'datadosen_store'])->name('staf.datadosen.store');
+    Route::get('/staf/datadosen/{datadosen}', [StafController::class, 'datadosen_show'])->name('staf.datadosen.show');
+    Route::get('/staf/datadosen/{datadosen}/edit', [StafController::class, 'datadosen_edit'])->name('staf.datadosen.edit');
+    Route::put('/staf/datadosen/{datadosen}', [StafController::class, 'datadosen_update'])->name('staf.datadosen.update');
+    Route::delete('/staf/datadosen/{datadosen}', [StafController::class, 'datadosen_destroy'])->name('staf.datadosen.destroy');
+
     // kelola status
     Route::resource('status', StatusController::class);
 
-    // Resource route untuk Pemberkasan
     Route::resource('pemberkasan', PemberkasanController::class);
+    Route::get('/pemberkasan/{pemberkasan}/file/{field}', [PemberkasanController::class, 'file'])->name('pemberkasan.file');
     Route::post('/pemberkasan/upload', [PemberkasanController::class, 'store'])->name('pemberkasan.store');
 
     // Kelola User-Dosen
@@ -200,6 +224,45 @@ Route::middleware('auth')->group(function () {
     Route::put('/{id}', [UserDosenController::class, 'update'])->name('dosen.user.update');
     Route::delete('/{id}', [UserDosenController::class, 'destroy'])->name('dosen.user.destroy');
 });
+
+    // Proposal - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+        Route::prefix('proposal')->name('proposal.')->group(function () {
+            Route::get('/', [ProposalDosenController::class, 'index'])->name('indexdosen');
+            Route::get('/create', [ProposalDosenController::class, 'create'])->name('createdosen');
+            Route::post('/', [ProposalDosenController::class, 'store'])->name('store');
+            Route::get('/{proposal}/edit', [ProposalDosenController::class, 'edit'])->name('editdosen');
+            Route::get('/{proposal}', [ProposalDosenController::class, 'show'])->name('showdosen');
+            Route::put('/{proposal}', [ProposalDosenController::class, 'update'])->name('updatedosen');
+            Route::delete('/{proposal}', [ProposalDosenController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    // Surat Pengantar - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+        Route::prefix('suratpengantar')->name('suratpengantar.')->group(function () {
+            Route::get('/', [SuratPengantarDosenController::class, 'index'])->name('indexdosen');
+            Route::get('/create', [SuratPengantarDosenController::class, 'create'])->name('createdosen');
+            Route::post('/', [SuratPengantarDosenController::class, 'store'])->name('store');
+            Route::get('/{suratpengantar}/edit', [SuratPengantarDosenController::class, 'edit'])->name('editdosen');
+            Route::get('/{suratpengantar}', [SuratPengantarDosenController::class, 'show'])->name('showdosen');
+            Route::put('/{suratpengantar}', [SuratPengantarDosenController::class, 'update'])->name('updatedosen');
+            Route::delete('/{suratpengantar}', [SuratPengantarDosenController::class, 'destroy'])->name('destroy');
+        });
+    });
+
+    // Pemberkasan - Dosen
+    Route::prefix('dosen')->name('dosen.')->group(function () {
+        Route::prefix('pemberkasan')->name('pemberkasan.')->group(function () {
+            Route::get('/', [PemberkasanDosenController::class, 'index'])->name('indexdosen');
+            Route::get('/create', [PemberkasanDosenController::class, 'create'])->name('createdosen');
+            Route::post('/', [PemberkasanDosenController::class, 'store'])->name('store');
+            Route::get('/{pemberkasan}/edit', [PemberkasanDosenController::class, 'edit'])->name('editdosen');
+            Route::get('/{pemberkasan}', [PemberkasanDosenController::class, 'show'])->name('showdosen');
+            Route::put('/{pemberkasan}', [PemberkasanDosenController::class, 'update'])->name('updatedosen');
+            Route::delete('/{pemberkasan}', [PemberkasanDosenController::class, 'destroy'])->name('destroy');
+        });
+    });
 
     // Dosen Data Mahasiswa
     Route::prefix('dosen')->name('dosen.')->group(function () {
@@ -214,6 +277,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/create', [NilaiDosenController::class, 'create'])->name('createdosen');
         Route::get('/{id}/edit', [NilaiDosenController::class, 'edit'])->name('editdosen');
         Route::get('/{id}', [NilaiDosenController::class, 'show'])->name('showdosen');
+        Route::delete('/{id}', [NilaiDosenController::class, 'destroy'])->name('destroydosen');
     });
 
     // Tambahan khusus fitur import
@@ -261,9 +325,16 @@ Route::middleware('auth')->group(function () {
 });
 
     Route::prefix('dosen')->name('dosen.')->group(function () {
-    Route::get('/seminar', [SeminarDosenController::class, 'index'])->name('seminar.indexdosen');
-    Route::get('/seminar/{id}', [SeminarDosenController::class, 'show'])->name('seminar.showdosen');
-});
+        Route::prefix('seminar')->name('seminar.')->group(function () {
+            Route::get('/', [SeminarDosenController::class, 'index'])->name('indexdosen');
+            Route::get('/create', [SeminarDosenController::class, 'create'])->name('createdosen');
+            Route::post('/', [SeminarDosenController::class, 'store'])->name('store');
+            Route::get('/{seminar}/edit', [SeminarDosenController::class, 'edit'])->name('editdosen');
+            Route::get('/{seminar}', [SeminarDosenController::class, 'show'])->name('showdosen');
+            Route::put('/{seminar}', [SeminarDosenController::class, 'update'])->name('updatedosen');
+            Route::delete('/{seminar}', [SeminarDosenController::class, 'destroy'])->name('destroy');
+        });
+    });
 
     Route::middleware('auth')->group(function () {
     Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])
@@ -307,4 +378,7 @@ Route::middleware('auth')->group(function () {
 });
 
 });
+
+Route::get('/koor-pkl/profil', [KoorPklController::class, 'showProfile'])->name('koor.profil');
+Route::post('/koor-pkl/profil', [KoorPklController::class, 'updateProfile'])->name('koor.profil.update');
 

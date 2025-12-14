@@ -18,6 +18,10 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         
         if (Auth::attempt($credentials)) {
+            if (!Auth::user()->is_validated) {
+                Auth::logout();
+                return back()->withErrors(['email' => 'Akun Anda belum divalidasi oleh admin.']);
+            }
             return redirect()->intended('/dashboard')->with('success', 'Login berhasil');
         }
 
@@ -64,8 +68,8 @@ public function doLogin(Request $request)
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect('/login');
-            session()->forget('user');
-    return redirect('/login')->with('success', 'Anda berhasil logout');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/login')->with('success', 'Anda berhasil logout');
     }
 }

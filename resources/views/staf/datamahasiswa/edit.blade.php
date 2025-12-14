@@ -73,10 +73,6 @@
                 <label for="dosen_pembimbing" class="form-label">Dosen Pembimbing</label>
                 <select class="form-select @error('dosen_pembimbing') is-invalid @enderror" id="dosen_pembimbing" name="dosen_pembimbing" required>
                     <option value="">Pilih Dosen Pembimbing</option>
-                    @php
-                        // Ambil data dosen langsung di view (sementara)
-                        $dosens = \App\Models\Dosen::orderBy('nama')->get();
-                    @endphp
                     @foreach($dosens as $dosen)
                         <option value="{{ $dosen->id }}" {{ old('dosen_pembimbing') == $dosen->id ? 'selected' : '' }}>
                             {{ $dosen->nama }} - {{ $dosen->nip }}

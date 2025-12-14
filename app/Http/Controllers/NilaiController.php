@@ -8,6 +8,7 @@ use App\Models\Nilai;
 use Illuminate\Http\Request;
 use App\Services\GoogleSheetService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 
 class NilaiController extends Controller
@@ -135,7 +136,7 @@ class NilaiController extends Controller
                 'count_c_plus' => $counts['C+'],
                 'count_c' => $counts['C'],
                 'count_d' => $counts['D'],
-                'sks_d' => $sksD, // 👈 Kirim data SKS D
+                'sks_d' => $sksD, // Kirim data SKS D
                 'count_e' => $counts['E'],
                 'total_sks' => $totalSks,
                 'sheet_name' => $sheetName,
@@ -150,6 +151,7 @@ class NilaiController extends Controller
 
     public function show($id)
     {
+    
         $nilai = Nilai::with('mahasiswa')->findOrFail($id);
         $rows = collect();
 
@@ -217,6 +219,7 @@ class NilaiController extends Controller
             $nilai->mahasiswa->update([
                 'nim' => $request->nim,
                 'nama' => $request->nama,
+
             ]);
         }
 
@@ -228,7 +231,7 @@ class NilaiController extends Controller
             'count_c_plus' => $request->count_c_plus ?? 0,
             'count_c' => $request->count_c ?? 0,
             'count_d' => $request->count_d ?? 0,
-            'sks_d' => $request->sks_d ?? 0, // 👈 Tambahkan data
+            'sks_d' => $request->sks_d ?? 0, //  Tambahkan data
             'count_e' => $request->count_e ?? 0,
             'total_sks' => $request->total_sks ?? 0,
         ]);
@@ -240,6 +243,7 @@ class NilaiController extends Controller
     {
         $nilai = Nilai::findOrFail($id);
         $nilai->delete();
+        
 
         return redirect()->route('nilai.index')->with('success', 'Data nilai berhasil dihapus!');
     }
@@ -327,5 +331,17 @@ class NilaiController extends Controller
             Log::error('Gagal import PDF: ' . $e->getMessage());
             return response()->json(['error' => 'Gagal memproses file PDF: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function servePdf($id)
+    {
+        $nilai = Nilai::findOrFail($id);
+        $path = $nilai->pdf_path;
+
+        if (!$path || !Storage::disk('public')->exists($path)) {
+            abort(404, 'File PDF tidak ditemukan.');
+        }
+
+        return Storage::disk('public')->response($path);
     }
 }

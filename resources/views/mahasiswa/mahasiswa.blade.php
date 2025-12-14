@@ -191,6 +191,12 @@
         transition: all 0.3s ease;
         color: var(--light-text);
     }
+    .hero .card-frosted-link {
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit color from parent */
+        display: block; /* Make the entire link clickable */
+    }
+
     .hero .card-frosted:hover {
         transform: translateY(-8px);
         background: rgba(255, 255, 255, 0.15);
@@ -292,8 +298,8 @@
             <ul class="dropdown-menu" aria-labelledby="tempatDropdown">
               <li>
                 <div class="dropdown-card">
-                    <a href="{{ route('mahasiswa.lihatpkl.index') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
-                   <a href="{{ route('mahasiswa.suratpengantar.create') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+                    <a href="#"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
+                   <a href="#"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
                 </div>
               </li>
             </ul>
@@ -314,7 +320,7 @@
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+                  <a href="#"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
                 </div>
               </li>
             </ul>
@@ -334,7 +340,7 @@
             <ul class="dropdown-menu" aria-labelledby="proposalDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="#"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
                 </div>
               </li>
             </ul>
@@ -344,7 +350,7 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+                  <a href="#"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
                 </div>
               </li>
             </ul>
@@ -396,14 +402,14 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle d-flex align-items-center p-1 pe-2" style="background-color: rgba(255,255,255,0.1); border-radius: 20px;" href="#" id="profilDropdown" data-bs-toggle="dropdown">
-              <img src="{{ asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
+              <img src="{{ Auth::user()->profile_photo ? route('user.photo', Auth::user()) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
               <span>{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profilDropdown">
               <li>
                 <div class="profile-card">
                   <div class="text-center mb-2">
-                    <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
+                    <img src="{{ Auth::user()->profile_photo ? route('user.photo', Auth::user()) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
                     <h6>{{ Auth::user()->name }}</h6>
                     <p>Mahasiswa-Teknologi Informasi</p>
                   </div>
@@ -437,11 +443,14 @@
         <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
           <div class="row g-4">
             <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-building-fill fs-1 mb-2"></i>
-                <h6>Tempat PKL</h6>
-                <p>Jelajahi berbagai tempat PKL yang tersedia</p>
-              </div>
+              <a href="{{ url('/mahasiswa/tempat-pkl-terbaik') }}" class="card-frosted-link">
+                <div class="card-frosted">
+                  <i class="bi bi-building-fill fs-1 mb-2"></i>
+                  <h6>Tempat PKL</h6>
+                  <p>Jelajahi berbagai tempat PKL yang tersedia</p>
+                </div>
+              </a>
+            </div>
             </div>
             <div class="col-md-6">
               <div class="card-frosted">

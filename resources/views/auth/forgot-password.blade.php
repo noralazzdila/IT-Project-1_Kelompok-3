@@ -16,37 +16,60 @@
             <span class="font-semibold">"Kirim Kode"</span> di bawah ini. Kami akan mengirimkan kode verifikasi ke email Anda.
         </p>
 
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700">Email*</label>
-            <div class="flex">
-                <input type="email" class="w-full border rounded-l-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Masukkan Email">
-                <button class="bg-blue-600 text-white px-4 rounded-r-lg hover:bg-blue-700">Kirim Kode</button>
+        @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
             </div>
-        </div>
+        @endif
 
-        <!-- Kode Verifikasi -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700">Masukkan Kode Verifikasi*</label>
-            <input type="text" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Kode Verifikasi">
-        </div>
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-        <!-- Password Baru -->
-        <div class="mb-4">
-            <label class="block text-sm font-semibold text-gray-700">Masukkan Kata Sandi Baru</label>
-            <input type="password" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Kata Sandi Baru">
-        </div>
+        <form action="{{ route('password.email') }}" method="POST">
+            @csrf
+            <!-- Email -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700">Email*</label>
+                <div class="flex">
+                    <input type="email" name="email" class="w-full border rounded-l-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Masukkan Email" value="{{ old('email') }}">
+                    <button type="submit" class="bg-blue-600 text-white px-4 rounded-r-lg hover:bg-blue-700">Kirim Kode</button>
+                </div>
+            </div>
+        </form>
 
-        <!-- Konfirmasi Password -->
-        <div class="mb-6">
-            <label class="block text-sm font-semibold text-gray-700">Konfirmasi Kata Sandi</label>
-            <input type="password" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Konfirmasi Kata Sandi">
-        </div>
+        <form action="{{ route('password.update') }}" method="POST">
+            @csrf
+            <input type="hidden" name="email" value="{{ old('email') }}">
+            <!-- Kode Verifikasi -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700">Masukkan Kode Verifikasi*</label>
+                <input type="text" name="code" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Kode Verifikasi">
+            </div>
 
-        <!-- Tombol Masuk -->
-        <button class="w-full bg-blue-700 text-white py-2 rounded-full hover:bg-blue-800 transition">
-            Masuk
-        </button>
+            <!-- Password Baru -->
+            <div class="mb-4">
+                <label class="block text-sm font-semibold text-gray-700">Masukkan Kata Sandi Baru</label>
+                <input type="password" name="password" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Kata Sandi Baru">
+            </div>
+
+            <!-- Konfirmasi Password -->
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700">Konfirmasi Kata Sandi</label>
+                <input type="password" name="password_confirmation" class="w-full border rounded-lg p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Konfirmasi Kata Sandi">
+            </div>
+
+            <!-- Tombol Masuk -->
+            <button type="submit" class="w-full bg-blue-700 text-white py-2 rounded-full hover:bg-blue-800 transition">
+                Reset Password
+            </button>
+        </form>
 
         <!-- Kembali -->
         <div class="mt-4 text-center">

@@ -469,7 +469,7 @@
                                     <span class="badge rounded-pill {{ $badgeClass }}">{{ $proposal->status }}</span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{ asset('storage/' . $proposal->file_proposal) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ route('proposal.file', $proposal) }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-download"></i>
                                     </a>
                                 </td>

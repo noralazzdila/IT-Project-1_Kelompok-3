@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -118,5 +119,24 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->with('success', 'User berhasil dihapus!');
+    }
+
+    /**
+     * Validate user.
+     */
+    public function validate(User $user)
+    {
+        $user->update(['is_validated' => true]);
+
+        return redirect()->route('user.index')->with('success', 'User berhasil divalidasi!');
+    }
+
+    public function photo(User $user)
+    {
+        if (!$user->profile_photo || !Storage::disk('public')->exists($user->profile_photo)) {
+            abort(404);
+        }
+
+        return Storage::disk('public')->response($user->profile_photo);
     }
 }

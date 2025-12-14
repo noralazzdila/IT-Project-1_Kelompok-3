@@ -43,7 +43,7 @@
 
         @if ($nilai->pdf_path)
             <div class="mt-3">
-                <iframe src="{{ Storage::url($nilai->pdf_path) }}" width="100%" height="600px"></iframe>
+                <iframe src="{{ route('staf.nilai.pdf', ['id' => $nilai->id]) }}" width="100%" height="600px"></iframe>
             </div>
         @else
             <div class="table-responsive">

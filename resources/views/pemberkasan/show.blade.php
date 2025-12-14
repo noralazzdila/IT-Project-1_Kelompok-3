@@ -1,88 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Pemberkasan - Koordinator PKL</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+@extends('layouts.app')
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fa;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        .wrapper { flex: 1; display: flex; }
-        .sidebar {
-            background: #ffffff;
-            min-height: 100vh;
-            padding-top: 20px;
-            box-shadow: 2px 0 6px rgba(0,0,0,0.1);
-        }
-        .sidebar .nav-link {
-            color: #333; font-weight: 500; margin-bottom: 5px; transition: all 0.3s ease;
-        }
-        .sidebar .nav-link.active {
-            background: #113F67; color: #fff !important; border-radius: 8px;
-        }
-        .sidebar .nav-link:hover { background: #e9ecef; border-radius: 8px; }
-        .header { background: #113F67; color: #fff; padding: 15px; box-shadow: 0px 2px 6px rgba(0,0,0,0.2); }
-        .footer { background: #113F67; color: #fff; padding: 12px; text-align: center; margin-top: auto; }
-        .info-label { font-weight: bold; color: #113F67; }
-        .file-box { border: 1px solid #ddd; border-radius: 8px; padding: 15px; background: #fff; }
-        .file-name { font-style: italic; color: #555; }
-    </style>
-</head>
+@section('title', 'Manajemen Pemberkasan PKL')
 
-<body>
-<div class="wrapper">
-
-    {{-- SIDEBAR --}}
-    <div class="col-2 sidebar">
-        <div class="text-center mb-4">
-            <img src="{{ asset('images/Logo_Politala.png') }}" width="80" alt="Logo">
-            <h6 class="fw-bold mt-2">SIPRAKELRA</h6>
-            <small class="text-muted">Sistem Informasi PKL</small>
-        </div>
-
-        <nav class="nav flex-column px-2">
-            <a href="{{ route('koor.dashboard') }}" class="nav-link"><i class="fa fa-home me-2"></i> Beranda</a>
-            <a href="{{ route('user.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>User</a>
-            <a href="{{ route('nilai.index') }}" class="nav-link"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
-            <a href="{{ route('tempatpkl.index') }}" class="nav-link"><i class="fa fa-building me-2"></i>Tempat PKL</a>
-            <a href="{{ route('datamahasiswa.index') }}" class="nav-link"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
-            <a href="{{ route('bimbingan.index') }}" class="nav-link"><i class="fa fa-chalkboard-teacher me-2"></i>Bimbingan</a>
-            <a href="{{ route('seminar.index') }}" class="nav-link"><i class="fa fa-calendar me-2"></i>Seminar</a>
-            <a href="{{ route('penguji.index') }}" class="nav-link"><i class="fa fa-user-check me-2"></i>Penguji</a>
-            <a href="{{ route('datadosen.index') }}" class="nav-link"><i class="fa fa-users me-2"></i>Data Dosen</a>
-            <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
-            <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa fa-envelope me-2"></i>Surat Pengantar</a>
-            <a href="{{ route('pemberkasan.index') }}" class="nav-link active"><i class="fa fa-folder me-2"></i>Pemberkasan</a>
-        </nav>
-    </div>
-
-    {{-- KONTEN UTAMA --}}
-    <div class="col-10 d-flex flex-column">
-        
-        {{-- HEADER --}}
-        <div class="header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Detail Pemberkasan Mahasiswa</h5>
-            <div class="dropdown text-end">
-                <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="fw-semibold">Dwi Agung Wibowo, M.Kom</span> <br>
-                    <small>Koordinator PKL</small>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-                    <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit me-2"></i>Edit Profil</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                </ul>
-            </div>
-        </div>
-
+@section('content')
         {{-- DETAIL BERKAS --}}
         <div class="container mt-4 flex-grow-1">
             <div class="card shadow-sm">
@@ -116,7 +36,7 @@
                                 <h6><i class="fa-solid fa-file-alt me-2"></i>Form Bimbingan</h6>
                                 @if($pemberkasan->form_bimbingan_path)
                                     <p class="file-name">{{ basename($pemberkasan->form_bimbingan_path) }}</p>
-                                    <a href="{{ asset('storage/' . $pemberkasan->form_bimbingan_path) }}" target="_blank" class="btn btn-sm btn-success">
+                                    <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'form_bimbingan']) }}" target="_blank" class="btn btn-sm btn-success">
                                         <i class="fa-solid fa-eye me-1"></i> Lihat File
                                     </a>
                                 @else
@@ -130,7 +50,7 @@
                                 <h6><i class="fa-solid fa-certificate me-2"></i>Sertifikat</h6>
                                 @if($pemberkasan->sertifikat_path)
                                     <p class="file-name">{{ basename($pemberkasan->sertifikat_path) }}</p>
-                                    <a href="{{ asset('storage/' . $pemberkasan->sertifikat_path) }}" target="_blank" class="btn btn-sm btn-success">
+                                    <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'sertifikat']) }}" target="_blank" class="btn btn-sm btn-success">
                                         <i class="fa-solid fa-eye me-1"></i> Lihat File
                                     </a>
                                 @else
@@ -144,7 +64,7 @@
                                 <h6><i class="fa-solid fa-book me-2"></i>Laporan Final</h6>
                                 @if($pemberkasan->laporan_final_path)
                                     <p class="file-name">{{ basename($pemberkasan->laporan_final_path) }}</p>
-                                    <a href="{{ asset('storage/' . $pemberkasan->laporan_final_path) }}" target="_blank" class="btn btn-sm btn-success">
+                                    <a href="{{ route('pemberkasan.file', ['pemberkasan' => $pemberkasan, 'field' => 'laporan_final']) }}" target="_blank" class="btn btn-sm btn-success">
                                         <i class="fa-solid fa-eye me-1"></i> Lihat File
                                     </a>
                                 @else
@@ -184,13 +104,4 @@
             </div>
         </div>
 
-        {{-- FOOTER --}}
-        <div class="footer">
-            <small>&copy; 2025 SIPRAKELRA - Sistem Informasi PKL | Politala</small>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection

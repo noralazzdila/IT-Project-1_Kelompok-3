@@ -22,7 +22,7 @@ class SeminarController extends Controller
     {
         $request->validate([
             'nama_mahasiswa'    => 'required|string|max:255',
-            'nim'               => 'required|string|max:20|unique:mahasiswa,nim',
+            'nim'               => 'required|string|max:20',
             'nama_pembimbing'   => 'required|string|max:255',
             'nama_penguji'      => 'required|string|max:255',
             'judul'             => 'required|string',

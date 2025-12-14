@@ -67,8 +67,7 @@
                 <small class="text-muted">Sistem Informasi PKL</small>
             </div>
             <nav class="nav flex-column px-2">
-                    <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
-                <a href="{{ route('koorprodi.user.index') }}" class="nav-link {{ request()->routeIs('koorprodi.user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>User</a>
+                <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
                 <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
                 <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i>Penguji</a>
                 <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Data Dosen</a> 

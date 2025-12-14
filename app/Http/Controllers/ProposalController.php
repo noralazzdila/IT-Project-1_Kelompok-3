@@ -178,4 +178,13 @@ class ProposalController extends Controller
         return redirect()->back()->with('success', 'Proposal berhasil di-upload! Harap tunggu review dari Koordinator.');
     }
 
+    public function file(Proposal $proposal)
+    {
+        if (!$proposal->file_proposal || !Storage::exists('public/' . $proposal->file_proposal)) {
+            abort(404);
+        }
+
+        return Storage::response('public/' . $proposal->file_proposal);
+    }
+
 }

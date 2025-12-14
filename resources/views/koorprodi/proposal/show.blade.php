@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <p class="detail-label mb-1">File Proposal</p>
-                <a href="{{ asset('storage/' . $proposal->file_proposal) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('proposal.file', $proposal) }}" target="_blank" class="btn btn-outline-primary btn-sm">
                     <i class="fas fa-download"></i> Unduh File
                 </a>
             </div>
@@ -67,7 +67,7 @@
         <div class="mt-4">
             <h6 class="mb-3">Preview File Proposal</h6>
              @if($proposal->file_proposal && Storage::exists('public/' . $proposal->file_proposal))
-                <iframe src="{{ asset('storage/' . $proposal->file_proposal) }}" width="100%" height="600px" class="border rounded"></iframe>
+                <iframe src="{{ route('proposal.file', $proposal) }}" width="100%" height="600px" class="border rounded"></iframe>
             @else
                 <div class="alert alert-warning">File tidak ditemukan.</div>
             @endif
