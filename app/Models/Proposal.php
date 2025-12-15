@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Notifications\ProposalApprovedNotification;
 
 class Proposal extends Model
 {
@@ -32,4 +34,13 @@ class Proposal extends Model
         'status',
         'catatan',
     ];
+
+    public function approve($id)
+{
+    $mahasiswa = User::find($id);
+
+    $mahasiswa->notify(new ProposalApprovedNotification('approved'));
+
+    return back()->with('success', 'Notifikasi email terkirim!');
+}
 }

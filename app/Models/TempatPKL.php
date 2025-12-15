@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\NilaiPKL;
 
 class TempatPKL extends Model
 {
@@ -22,6 +23,7 @@ class TempatPKL extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'mahasiswa_id',
         'nama_perusahaan',
         'alamat_perusahaan',
         'jarak_lokasi',
@@ -29,5 +31,15 @@ class TempatPKL extends Model
         'fasilitas',
         'kesesuaian_program',
         'lingkungan_kerja',
+        'pdf_transkrip',
+        'status',
     ];
+    public function mahasiswa() {
+        return $this->belongsTo(Mahasiswa::class);
+    }
+
+    public function nilaiPKL() {
+    return $this->hasOne(NilaiPKL::class);
+}
+
 }

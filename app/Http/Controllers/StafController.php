@@ -1034,20 +1034,6 @@ class StafController extends Controller
 
                         return response()->json($data);
 
-
-
-    
-
-
-
-        
-
-
-
-    
-
-
-
                     } catch (\Exception $e) {
 
 
@@ -1065,129 +1051,18 @@ class StafController extends Controller
 
 
                         return response()->json(['error' => 'Gagal memproses file PDF: ' . $e->getMessage()], 500);
-
-
-
-    
-
-
-
                     }
-
-
-
-    
-
-
-
                 }
-
-
-
-    
-
-
-
-        
-
-
-
-    
-
-
-
             public function nilai_serve_pdf($id)
-
-
-
-    
-
-
-
             {
-
-
-
-    
-
-
-
                 $nilai = Nilai::findOrFail($id);
-
-
-
-    
-
-
-
                 $path = $nilai->pdf_path;
-
-
-
-    
-
-
-
-        
-
-
-
-    
-
-
-
                 if (!$path || !Storage::disk('public')->exists($path)) {
-
-
-
-    
-
-
-
                     abort(404, 'File PDF tidak ditemukan.');
 
-
-
-    
-
-
-
                 }
 
-
-
-    
-
-
-
-        
-
-
-
-    
-
-
-
-                return Storage::disk('public')->response($path);
-
-
-
-    
-
-
+                return response()->file(Storage::disk('public')->path($path));
 
             }
-
-
-
-    
-
-
-
         }
-
-
-
-    
-
-

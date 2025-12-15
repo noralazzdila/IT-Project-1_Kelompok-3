@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class PengaturanController extends Controller
 {
@@ -17,7 +18,8 @@ class PengaturanController extends Controller
 
     public function update(Request $request)
 {
-    $user = auth()->user();
+    /** @var \App\Models\User $user */
+    $user = auth::user();
 
     $request->validate([
         'name' => 'required|string|max:255',

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('tempat_pkl', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswa')->onDelete('cascade');
             $table->string('nama_perusahaan');
             $table->text('alamat_perusahaan');
             $table->decimal('jarak_lokasi', 5, 2)->nullable();
@@ -20,6 +21,8 @@ return new class extends Migration
             $table->string('fasilitas');
             $table->string('kesesuaian_program');
             $table->string('lingkungan_kerja');
+            $table->string('pdf_transkrip')->nullable(); // path PDF
+            $table->string('status')->default('Menunggu Persetujuan'); // status pengajuan
             $table->timestamps();
         });
     }

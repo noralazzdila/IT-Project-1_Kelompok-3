@@ -259,13 +259,21 @@ class NilaiController extends Controller
             
             // Simpan file PDF yang diupload
             $pdfPath = $file->store('pdfs', 'public');
-            
-            // PERBAIKAN: Hapus fungsi config() dan langsung tulis path sebagai string
+            // PERBAIKAN: Hapus fungsi config() dan langsung tulis path sebagai string                                                                   │
+//$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       │
+//$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       
             $path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';
-            
-            // Pastikan path ini sesuai dengan lokasi di komputer Anda
-            $text = (new Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
 
+            if (!file_exists($path_to_pdftotext)) {
+                throw new Exception(
+                    "File pdftotext.exe tidak ditemukan di '{$path_to_pdftotext}'. " .
+                    "Fitur unggah PDF memerlukan library Poppler. " .
+                    "Silakan unduh dari situs resminya, ekstrak, lalu sesuaikan path di file NilaiController.php jika perlu."
+                );
+            }
+            
+            $text = (new Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
+            //$text = (new Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
             // 1. Ekstrak data utama menggunakan Regex
             $dataMahasiswa = [];
             $patterns = [
@@ -341,7 +349,7 @@ class NilaiController extends Controller
         if (!$path || !Storage::disk('public')->exists($path)) {
             abort(404, 'File PDF tidak ditemukan.');
         }
-
-        return Storage::disk('public')->response($path);
+        //return Storage::disk('public')->response($path);
+        return response()->file(Storage::disk('public')->path($path));
     }
 }

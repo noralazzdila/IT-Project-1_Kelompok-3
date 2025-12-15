@@ -12,7 +12,7 @@ class Mahasiswa extends Model
     protected $table = 'mahasiswa'; 
 
     protected $fillable = [
-    'nim', 'nama', 'jurusan', 'angkatan'
+    'nim', 'nama', 'jurusan', 'angkatan', 'user_id'
 ];
 
 
@@ -20,6 +20,12 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(Nilai::class, 'mahasiswa_id');
     }
+
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id', 'id');
+}
+
 
     
 }

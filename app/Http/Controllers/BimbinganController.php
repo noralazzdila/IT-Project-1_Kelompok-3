@@ -6,6 +6,9 @@ use App\Models\Bimbingan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Notifications\NotifikasiPKL;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class BimbinganController extends Controller
 {
@@ -54,24 +57,36 @@ class BimbinganController extends Controller
         'dosen_pembimbing'  => 'required|string|max:255',
         'tanggal_bimbingan' => 'required|date',
         'topik_bimbingan'   => 'required|string|max:255',
-        'catatan'           => 'required|string',
-        'status'            => 'required|in:Menunggu,Disetujui,Revisi',
+        'catatan'           => 'nullable|string',
     ]);
 
-    // 🟢 Tambahkan user_id dari user yang login
-    Bimbingan::create([
-        'user_id'           => auth()->id(),
+    // Simpan bimbingan
+    $bimbingan = Bimbingan::create([
+        'user_id'           => Auth::id(), 
         'mahasiswa_nama'    => $request->mahasiswa_nama,
         'nim'               => $request->nim,
         'dosen_pembimbing'  => $request->dosen_pembimbing,
         'tanggal_bimbingan' => $request->tanggal_bimbingan,
         'topik_bimbingan'   => $request->topik_bimbingan,
         'catatan'           => $request->catatan,
-        'status'            => $request->status,
+        'status'            => 'Menunggu', // Default status
     ]);
 
+    // Ambil user dosen
+    $dosen = User::where('name', $request->dosen_pembimbing)->first();
+
+    // KIRIM NOTIFIKASI 🔔 ke Dosen
+    if ($dosen) {
+        $dosen->notify(new NotifikasiPKL(
+            'Permintaan Bimbingan Baru',
+            'Mahasiswa ' . $request->mahasiswa_nama . ' mengajukan permintaan bimbingan.',
+            route('bimbingan.index')
+        ));
+    }
+
+    // Redirect
     return redirect()->route('bimbingan.index')
-                     ->with('success', 'Data Bimbingan berhasil ditambahkan.');
+        ->with('success', 'Permintaan bimbingan berhasil diajukan & notifikasi telah dikirim ke dosen.');
 }
 
 
@@ -102,7 +117,7 @@ class BimbinganController extends Controller
             'dosen_pembimbing'  => 'required|string|max:255',
             'tanggal_bimbingan' => 'required|date',
             'topik_bimbingan'   => 'required|string|max:255',
-            'catatan'           => 'required|string',
+            'catatan'           => 'nullable|string',
             'status'            => 'required|in:Menunggu,Disetujui,Revisi',
         ]);
 
@@ -122,5 +137,6 @@ class BimbinganController extends Controller
         return redirect()->route('bimbingan.index')
                          ->with('success', 'Data Bimbingan berhasil dihapus.');
     }
+
 }
 
