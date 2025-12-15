@@ -6,7 +6,7 @@
     
     <div class="card p-4 shadow-lg frosted-card">
         <div class="d-flex align-items-center mb-4">
-            <img src="{{ $user->profile_photo ? route('user.photo', $user) : asset('images/user-fill.png') }}" 
+            <img src="{{ $user->profile_photo ? asset('storage/'.$user->profile_photo) : asset('images/user-fill.png') }}" 
                  alt="Foto Profil" class="rounded-circle shadow-sm" width="100" height="100">
             <div class="ms-3">
                 <h5 class="fw-bold">{{ $user->name }}</h5>
