@@ -6,8 +6,10 @@
     <title>@yield('title', 'Dashboard Koordinator PKL')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <style>
-        body {
+    
+</head>
+<style>
+       body {
             font-family: Arial, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -47,6 +49,21 @@
             padding: 15px;
             box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
         }
+        /* Card Dashboard */
+        .card-dashboard {
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            border-radius: 12px;
+        }
+        .card-dashboard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+        }
+        .card-dashboard i {
+            font-size: 35px;
+            color: #113F67;
+        }
         /* Footer */
         .footer {
             background: #113F67;
@@ -55,6 +72,74 @@
             text-align: center;
             margin-top: auto;
         }
+
+        /* */
+        .custom-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .custom-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 5px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .custom-list li:hover {
+            background-color: #f8f9fa;
+        }
+        .custom-list li:last-child {
+            border-bottom: none;
+        }
+        .custom-list .list-icon {
+            font-size: 1.2rem;
+            width: 40px;
+            text-align: center;
+        }
+        .custom-list .list-content {
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .custom-list .list-content p {
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .scrollable-content {
+            height: 220px; /* Sedikit menambah tinggi */
+            overflow-y: auto;
+        }
+        .seminar-entry {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .seminar-entry .student-info {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .seminar-entry .student-info small {
+            font-weight: 400;
+            color: #6c757d;
+        }
+        .seminar-entry .judul {
+            font-style: italic;
+            color: #343a40;
+            margin: 8px 0;
+        }
+        .seminar-details, .seminar-roles {
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        .seminar-details i, .seminar-roles i {
+            width: 20px;
+            text-align: center;
+            color: #113F67;
+        }
+
     </style>
 </head>
 <body>
@@ -68,6 +153,7 @@
             </div>
             <nav class="nav flex-column px-2">
                 <a href="{{ route('koorprodi.index') }}" class="nav-link {{ request()->routeIs('koorprodi.index') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
+                <a href="{{ route('koorprodi.nilai.index') }}" class="nav-link {{ request()->routeIs('koorprodi.nilai.index') ? 'active' : '' }}"><i class="fa fa-graduation-cap me-2"></i>Kelola Nilai</a>
                 <a href="{{ route('koorprodi.datamahasiswa.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datamahasiswa.index') ? 'active' : '' }}"><i class="fa fa-id-card me-2"></i>Data Mahasiswa</a>
                 <a href="{{ route('koorprodi.penguji.index') }}" class="nav-link {{ request()->routeIs('koorprodi.penguji.index') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i>Penguji</a>
                 <a href="{{ route('koorprodi.datadosen.index') }}" class="nav-link {{ request()->routeIs('koorprodi.datadosen.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>Data Dosen</a> 
@@ -85,7 +171,7 @@
                 <h5 class="mb-0">@yield('header-title', 'Dashboard Koordinator Program Studi')</h5>
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="fw-semibold">Jaka Permadi, S.Si., M.Cs</span> <br>
+                        <span class="fw-semibold">{{ Auth::user()->name }}</span> <br>
                         <small>Koordinator Program Studi</small>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end text-small shadow">

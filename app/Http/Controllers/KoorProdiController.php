@@ -9,8 +9,11 @@ use App\Models\Penguji;
 use App\Models\Dosen;
 use App\Models\SuratPengantar;
 use App\Models\Pemberkasan;
-
+use App\Models\Mahasiswa;
+use App\Models\TempatPKL;
+use App\Models\Nilai;
 use App\Models\Proposal;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -20,92 +23,26 @@ class KoorProdiController extends Controller
 {
     public function index()
     {
+        $mahasiswaMemenuhiSyarat = Nilai::where('ipk', '>=', 2.5)
+                                     ->where('sks_d', '<=', 6)
+                                     ->where('count_e', 0)
+                                     ->where('total_sks', '>=', 77)
+                                     ->count();
+                                     
+        $proposalDisetujui = Proposal::where('status', 'Disetujui')->count();
+        $tempatAktif = TempatPKL::count();
+        $seminarBulanIni = Seminar::whereMonth('tanggal', now()->month)->count();
         $seminars = Seminar::all();
-        return view('koorprodi.koorprodi', compact('seminars'));
-    }
+        $aktivitas = ActivityLog::with('user')->latest()->take(10)->get();
 
-    public function user_index()
-    {
-        $users = User::all();
-        return view('koorprodi.user.index', compact('users'));
-    }
-
-    public function user_create()
-    {
-        return view('koorprodi.user.create');
-    }
-
-    public function user_store(Request $request)
-    {
-        $request->validate([
-            'name'       => 'required|string|max:100',
-            'email'      => 'required|email|unique:users,email',
-            'password'   => 'required|min:6|confirmed',
-            'role'       => 'required|string',
-            'identifier' => 'nullable|string|max:50', // NIM / NIP
-            'status'     => 'required|string|in:aktif,nonaktif',
-        ]);
-
-        User::create([
-            'name'       => $request->name,
-            'email'      => $request->email,
-            'password'   => Hash::make($request->password),
-            'role'       => $request->role,
-            'identifier' => $request->identifier,
-            'status'     => $request->status,
-        ]);
-
-        return redirect()->route('koorprodi.user.index')->with('success', 'User berhasil ditambahkan!');
-    }
-
-    public function user_show($id)
-    {
-        $user = User::findOrFail($id);
-        return view('koorprodi.user.show', compact('user'));
-    }
-
-    public function user_edit($id)
-    {
-        $user = User::findOrFail($id);
-        return view('koorprodi.user.edit', compact('user'));
-    }
-
-    public function user_update(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-
-        $request->validate([
-            'name'       => 'required|string|max:100',
-            'email'      => 'required|email|unique:users,email,' . $user->id,
-            'password'   => 'nullable|min:6|confirmed',
-            'role'       => 'required|string',
-            'identifier' => 'nullable|string|max:50',
-            'status'     => 'required|string|in:aktif,nonaktif',
-        ]);
-
-        $user->update([
-            'name'       => $request->name,
-            'email'      => $request->email,
-            'role'       => $request->role,
-            'identifier' => $request->identifier,
-            'status'     => $request->status,
-        ]);
-
-        if ($request->filled('password')) {
-            $user->update([
-                'password' => Hash::make($request->password),
-            ]);
-        }
-
-        return redirect()->route('koorprodi.user.index')->with('success', 'Data user berhasil diperbarui!');
-    }
-
-    public function user_destroy($id)
-    {
-        $user = User::findOrFail($id);
-        $user->delete();
-
-        return redirect()->route('koorprodi.user.index')->with('success', 'User berhasil dihapus!');
+        return view('koorprodi.koorprodi', compact(
+            'mahasiswaMemenuhiSyarat',
+            'proposalDisetujui',
+            'tempatAktif',
+            'seminarBulanIni',
+            'seminars',
+            'aktivitas'
+        ));
     }
 
     public function datamahasiswa_index(Request $request)
@@ -435,5 +372,11 @@ class KoorProdiController extends Controller
     {
         $pemberkasans = Pemberkasan::latest()->paginate(10);
         return view('koorprodi.pemberkasan.index', compact('pemberkasans'));
+    }
+
+    public function nilai_index()
+    {
+        $nilai = Nilai::with('mahasiswa')->latest()->paginate(10);
+        return view('koorprodi.nilai.index', compact('nilai'));
     }
 }

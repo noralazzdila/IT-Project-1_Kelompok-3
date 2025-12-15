@@ -1,0 +1,145 @@
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #f5f7fa;
+}
+.wrapper {
+    flex: 1;
+    display: flex;
+}
+/* Sidebar */
+.sidebar {
+    background: #ffffff;
+    min-height: 100vh;
+    padding-top: 20px;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+}
+.sidebar .nav-link {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+.sidebar .nav-link.active {
+    background: #113F67;
+    color: #fff !important;
+    border-radius: 8px;
+}
+.sidebar .nav-link:hover {
+    background: #e9ecef;
+    border-radius: 8px;
+}
+/* Header */
+.header {
+    background: #113F67;
+    color: #fff;
+    padding: 15px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+/* Card Dashboard */
+.card-dashboard {
+    cursor: pointer;
+    transition: 0.3s;
+    border: none;
+    border-radius: 12px;
+}
+.card-dashboard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+}
+.card-dashboard i {
+    font-size: 35px;
+    color: #113F67;
+}
+/* Footer */
+.footer {
+    background: #113F67;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    margin-top: auto;
+}
+
+/* Custom List for Activities */
+.custom-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.custom-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px 5px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease-in-out;
+}
+.custom-list li:hover {
+    background-color: #f8f9fa;
+}
+.custom-list li:last-child {
+    border-bottom: none;
+}
+.custom-list .list-icon {
+    font-size: 1.2rem;
+    width: 40px;
+    text-align: center;
+}
+.custom-list .list-content {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+.custom-list .list-content p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Scrollable content for cards */
+.scrollable-content {
+    height: 220px;
+    overflow-y: auto;
+}
+
+/* Seminar Entry Styles */
+.seminar-entry {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+.seminar-entry .student-info {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+.seminar-entry .student-info small {
+    font-weight: 400;
+    color: #6c757d;
+}
+.seminar-entry .judul {
+    font-style: italic;
+    color: #343a40;
+    margin: 8px 0;
+}
+.seminar-details, .seminar-roles {
+    font-size: 0.9rem;
+    color: #495057;
+}
+.seminar-details i, .seminar-roles i {
+    width: 20px;
+    text-align: center;
+    color: #113F67;
+}
+
+/* Custom breadcrumb */
+.breadcrumb {
+     background-color: transparent;
+     padding-left: 0;
+}
+
+/* Detail view */
+.detail-label {
+    font-weight: 600;
+    color: #6c757d;
+}

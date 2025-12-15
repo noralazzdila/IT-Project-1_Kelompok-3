@@ -170,7 +170,6 @@
                 <a href="{{ route('dosen.suratpengantar.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.suratpengantar.*') ? 'active' : '' }}"><i class="fa fa-envelope me-2"></i>Surat Pengantar</a>
                 <a href="{{ route('dosen.pemberkasan.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.pemberkasan.*') ? 'active' : '' }}"><i class="fa fa-folder me-2"></i>Pemberkasan</a>
                 <a href="{{ route('dosen.seminar.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.seminar.*') ? 'active' : '' }}"><i class="fa fa-calendar me-2"></i>Seminar</a>
-                <a href="{{ route('dosen.penguji.indexdosen') }}" class="nav-link {{ request()->routeIs('dosen.penguji.*') ? 'active' : '' }}"><i class="fa fa-user-check me-2"></i>Penguji</a>
             </nav>
         </div>
 

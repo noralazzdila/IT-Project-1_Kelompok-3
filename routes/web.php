@@ -122,13 +122,6 @@ Route::middleware('auth')->group(function () {
 
     // Koorprodi Routes
     Route::get('/koorprodi', [KoorprodiController::class, 'index'])->name('koorprodi.index');
-    Route::get('/koorprodi/user', [KoorprodiController::class, 'user_index'])->name('koorprodi.user.index');
-    Route::get('/koorprodi/user/create', [KoorprodiController::class, 'user_create'])->name('koorprodi.user.create');
-    Route::post('/koorprodi/user', [KoorprodiController::class, 'user_store'])->name('koorprodi.user.store');
-    Route::get('/koorprodi/user/{user}', [KoorprodiController::class, 'user_show'])->name('koorprodi.user.show');
-    Route::get('/koorprodi/user/{user}/edit', [KoorprodiController::class, 'user_edit'])->name('koorprodi.user.edit');
-    Route::put('/koorprodi/user/{user}', [KoorprodiController::class, 'user_update'])->name('koorprodi.user.update');
-    Route::delete('/koorprodi/user/{user}', [KoorprodiController::class, 'user_destroy'])->name('koorprodi.user.destroy');
     Route::get('/koorprodi/datamahasiswa', [KoorprodiController::class, 'datamahasiswa_index'])->name('koorprodi.datamahasiswa.index');
     Route::get('/koorprodi/datamahasiswa/create', [KoorprodiController::class, 'datamahasiswa_create'])->name('koorprodi.datamahasiswa.create');
     Route::post('/koorprodi/datamahasiswa', [KoorprodiController::class, 'datamahasiswa_store'])->name('koorprodi.datamahasiswa.store');
@@ -482,3 +475,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengajuan-pkl/{id}/nilai', [KoorPklController::class, 'beriNilai'])->name('koor.pengajuan.beriNilai');
     Route::post('/proposal/{proposal}/validate', [KoorPklController::class, 'validateProposal'])->name('koor.proposal.validate');
 });
+
+    Route::get('/koorprodi/nilai', [KoorprodiController::class, 'nilai_index'])->name('koorprodi.nilai.index');
