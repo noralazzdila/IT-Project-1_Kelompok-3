@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\TempatPKL;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class TempatPKLController extends Controller
 {
@@ -58,6 +61,8 @@ class TempatPKLController extends Controller
 
         return redirect()->route('tempatpkl.index')
                          ->with('success', 'Data Tempat PKL berhasil ditambahkan.');
+
+        
     }
 
     /**
@@ -111,6 +116,34 @@ class TempatPKLController extends Controller
                          ->with('success', 'Data Tempat PKL berhasil dihapus.');
     }
 
+    public function uploadPdf(Request $request, $id)
+    {
+        // 1. Validasi file
+        $request->validate([
+            'pdf' => 'required|mimes:pdf|max:2048',
+        ]);
 
+        // 2. Ambil data mahasiswa/tempat PKL
+        $tempatpkl = TempatPKL::findOrFail($id);
+
+        // 3. Simpan file ke storage
+        $file = $request->file('pdf');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('public/pdf', $filename);
+
+        // 4. Simpan path ke database
+        $tempatpkl->pdf_path = $path;
+        $tempatpkl->save();
+
+        // 5. Catat aktivitas di tabel activity_logs
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => Auth::user()->name . ' meng-upload PDF untuk ' . $tempatpkl->nama_perusahaan,
+            'type' => 'upload_pdf',
+        ]);
+
+        // 6. Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'PDF berhasil di-upload!');
+    }
 
 }

@@ -35,15 +35,24 @@ use App\Http\Controllers\Dosen\ProposalDosenController;
 use App\Http\Controllers\Dosen\SeminarDosenController;
 use App\Http\Controllers\Dosen\SuratPengantarDosenController;
 use App\Http\Controllers\Mahasiswa\LihatDetailIpkController;
+use App\Http\Controllers\Mahasiswa\LihatSemuaTempatPKLController;
 use App\Http\Controllers\Mahasiswa\ProfilController;
 use App\Http\Controllers\Mahasiswa\PengaturanController;
 use App\Http\Controllers\Mahasiswa\PreferensiController;
 use App\Http\Controllers\Mahasiswa\MahasiswaDosenController;
 use App\Http\Controllers\Mahasiswa\BimbinganController as MahasiswaBimbinganController;
 use App\Http\Controllers\TPKController;
+use App\Http\Controllers\Mahasiswa\TempatPKLController as MahasiswaTempatPKLController;
+use App\Http\Controllers\Mahasiswa\AjukanTempatPKLController;
+use App\Http\Controllers\Mahasiswa\UploadProposalController;
+use App\Http\Controllers\Mahasiswa\PemberkasanMahasiswaController;
+use App\Http\Controllers\Mahasiswa\JadwalSeminarController;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Proposal;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 Route::get('/mahasiswa/tempat-pkl-terbaik', [TPKController::class, 'hitung']);
-
 /*
 |--------------------------------------------------------------------------
 | Rute untuk Tamu (Guest)
@@ -84,6 +93,8 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/dashboard/notifikasi/kirim', [DashboardController::class, 'kirimNotifikasiSemuaRole'])->name('dashboard.notifikasi.kirim');
+    Route::post('/dashboard/test-notifikasi',[DashboardController::class, 'testNotifikasiDashboard'])->name('dashboard.test.notifikasi');
     Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
     Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
     Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
@@ -337,8 +348,8 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::middleware('auth')->group(function () {
-    Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])
-    ->name('mahasiswa.lihatdetailipk.index');
+    Route::get('/mahasiswa/lihatdetailipk', [LihatDetailIpkController::class, 'index'])->name('mahasiswa.lihatdetailipk.index');
+    Route::get('/mahasiswa/lihatsemuatempatpkl', [LihatSemuaTempatPKLController::class, 'index'])->name('mahasiswa.lihatsemua');
 
 });
 
@@ -375,10 +386,100 @@ Route::middleware('auth')->group(function () {
     // Bimbingan - Mahasiswa
     Route::prefix('mahasiswa')->middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('/bimbingan', [MahasiswaBimbinganController::class, 'index'])->name('mahasiswa.bimbingan.index');
-});
+    Route::get('/lihat-tempat-pkl', [MahasiswaTempatPKLController::class, 'index'])->name('tempatpkl.lihattempatpkl');
+    Route::get('/aktivitas', [\App\Http\Controllers\Mahasiswa\AktivitasController::class, 'index'])->name('aktivitas.index');
+    Route::post('/aktivitas/store', [\App\Http\Controllers\Mahasiswa\AktivitasController::class, 'store'])->name('aktivitas.store');
+    
+    // ======================
+    // PROPOSAL PKL
+    // ======================
+    Route::get('/proposal/upload', [UploadProposalController::class, 'create'])
+        ->name('mahasiswa.proposal.upload');
+
+    Route::post('/proposal/upload', [UploadProposalController::class, 'store'])
+        ->name('mahasiswa.proposal.store');
+
+    Route::get('/mahasiswa/proposal/{id}/lihat', function ($id) {
+    $proposal = Proposal::findOrFail($id); // <--- pastikan model Proposal
+
+    // Pastikan hanya owner yang bisa lihat
+    if ($proposal->nim !== Auth::user()->nim) {
+        abort(403, 'Forbidden');
+    }
+
+    $path = storage_path('app/public/' . $proposal->file_proposal);
+
+    if (!file_exists($path)) {
+        abort(404, 'File tidak ditemukan');
+    }
+
+    return response()->file($path);
+})->name('proposal.lihat')->middleware(['auth', 'role:mahasiswa']);
+
+    // Halaman upload proposal
+    Route::get('/proposal/upload', [UploadProposalController::class, 'index'])
+        ->name('mahasiswa.proposal.upload');
+
+    // Halaman Pemberkasan (Mahasiswa)
+    Route::get('/pemberkasan/upload', [PemberkasanMahasiswaController::class, 'index'])
+        ->name('mahasiswa.pemberkasan.upload');
+
+    // Proses upload pemberkasan
+    Route::post('/pemberkasan/store', [PemberkasanMahasiswaController::class, 'store'])
+        ->name('mahasiswa.pemberkasan.store');
+
+    Route::get('/pemberkasan/view/{file}', function($file){
+    $path = storage_path('app/public/pemberkasan/' . $file);
+
+    if (!file_exists($path)) {
+        abort(404);
+    }
+
+    return response()->file($path); // akan membuka PDF di browser
+})->name('pemberkasan.view');
+
+    Route::get('/ajukan-tempat-pkl', [AjukanTempatPKLController::class, 'create'])->name('tempatpkl.ajukantempatpkl');
+    Route::post('/upload-pdf', [AjukanTempatPKLController::class, 'uploadPdf'])->name('tempatpkl.uploadPdf');
+    Route::post('/store', [AjukanTempatPKLController::class, 'store'])->name('tempatpkl.store');
+
+    Route::get('/pemberkasan/view/{type}/{id}', [PemberkasanMahasiswaController::class, 'viewFile'])
+    ->name('pemberkasan.view');
+
+    // Proses penyimpanan data upload
+    Route::post('/proposal/store', [UploadProposalController::class, 'store'])
+        ->name('mahasiswa.proposal.store');
+
+    // Halaman Jadwal Seminar (untuk mahasiswa)
+    Route::get('/seminar/jadwal', [JadwalSeminarController::class, 'index'])
+        ->name('seminar.jadwal');
+
+    Route::get('/seminar/{id}', [JadwalSeminarController::class, 'show'])
+        ->name('seminar.show');
 
 });
+    Route::get('/test-email', function () {
+    Mail::raw('Tes email dari Laravel SIPRAKERLA', function ($message) {
+        $message->to('emailtujuan@gmail.com')
+                ->subject('Tes Email Laravel');
+    });
 
 Route::get('/koor-pkl/profil', [KoorPklController::class, 'showProfile'])->name('koor.profil');
 Route::post('/koor-pkl/profil', [KoorPklController::class, 'updateProfile'])->name('koor.profil.update');
 
+    return 'Email terkirim!';
+
+});
+    Route::post('/notifikasi/baca-semua', function () {
+    Auth::user()->unreadNotifications->markAsRead();
+    return back();
+    
+})
+    ->name('notifikasi.baca');
+});
+
+    Route::middleware(['auth','role:koordinator'])->prefix('koordinator')->group(function() {
+    Route::get('/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
+    Route::post('/pengajuan-pkl/{id}/validasi', [KoorPklController::class, 'validasiPengajuan'])->name('koor.pengajuan.validasi');
+    Route::post('/pengajuan-pkl/{id}/nilai', [KoorPklController::class, 'beriNilai'])->name('koor.pengajuan.beriNilai');
+    Route::post('/proposal/{proposal}/validate', [KoorPklController::class, 'validateProposal'])->name('koor.proposal.validate');
+});

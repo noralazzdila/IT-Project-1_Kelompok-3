@@ -9,12 +9,18 @@ use App\Models\Pemberkasan;
 use App\Models\Proposal;
 use App\Models\Seminar;
 use App\Models\TempatPKL;
+use App\Models\PengajuanPKL;
+use App\Models\User;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
 class KoorPklController extends Controller
 {
+    /**
+     * Dashboard Koordinator PKL
+     */
     public function index()
     {
         // Mendapatkan user yang sedang login
@@ -22,54 +28,22 @@ class KoorPklController extends Controller
 
         // Data dinamis dari database
         $totalMahasiswa = Mahasiswa::count();
-        $tempatAktif = TempatPKL::count(); // Asumsi semua tempat dihitung sebagai aktif
+        $tempatAktif = TempatPKL::count();
         $seminarBulanIni = Seminar::whereMonth('tanggal', now()->month)->count();
 
-        // Menghitung mahasiswa yang memenuhi syarat
-        $mahasiswaMemenuhiSyarat = Nilai::all()->filter(function ($nilai) {
-            return $nilai->status === 'Memenuhi Syarat';
-        })->count();
+        // Menghitung mahasiswa yang memenuhi syarat (Query yang efisien)
+        $mahasiswaMemenuhiSyarat = Nilai::where('status', 'Memenuhi Syarat')->count();
 
         // Menghitung proposal yang disetujui
         $proposalDisetujui = Proposal::where('status', 'Disetujui')->count();
+        
+        // Menghitung laporan yang menunggu validasi
+        $laporanPending = PengajuanPKL::where('status', 'uploaded')->count();
 
-        // Mengambil aktivitas terbaru
-        $bimbingan = Bimbingan::latest()->take(5)->get()->map(function ($item) {
-            return [
-                'type' => 'bimbingan',
-                'desc' => $item->mahasiswa_nama . ' telah bimbingan dengan ' . $item->dosen_pembimbing,
-                'time' => $item->created_at->diffForHumans(),
-            ];
-        });
-
-        $proposal = Proposal::latest()->take(5)->get()->map(function ($item) {
-            return [
-                'type' => 'proposal',
-                'desc' => $item->nama_mahasiswa . ' mengajukan proposal baru.',
-                'time' => $item->created_at->diffForHumans(),
-            ];
-        });
-
-        $pemberkasan = Pemberkasan::latest()->take(5)->get()->map(function ($item) {
-            return [
-                'type' => 'pemberkasan',
-                'desc' => $item->nama_mahasiswa . ' mengunggah berkas baru.',
-                'time' => $item->created_at->diffForHumans(),
-            ];
-        });
-
-        $seminar = Seminar::latest()->take(5)->get()->map(function ($item) {
-            return [
-                'type' => 'seminar',
-                'desc' => 'Seminar untuk ' . $item->nama_mahasiswa . ' telah dijadwalkan.',
-                'time' => $item->created_at->diffForHumans(),
-            ];
-        });
-
-        $aktivitas = collect($bimbingan)->merge($proposal)->merge($pemberkasan)->merge($seminar)->sortByDesc('time')->take(5);
-
-
-        // Mengambil semua data seminar, diurutkan berdasarkan tanggal terbaru
+        // Mengambil aktivitas terbaru dari log
+        $activities = ActivityLog::with('user')->latest()->take(10)->get();
+        
+        // Mengambil data seminar
         $seminars = Seminar::latest()->get();
 
         return view('koor-pkl.dashboard', compact(
@@ -77,10 +51,11 @@ class KoorPklController extends Controller
             'totalMahasiswa',
             'tempatAktif',
             'seminarBulanIni',
-            'aktivitas',
+            'activities',
             'seminars',
             'mahasiswaMemenuhiSyarat',
-            'proposalDisetujui' // Mengirim data ke view
+            'proposalDisetujui',
+            'laporanPending'
         ));
     }
 
@@ -92,6 +67,7 @@ class KoorPklController extends Controller
 
     public function updateProfile(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $request->validate([
@@ -113,5 +89,86 @@ class KoorPklController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    /**
+     * Validasi pengajuan PKL oleh koordinator (Setujui / Tolak / Diproses)
+     */
+    public function validasiPengajuan(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:uploaded,diproses,diterima,ditolak',
+            'catatan' => 'nullable|string',
+        ]);
+
+        $pengajuan = PengajuanPKL::findOrFail($id);
+        $pengajuan->status = $request->status;
+        $pengajuan->catatan = $request->catatan;
+        $pengajuan->save();
+
+        // Log aktivitas
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => 'Koordinator ' . Auth::user()->name . ' ' . $request->status . ' pengajuan PKL mahasiswa: ' . $pengajuan->mahasiswa->name,
+            'type' => 'pengajuan_validation',
+        ]);
+
+        return redirect()->back()->with('success', 'Pengajuan PKL berhasil diupdate.');
+    }
+
+    /**
+     * Memberi nilai PKL mahasiswa
+     */
+    public function beriNilai(Request $request, $id)
+    {
+        $request->validate([
+            'nilai' => 'required|integer|min:0|max:100',
+            'catatan' => 'nullable|string'
+        ]);
+
+        $pengajuan = PengajuanPKL::findOrFail($id);
+
+        // Update status menjadi diterima
+        $pengajuan->status = 'diterima';
+        $pengajuan->save();
+
+        // Simpan nilai PKL
+        $pengajuan->nilaiPKL()->updateOrCreate(
+            ['pengajuan_pkl_id' => $pengajuan->id],
+            ['nilai' => $request->nilai, 'catatan' => $request->catatan]
+        );
+
+        // Log aktivitas
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => 'Koordinator ' . Auth::user()->name . ' memberi nilai PKL mahasiswa: ' . $pengajuan->mahasiswa->name,
+            'type' => 'nilai_pkl',
+        ]);
+
+        return redirect()->back()->with('success', 'Pengajuan berhasil dinilai.');
+    }
+
+    /**
+     * Validasi Proposal PKL
+     */
+    public function validateProposal(Request $request, Proposal $proposal)
+    {
+        $request->validate([
+            'status' => 'required|in:disetujui,ditolak',
+            'catatan' => 'nullable|string',
+        ]);
+
+        $proposal->status = $request->status;
+        $proposal->catatan = $request->catatan;
+        $proposal->save();
+
+        // Log aktivitas
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => 'Koordinator ' . Auth::user()->name . ' ' . $request->status . ' proposal: ' . $proposal->judul_proposal . ' oleh ' . $proposal->mahasiswa->name,
+            'type' => 'proposal_validation',
+        ]);
+
+        return redirect()->back()->with('success', 'Status proposal berhasil diupdate.');
     }
 }

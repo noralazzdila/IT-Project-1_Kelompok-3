@@ -136,7 +136,8 @@ class UserController extends Controller
         if (!$user->profile_photo || !Storage::disk('public')->exists($user->profile_photo)) {
             abort(404);
         }
-
-        return Storage::disk('public')->response($user->profile_photo);
+        //return Storage::disk('public')->response($user->profile_photo);
+        return response()->file(Storage::disk('public')->path($user->profile_photo));
+        
     }
 }

@@ -341,7 +341,7 @@ class NilaiController extends Controller
         if (!$path || !Storage::disk('public')->exists($path)) {
             abort(404, 'File PDF tidak ditemukan.');
         }
-
-        return Storage::disk('public')->response($path);
+        //return Storage::disk('public')->response($path);
+        return response()->file(Storage::disk('public')->path($path));
     }
 }

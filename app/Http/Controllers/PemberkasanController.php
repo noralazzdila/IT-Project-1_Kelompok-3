@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ActivityLog;
 
 class PemberkasanController extends Controller
 {
@@ -251,54 +252,16 @@ public function createMahasiswa(): View
         
         $pemberkasan->save();
 
-        
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => Auth::user()->name . ' mengunggah laporan PKL.',
+            'type' => 'laporan_upload',
+        ]);
 
         return redirect()->back()->with('success', 'Berkas berhasil diunggah!');
 
+        
     }
 
-
-
-    public function file(Pemberkasan $pemberkasan, $field)
-
-    {
-
-        $filePath = null;
-
-        switch ($field) {
-
-            case 'form_bimbingan':
-
-                $filePath = $pemberkasan->form_bimbingan_path;
-
-                break;
-
-            case 'sertifikat':
-
-                $filePath = $pemberkasan->sertifikat_path;
-
-                break;
-
-            case 'laporan_final':
-
-                $filePath = $pemberkasan->laporan_final_path;
-
-                break;
-
-        }
-
-
-
-        if (!$filePath || !Storage::disk('public')->exists($filePath)) {
-
-            abort(404);
-
-        }
-
-
-
-        return Storage::disk('public')->response($filePath);
-
-    }
-
+    
 }

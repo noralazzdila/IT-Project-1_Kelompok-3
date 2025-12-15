@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Mahasiswa;
 use App\Http\Controllers\Controller;
 use App\Models\Bimbingan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BimbinganController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Bimbingan::where('user_id', auth()->id());
+        $query = Bimbingan::where('user_id', Auth::id());
 
         // Pencarian sederhana
         if ($request->filled('search')) {

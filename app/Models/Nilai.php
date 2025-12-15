@@ -22,7 +22,8 @@ class Nilai extends Model
         'count_e',
         'total_sks',
         'sheet_name',
-        'pdf_path'
+        'pdf_path',
+
     ];
 
     public function mahasiswa()
@@ -58,4 +59,5 @@ class Nilai extends Model
 
         return 'danger'; // Warna merah untuk bootstrap
     }
+    
 }

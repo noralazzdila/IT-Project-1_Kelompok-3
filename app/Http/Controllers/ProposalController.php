@@ -6,6 +6,10 @@ use App\Models\Proposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
+use App\Notifications\NotifikasiPKL;
+use App\Models\User;
 
 class ProposalController extends Controller
 {
@@ -55,6 +59,7 @@ class ProposalController extends Controller
             'tanggal_pengajuan' => 'required|date',
             'status' => ['required', Rule::in(['Menunggu', 'Disetujui', 'Ditolak'])],
             'catatan' => 'nullable|string',
+            
         ]);
 
         // Handle file upload
@@ -66,7 +71,16 @@ class ProposalController extends Controller
 
         Proposal::create($validatedData);
 
+        ActivityLog::create([
+            'user_id' => Auth::id(),
+            'activity' => Auth::user()->name . ' mengajukan proposal PKL.',
+            'type' => 'proposal_upload',
+        ]);
+
+
         return redirect()->route('proposal.index')->with('success', 'Proposal PKL berhasil ditambahkan.');
+
+        
     }
 
     /**
@@ -185,6 +199,27 @@ class ProposalController extends Controller
         }
 
         return Storage::response('public/' . $proposal->file_proposal);
+    }
+    public function setujui($proposalId)
+    {
+        $proposal = Proposal::findOrFail($proposalId);
+
+        // 1️Update status proposal
+        $proposal->update([
+            'status' => 'disetujui'
+        ]);
+
+        // 2️Ambil mahasiswa pemilik proposal
+        $user = $proposal->mahasiswa; // relasi ke User
+
+        // 3️KIRIM NOTIFIKASI 🔔
+        $user->notify(new NotifikasiPKL(
+            'Proposal Disetujui',
+            'Proposal PKL Anda telah disetujui oleh dosen pembimbing.',
+            route('mahasiswa.proposal.index')
+        ));
+
+        return back()->with('success', 'Proposal disetujui & notifikasi dikirim');
     }
 
 }

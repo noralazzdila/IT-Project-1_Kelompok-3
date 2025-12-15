@@ -20,6 +20,7 @@ class ProfilController extends Controller
     // Update profil
     public function update(Request $request)
     {
+         /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // Validasi input
@@ -47,6 +48,7 @@ class ProfilController extends Controller
     // Update password (opsional)
     public function updatePassword(Request $request)
     {
+         /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $request->validate([

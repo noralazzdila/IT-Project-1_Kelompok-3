@@ -3,6 +3,20 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<div class="container-fluid mt-4 flex-grow-1 px-4">
+                {{-- 🔔 TEST NOTIFIKASI EMAIL KE MAHASISWA --}}
+                @if(auth()->check())
+                @if(session('success'))
+                <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            <form action="{{ route('dashboard.test.notifikasi') }}" method="POST" class="mb-3">
+                @csrf
+                <button type="submit" class="btn btn-warning">
+                    🔔 Test Kirim Email ke Mahasiswa
+                </button>
+            </form>
 <div class="row g-3">
     <div class="col-md-3">
         <a href="#" class="text-decoration-none text-dark">
