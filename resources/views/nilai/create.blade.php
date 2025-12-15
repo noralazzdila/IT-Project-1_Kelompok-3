@@ -55,7 +55,8 @@
                 <a href="{{ route('proposal.index') }}" class="nav-link"><i class="fa fa-file-signature me-2"></i> Proposal</a>
                 <a href="{{ route('suratpengantar.index') }}" class="nav-link"><i class="fa-solid fa-envelope me-2"></i>Surat Pengantar</a>
                 <a href="{{ route('pemberkasan.index') }}" class="nav-link"><i class="fa-solid fa-folder me-2"></i>Pemberkasan</a>
-
+              </nav>
+          </div>
     <div class="col-10 d-flex flex-column">
         <div class="header d-flex justify-content-between align-items-center">
             <h5 class="mb-0">Tambah Nilai Mahasiswa</h5>

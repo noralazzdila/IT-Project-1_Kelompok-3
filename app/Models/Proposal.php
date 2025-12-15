@@ -32,4 +32,13 @@ class Proposal extends Model
         'status',
         'catatan',
     ];
+
+    public function approve($id)
+{
+    $mahasiswa = User::find($id);
+
+    $mahasiswa->notify(new ProposalApprovedNotification('approved'));
+
+    return back()->with('success', 'Notifikasi email terkirim!');
+}
 }

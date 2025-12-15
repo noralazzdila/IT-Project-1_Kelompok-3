@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seminar;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Notifications\NotifikasiPKL;
+use App\Models\User;
 
 class SeminarController extends Controller
 {
@@ -70,5 +73,20 @@ class SeminarController extends Controller
     {
         $seminar->delete();
         return redirect()->route('seminar.index')->with('success', 'Jadwal seminar berhasil dihapus.');
+    }
+
+    public function jadwalkanSeminar($mahasiswaId)
+    {
+        $mahasiswa = User::findOrFail($mahasiswaId);
+
+        $mahasiswa->notify(
+            new NotifikasiPKL(
+                'Seminar PKL Dijadwalkan',
+                'Seminar PKL Anda dijadwalkan pada 15 Januari 2025 pukul 10.00 WIB.',
+                route('seminar.jadwal')
+            )
+        );
+
+        return back()->with('success', 'Notifikasi berhasil dikirim');
     }
 }

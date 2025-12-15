@@ -270,6 +270,10 @@
 </head>
 <body>
 
+@php
+$notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
+@endphp
+
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
       <a class="navbar-brand d-flex align-items-center" href="#">
@@ -292,8 +296,8 @@
             <ul class="dropdown-menu" aria-labelledby="tempatDropdown">
               <li>
                 <div class="dropdown-card">
-                    <a href="{{ route('mahasiswa.lihatpkl.index') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
-                   <a href="{{ route('mahasiswa.suratpengantar.create') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+                    <a href="{{ route('tempatpkl.lihattempatpkl') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
+                   <a href="{{ route('tempatpkl.ajukantempatpkl') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
                 </div>
               </li>
             </ul>
@@ -314,7 +318,7 @@
             <ul class="dropdown-menu" aria-labelledby="seminarDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
+                  <a href="{{ route('seminar.jadwal') }}"><i class="bi bi-calendar-event me-2"></i>Jadwal Seminar</a>
                 </div>
               </li>
             </ul>
@@ -334,7 +338,7 @@
             <ul class="dropdown-menu" aria-labelledby="proposalDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.proposal.create')  }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
+                  <a href="{{ route('mahasiswa.proposal.upload') }}"><i class="bi bi-cloud-upload me-2"></i>Upload Proposal</a>
                 </div>
               </li>
             </ul>
@@ -344,7 +348,7 @@
             <ul class="dropdown-menu" aria-labelledby="pemberkasanDropdown">
               <li>
                 <div class="dropdown-card">
-                  <a href="{{ route('mahasiswa.pemberkasan.create') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
+                  <a href="{{ route('mahasiswa.pemberkasan.upload') }}"><i class="bi bi-folder-plus me-2"></i>Upload Berkas</a>
                 </div>
               </li>
             </ul>
@@ -355,36 +359,38 @@
           <li class="nav-item dropdown me-3">
             <a class="nav-link position-relative" href="#" id="notifDropdown" data-bs-toggle="dropdown">
               <i class="bi bi-bell-fill notif-icon"></i>
-              <span class="notif-badge">4</span>
+              @if($notifications->count() > 0)
+              <span class="notif-badge">{{ $notifications->count() }}</span>
+              @endif
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
               <li>
                 <div class="notif-card">
                   <div class="notif-header">
                     <h6>Notifikasi</h6>
-                    <a href="#">Tandai Semua Dibaca</a>
+                    <form action="{{ route('notifikasi.baca') }}" method="POST">
+                      @csrf
+                      <button type="submit" class="btn btn-link p-0">
+                        Tandai Semua Dibaca
+                      </button>
+                    </form>
                   </div>
                   <div>
-                      <div class="notif-item">
-                        <strong>Bimbingan Dijadwalkan</strong>
-                        <p class="mb-0 small">Bimbingan dengan Dr. Sari Wijaya pada 15 Januari 2024, 10:00 WIB</p>
-                        <small class="text-muted">2 jam yang lalu</small>
+                      <div>
+                        @forelse($notifications as $notif)
+                        <div class="notif-item">
+                          <strong>{{ $notif->data['judul'] }}</strong>
+                          <p class="mb-0 small">{{ $notif->data['pesan'] }}</p>
+                          <small class="text-muted">
+                          {{ $notif->created_at->diffForHumans() }}
+                        </small>
                       </div>
-                      <div class="notif-item">
-                        <strong>Proposal Disetujui</strong>
-                        <p class="mb-0 small">Proposal PKL Anda telah disetujui oleh dosen pembimbing.</p>
-                        <small class="text-muted">1 hari yang lalu</small>
+                      @empty
+                      <div class="notif-item text-center text-muted">
+                        Tidak ada notifikasi baru
                       </div>
-                      <div class="notif-item">
-                        <strong>Deadline Mendekati</strong>
-                        <p class="mb-0 small">Pengumpulan laporan PKL dalam 3 hari lagi.</p>
-                        <small class="text-muted">2 hari yang lalu</small>
-                      </div>
-                      <div class="notif-item">
-                        <strong>Seminar Terjadwal</strong>
-                        <p class="mb-0 small">Seminar PKL Anda telah dijadwalkan oleh admin.</p>
-                        <small class="text-muted">5 hari yang lalu</small>
-                      </div>
+                      @endforelse
+                    </div>
                   </div>
                   <div class="notif-footer">
                     <a href="#">Lihat Semua Notifikasi</a>
@@ -395,23 +401,23 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center p-1 pe-2" style="background-color: rgba(255,255,255,0.1); border-radius: 20px;" href="#" id="profilDropdown" data-bs-toggle="dropdown">
+              <a class="nav-link dropdown-toggle d-flex align-items-center p-1 pe-2" style="background-color: rgba(255,255,255,0.1); border-radius: 20px;" href="#" id="profilDropdown" data-bs-toggle="dropdown">
               <img src="{{ asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
-              <span>{{ Auth::user()->name }}</span>
+              <span>{{ optional(Auth::user())->name ?? 'Pengguna' }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profilDropdown">
               <li>
                 <div class="profile-card">
-                  <div class="text-center mb-2">
-                    <img src="{{ Auth::user()->profile_photo ? asset('storage/' . Auth::user()->profile_photo) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
-                    <h6>{{ Auth::user()->name }}</h6>
+                    <div class="text-center mb-2">
+                    <img src="{{ optional(Auth::user())->profile_photo ? asset('storage/' . optional(Auth::user())->profile_photo) : asset('images/user-fill.png') }}" alt="Profil" class="profile-img me-2">
+                    <h6>{{ optional(Auth::user())->name ?? 'Pengguna' }}</h6>
                     <p>Mahasiswa-Teknologi Informasi</p>
                   </div>
-                  <div class="profile-actions">
+                    <div class="profile-actions">
                     <a href="{{ route('mahasiswa.profil') }}"><i class="bi bi-person-circle me-2"></i>Profil Saya</a>
                     <a href="{{ route('mahasiswa.pengaturan') }}"><i class="bi bi-gear me-2"></i>Pengaturan</a>
                     <hr>
-                    <a href={{ route('login') }} class="logout"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
+                    <a href="{{ route('login') }}" class="logout"><i class="bi bi-box-arrow-right me-2"></i>Keluar</a>
                   </div>
                 </div>
               </li>
@@ -476,7 +482,7 @@
         <div class="card p-4 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">Tempat PKL Terfavorit</h5>
-              <a href="#" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
+              <a href="{{ route('mahasiswa.lihatsemua') }}" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
           </div>
 
           <div class="ranking-list">

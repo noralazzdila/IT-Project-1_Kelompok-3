@@ -6,6 +6,8 @@ use App\Models\Bimbingan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use App\Notifications\NotifikasiPKL;
+use App\Models\User;
 
 class BimbinganController extends Controller
 {
@@ -58,9 +60,9 @@ class BimbinganController extends Controller
         'status'            => 'required|in:Menunggu,Disetujui,Revisi',
     ]);
 
-    // 🟢 Tambahkan user_id dari user yang login
-    Bimbingan::create([
-        'user_id'           => auth()->id(),
+    // Simpan bimbingan
+    $bimbingan = Bimbingan::create([
+        'user_id'           => auth()->id(), // MAHASISWA LOGIN
         'mahasiswa_nama'    => $request->mahasiswa_nama,
         'nim'               => $request->nim,
         'dosen_pembimbing'  => $request->dosen_pembimbing,
@@ -70,8 +72,20 @@ class BimbinganController extends Controller
         'status'            => $request->status,
     ]);
 
+    // Ambil user mahasiswa
+    $user = auth()->user();
+
+    // KIRIM NOTIFIKASI 🔔 (TEMPAT YANG BENAR)
+    $user->notify(new NotifikasiPKL(
+        'Bimbingan Dijadwalkan',
+        'Bimbingan dengan dosen pembimbing pada ' .
+            \Carbon\Carbon::parse($request->tanggal_bimbingan)->translatedFormat('d F Y'),
+        route('mahasiswa.bimbingan.index')
+    ));
+
+    // Redirect
     return redirect()->route('bimbingan.index')
-                     ->with('success', 'Data Bimbingan berhasil ditambahkan.');
+        ->with('success', 'Bimbingan dijadwalkan & notifikasi dikirim');
 }
 
 
@@ -122,5 +136,6 @@ class BimbinganController extends Controller
         return redirect()->route('bimbingan.index')
                          ->with('success', 'Data Bimbingan berhasil dihapus.');
     }
+
 }
 

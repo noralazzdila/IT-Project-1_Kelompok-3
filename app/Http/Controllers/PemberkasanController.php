@@ -251,6 +251,16 @@ public function createMahasiswa(): View
         
         $pemberkasan->save();
 
+        ActivityLog::create([
+            'user_id' => auth()->id(),
+            'activity' => auth()->user()->name . ' mengunggah laporan PKL.',
+            'type' => 'laporan_upload',
+        ]);
+
         return redirect()->back()->with('success', 'Berkas berhasil diunggah!');
+
+        
     }
+
+    
 }

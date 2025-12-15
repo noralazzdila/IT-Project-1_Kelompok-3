@@ -240,6 +240,7 @@ class NilaiController extends Controller
     {
         $nilai = Nilai::findOrFail($id);
         $nilai->delete();
+        
 
         return redirect()->route('nilai.index')->with('success', 'Data nilai berhasil dihapus!');
     }

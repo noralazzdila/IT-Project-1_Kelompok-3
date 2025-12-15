@@ -182,6 +182,20 @@
             </div>
 
             <div class="container-fluid mt-4 flex-grow-1 px-4">
+                {{-- 🔔 TEST NOTIFIKASI EMAIL KE MAHASISWA --}}
+                @if(auth()->check())
+                @if(session('success'))
+                <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+            @endif
+            <form action="{{ route('dashboard.test.notifikasi') }}" method="POST" class="mb-3">
+                @csrf
+                <button type="submit" class="btn btn-warning">
+                    🔔 Test Kirim Email ke Mahasiswa
+                </button>
+            </form>
+            @endif
                 <div class="row g-3">
                     <div class="col-md-3">
                         <a href="#" class="text-decoration-none text-dark">
@@ -228,46 +242,32 @@
                                 <h6 class="fw-bold mb-0">Aktivitas Terbaru</h6>
                             </div>
                             <div class="card-body scrollable-content">
-                                <ul class="custom-list">
-                                    <li>
-                                        <i class="fas fa-file-alt text-primary list-icon"></i>
-                                        <div class="list-content">
-                                            <p><strong>Budi Santoso</strong> mengajukan proposal baru.</p>
-                                            <small class="text-muted">Senin, 6 Okt 2025 - 23:30</small>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-check-circle text-success list-icon"></i>
-                                        <div class="list-content">
-                                            <p>Tempat PKL untuk <strong>Citra Lestari</strong> telah disetujui.</p>
-                                            <small class="text-muted">Senin, 6 Okt 2025 - 21:15</small>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-calendar-check text-info list-icon"></i>
-                                        <div class="list-content">
-                                            <p>Seminar untuk <strong>Ahmad Dhani</strong> telah dijadwalkan.</p>
-                                            <small class="text-muted">Minggu, 5 Okt 2025 - 15:00</small>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-upload text-secondary list-icon"></i>
-                                        <div class="list-content">
-                                            <p><strong>Rina Amelia</strong> mengunggah laporan akhir.</p>
-                                            <small class="text-muted">Minggu, 5 Okt 2025 - 11:45</small>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <i class="fas fa-clipboard-list text-warning list-icon"></i>
-                                        <div class="list-content">
-                                            <p><strong>Eko Prasetyo</strong> mendaftar untuk seminar.</p>
-                                            <small class="text-muted">Jumat, 3 Okt 2025 - 18:20</small>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                <ul class="list-group">
+                                @php
+                                function getIcon($type) {
+                                return match($type) {
+                                'dokumen' => '📄',
+                                'proposal' => '📝',
+                                'seminar' => '🗓️',
+                                'proposal_validation' => '✅',
+                                default => 'ℹ️',
+                                };
+                            }
+                            @endphp
+                            @foreach($activities as $act)
+                            <li class="list-group-item d-flex align-items-start">
+                                <span class="me-2">{{ getIcon($act->type) }}</span>
+                                <div>
+                                    <strong>{{ $act->user->name }}</strong> {{ $act->activity }}
+                                    <br>
+                                    <small>{{ $act->created_at->diffForHumans() }}</small>
+                                </div>
+                            </li>
+                            @endforeach
+                        </ul>
                     </div>
+                </div>
+            </div>
                     <div class="col-md-6">
                         <div class="card shadow-sm">
                             <div class="card-header bg-white">
