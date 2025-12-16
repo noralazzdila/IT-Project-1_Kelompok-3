@@ -7,108 +7,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
-        /* ---------- BODY & LAYOUT ---------- */
-        body {
-            background-color: #e9f2ff;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        main {
-            flex: 1;
-        }
-
-        /* ---------- NAVBAR ---------- */
-        .navbar {
-            background-color: #004080;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-        }
+        body { background-color: #e9f2ff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
+        main { flex: 1; }
+        .navbar { background-color: #004080; box-shadow: 0 3px 12px rgba(0,0,0,0.15); }
         .navbar-brand, .nav-link { color: #fff !important; }
-
-        /* ---------- CARD ---------- */
-        .card {
-            background-color: rgba(243, 244, 245, 0.35);
-            border-radius: 18px;
-            border: 1px solid rgba(0, 64, 128, 0.3);
-            animation: fadeInUp 0.7s ease forwards;
-            transform: translateY(15px);
-            opacity: 0;
-        }
-
-        /* ---------- BUTTONS ---------- */
-        .btn-secondary {
-            background-color: #004080;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-        .btn-secondary:hover {
-            background-color: #003366;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
-        }
-
-        /* ---------- ANIMATIONS ---------- */
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ---------- FOOTER ---------- */
-        .footer {
-            background-color: #004080;
-            color: #fff;
-            text-align: center;
-            padding: 10px;
-        }
-
-        /* ---------- STEPPER ---------- */
-        .stepper-wrapper {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .stepper-step {
-            text-align: center;
-            position: relative;
-            flex: 1;
-        }
-        .stepper-step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 15px;
-            right: -50%;
-            width: 100%;
-            height: 4px;
-            background-color: #c0c0c0;
-            z-index: 0;
-        }
-        .stepper-step.completed:not(:last-child)::after {
-            background-color: #004080;
-        }
-        .step-counter {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #c0c0c0;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff;
-            font-weight: bold;
-            z-index: 1;
-            position: relative;
-        }
-        .stepper-step.completed .step-counter {
-            background-color: #004080;
-        }
-        .step-name {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+        .card { background-color: #fff; border-radius: 18px; border: 1px solid rgba(0,64,128,0.1); }
+        .btn-primary { background-color: #004080; border:none; }
+        .btn-primary:hover { background-color: #003366; }
+        .footer { background-color: #004080; color: #fff; text-align: center; padding: 10px; }
+        .stepper-wrapper { display: flex; justify-content: space-between; position: relative; margin-bottom: 20px; }
+        .stepper-step { text-align: center; position: relative; flex: 1; }
+        .stepper-step::after { content: ''; position: absolute; top: 15px; right: -50%; width: 100%; height: 4px; background-color: #dcdcdc; z-index: 0; }
+        .stepper-step:last-child::after { content: none; }
+        .stepper-step.completed::after { background-color: #004080; }
+        .step-counter { width: 30px; height: 30px; border-radius: 50%; background-color: #dcdcdc; display: inline-flex; justify-content: center; align-items: center; color: #fff; font-weight: bold; z-index: 1; position: relative; }
+        .stepper-step.completed .step-counter { background-color: #004080; }
+        .step-name { margin-top: 8px; font-size: 0.9rem; font-weight: 500; }
+        .requirement-list li { display: flex; justify-content: space-between; align-items: center; }
     </style>
 </head>
 <body>
@@ -116,34 +31,27 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid px-4">
         <a class="navbar-brand fw-bold" href="{{ route('dashboard.mahasiswa') }}">
-            <img src="{{ asset('images/Logo_Politala.png') }}" width="40" class="me-2">
-            SIPRAKERLA | Mahasiswa
+            <img src="{{ asset('images/Logo_Politala.png') }}" width="40" class="me-2"> SIPRAKERLA
         </a>
         <div class="dropdown ms-auto">
             <a href="#" class="text-light text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-                <span class="fw-semibold">{{ Auth::user()->name }}</span> <br>
-                <small>Mahasiswa</small>
+                <span class="fw-semibold">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow">
                 <li><a class="dropdown-item" href="{{ route('mahasiswa.profil') }}"><i class="fas fa-user-edit me-2"></i>Edit Profil</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li>
-                    <form action="{{ route('logout') }}" method="POST">@csrf
-                        <button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-                    </form>
-                </li>
+                <li><form action="{{ route('logout') }}" method="POST">@csrf<button class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</button></form></li>
             </ul>
         </div>
     </div>
 </nav>
 
 <main class="container mt-4 mb-4">
-
     @php
-        $status = $pengajuan?->status ?? null;
+        $status = $pengajuan->status ?? null;
         $step = 1;
-        if($status == 'uploaded' || $status == 'diproses') $step = 2;
-        if($status == 'diterima') $step = 3;
+        if ($status === 'diterima' || $status === 'diproses') $step = 2;
+        if ($status === 'selesai') $step = 3; // Misal ada status 'selesai'
     @endphp
 
     <nav aria-label="breadcrumb">
@@ -153,177 +61,193 @@
         </ol>
     </nav>
 
-    {{-- STEP PROGRESS BAR MODERN --}}
     <div class="stepper-wrapper mb-4">
         <div class="stepper-step {{ $step >= 1 ? 'completed' : '' }}">
             <div class="step-counter">1</div>
-            <div class="step-name">Upload PDF</div>
+            <div class="step-name">Validasi Nilai</div>
         </div>
         <div class="stepper-step {{ $step >= 2 ? 'completed' : '' }}">
             <div class="step-counter">2</div>
-            <div class="step-name">Validasi Koordinator</div>
+            <div class="step-name">Input Tempat PKL</div>
         </div>
         <div class="stepper-step {{ $step >= 3 ? 'completed' : '' }}">
             <div class="step-counter">3</div>
-            <div class="step-name">Ajukan Tempat PKL</div>
+            <div class="step-name">Selesai</div>
         </div>
     </div>
 
     <div class="card shadow-sm p-4">
 
-        {{-- ERROR HANDLING --}}
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <strong>Terjadi kesalahan!</strong>
-                <ul class="mt-2 mb-0">
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <div id="alert-container"></div>
 
         <div class="mb-4">
-            <h5>Status Pengajuan:</h5>
-            @if(!$status)
-                <span class="badge bg-secondary">Belum Upload PDF</span>
-            @elseif($status == 'uploaded')
-                <span class="badge bg-warning">Sudah Upload PDF - Menunggu Validasi</span>
-            @elseif($status == 'diproses')
-                <span class="badge bg-info">Sedang Diproses Koordinator PKL</span>
-            @elseif($status == 'diterima')
-                <span class="badge bg-success">Lolos Validasi - Bisa Ajukan Tempat PKL</span>
-            @elseif($status == 'ditolak')
-                <span class="badge bg-danger">Tidak Lolos Validasi</span>
+            <h5 class="mb-3">Status Pengajuan:</h5>
+            @if(!$status) <span class="badge bg-secondary fs-6">1. Belum Validasi Nilai</span>
+            @elseif($status == 'ditolak') <span class="badge bg-danger fs-6">1. Gagal Validasi Nilai</span>
+            @elseif($status == 'diterima') <span class="badge bg-success fs-6">2. Lolos Validasi - Silakan Ajukan Tempat PKL</span>
+            @elseif($status == 'diproses') <span class="badge bg-info fs-6">2. Pengajuan Tempat PKL Sedang Diproses</span>
             @endif
         </div>
 
-        {{-- STEP 1: UPLOAD PDF --}}
-        @if(!$pengajuan || $status == 'ditolak')
-        <div class="card mb-4">
+        {{-- STEP 1: UPLOAD & VALIDASI PDF --}}
+        @if(!$status || $status == 'ditolak')
+        <div class="card mb-4 border-2 {{ $status == 'ditolak' ? 'border-danger' : 'border-primary' }}">
+            <div class="card-header fw-bold">{{ $status == 'ditolak' ? 'Unggah Ulang Transkrip Nilai' : 'Langkah 1: Validasi Transkrip Nilai' }}</div>
             <div class="card-body">
+                <p>Silakan unggah transkrip nilai terakhir Anda dalam format PDF. Sistem akan memvalidasi secara otomatis apakah Anda memenuhi syarat untuk PKL.</p>
                 <form id="pdfUploadForm" enctype="multipart/form-data">
-                    @csrf
-                    <div class="mb-2">
-                        <label class="form-label">Upload Transkrip Nilai (PDF)</label>
-                        <input type="file" id="pdf" name="pdf" class="form-control mt-2" accept=".pdf" required>
+                    <div class="mb-3">
+                        <label for="pdf" class="form-label">File Transkrip Nilai (PDF)</label>
+                        <input type="file" id="pdf" name="pdf" class="form-control" accept=".pdf" required>
                     </div>
-                    <button type="submit" id="uploadBtn" class="btn btn-danger mt-2">
-                        <i class="fa fa-upload"></i> Upload PDF
+                    <button type="submit" id="uploadBtn" class="btn btn-primary">
+                        <i class="fa fa-upload"></i> Unggah & Validasi
                     </button>
                 </form>
             </div>
         </div>
-        @elseif($status == 'uploaded' || $status == 'diproses')
-        <div class="alert alert-warning">
-            📄 Transkrip sudah di-upload. Sedang menunggu validasi koordinator PKL.</div>
         @endif
 
-        {{-- STEP 2: FORM TEMPAT PKL --}}
-        @if($status == 'diterima')
-            <form action="{{ route('tempatpkl.store') }}" method="POST">
-                @csrf
-                <input type="hidden" name="pdf_path" value="{{ $pengajuan->pdf_path }}">
-
-                <div class="row">
-                    <h6 class="fw-semibold text-primary mb-3">🏢 Data Tempat PKL</h6>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama Perusahaan *</label>
-                        <input type="text" name="nama_perusahaan" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Bidang Industri *</label>
-                        <input type="text" name="bidang" class="form-control" required>
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        <label class="form-label">Alamat *</label>
-                        <textarea name="alamat" rows="3" class="form-control" required></textarea>
-                    </div>
-
-                    <h6 class="fw-semibold text-success mt-3">📞 Kontak Perusahaan</h6>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nama PIC</label>
-                        <input type="text" name="nama_pic" class="form-control">
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nomor Telepon PIC</label>
-                        <input type="text" name="telepon_pic" class="form-control">
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between mt-3">
-                    <a href="{{ route('tempatpkl.lihattempatpkl') }}" class="btn btn-secondary">
-                        <i class="fa fa-arrow-left"></i> Kembali
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa fa-paper-plane"></i> Ajukan
-                    </button>
-                </div>
-
-            </form>
+        {{-- Syarat PKL --}}
+        @if($requirements)
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Syarat Pengajuan PKL</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush requirement-list">
+                    @foreach($requirements as $key => $req)
+                    <li class="list-group-item">
+                        <span>{{ $key }}</span>
+                        @if($status == 'ditolak')
+                            <span class="badge {{ $req['status'] ? 'bg-success' : 'bg-danger' }}">
+                                Syarat: {{ $req['required'] }} | Anda: {{ $req['actual'] }}
+                                <i class="fa {{ $req['status'] ? 'fa-check-circle' : 'fa-times-circle' }} ms-1"></i>
+                            </span>
+                        @else
+                             <span class="badge bg-secondary">{{ $req['required'] }}</span>
+                        @endif
+                    </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
         @endif
 
-        <div class="mt-4 d-flex justify-content-start">
+        {{-- STEP 2: FORM TEMPAT PKL (hanya tampil jika status diterima) --}}
+        @if($status == 'diterima' || $status == 'diproses')
+        <div class="card border-2 border-success">
+            <div class="card-header fw-bold">Langkah 2: Ajukan Tempat PKL</div>
+            <div class="card-body">
+                 @if($status == 'diproses')
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle me-2"></i>
+                        Pengajuan Anda untuk <strong>{{ $pengajuan->nama_perusahaan }}</strong> sedang diproses oleh Koordinator PKL. Mohon ditunggu.
+                    </div>
+                @else
+                <form action="{{ route('tempatpkl.store') }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        <h6 class="fw-semibold text-primary mb-3">🏢 Data Tempat PKL</h6>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nama Perusahaan *</label>
+                            <input type="text" name="nama_perusahaan" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Bidang Industri *</label>
+                            <input type="text" name="bidang" class="form-control" required>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label class="form-label">Alamat *</label>
+                            <textarea name="alamat" rows="3" class="form-control" required></textarea>
+                        </div>
+                        <h6 class="fw-semibold text-success mt-3">📞 Kontak Perusahaan</h6>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nama PIC</label>
+                            <input type="text" name="nama_pic" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nomor Telepon PIC</label>
+                            <input type="text" name="telepon_pic" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Ajukan</button>
+                    </div>
+                </form>
+                @endif
+            </div>
+        </div>
+        @endif
+
+        <div class="mt-4">
             <a href="{{ route('dashboard.mahasiswa') }}" class="btn btn-secondary">
-                <i class="fa-solid fa-arrow-left me-1"></i> Kembali
+                <i class="fa-solid fa-arrow-left me-1"></i> Kembali ke Dashboard
             </a>
         </div>
-
     </div>
-
 </main>
 
-<div class="footer">
-    <small>&copy; 2025 SIPRAKERLA - Politeknik Negeri Tanah Laut</small>
-</div>
+<footer class="footer mt-auto">
+    <small>&copy; {{ date('Y') }} SIPRAKERLA - Politeknik Negeri Tanah Laut</small>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.getElementById('pdfUploadForm')?.addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    let fileInput = document.getElementById('pdf');
-    let file = fileInput.files[0];
-
-    if (!file) {
-        alert("Pilih file PDF terlebih dahulu!");
+    const fileInput = document.getElementById('pdf');
+    if (!fileInput.files.length) {
+        showAlert('Pilih file PDF terlebih dahulu!', 'warning');
         return;
     }
 
-    let btn = document.getElementById('uploadBtn');
+    const btn = document.getElementById('uploadBtn');
     btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Uploading...';
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Mengunggah & Memvalidasi...';
+    
+    const alertContainer = document.getElementById('alert-container');
+    alertContainer.innerHTML = '';
 
-    let formData = new FormData();
-    formData.append('pdf', file);
+    const formData = new FormData();
+    formData.append('pdf', fileInput.files[0]);
+    formData.append('_token', '{{ csrf_token() }}');
 
     try {
-        let res = await fetch(`{{ route('tempatpkl.uploadPdf') }}`, {
+        const response = await fetch(`{{ route('tempatpkl.uploadPdf') }}`, {
             method: 'POST',
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
             body: formData,
-            credentials: 'same-origin'
+            headers: { 'Accept': 'application/json' },
         });
 
-        let data = await res.json();
+        const data = await response.json();
 
-        if (!res.ok) throw new Error(data.message || 'Upload gagal!');
+        if (!response.ok) {
+           throw new Error(data.message || `Error ${response.status}`);
+        }
+        
+        showAlert(data.message, 'success');
+        setTimeout(() => location.reload(), 2000);
 
-        alert(data.message);
-        location.reload();
-    } catch (err) {
-        alert("Error: " + err.message);
+    } catch (error) {
+        showAlert(error.message, 'danger');
+        setTimeout(() => location.reload(), 4000); // Reload on error to show requirement details
     } finally {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fa fa-upload"></i> Upload PDF';
+        btn.innerHTML = '<i class="fa fa-upload"></i> Unggah & Validasi';
     }
 });
+
+function showAlert(message, type) {
+    const alertContainer = document.getElementById('alert-container');
+    const alert = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+    alertContainer.innerHTML = alert;
+}
 </script>
 
 </body>
 </html>
+

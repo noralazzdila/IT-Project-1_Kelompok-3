@@ -15,6 +15,20 @@
                 <div class="card-body p-4 detail-list">
                     <dl>
                         <div class="row">
+                            <dt class="col-sm-4">Mahasiswa Terkait</dt>
+                            <dd class="col-sm-8">
+                                @forelse($tempatpkl->pengajuanPkl as $pengajuan)
+                                    {{ optional($pengajuan->mahasiswa)->name }}
+                                    @if(optional($pengajuan->mahasiswa)->nim)
+                                        <span class="text-muted">({{ optional($pengajuan->mahasiswa)->nim }})</span>
+                                    @endif
+                                    @if(!$loop->last)<br>@endif
+                                @empty
+                                    <span class="text-muted">Belum ada mahasiswa yang mengajukan</span>
+                                @endforelse
+                            </dd>
+                        </div>
+                        <div class="row">
                             <dt class="col-sm-4">Nama Perusahaan</dt>
                             <dd class="col-sm-8">{{ $tempatpkl->nama_perusahaan }}</dd>
                         </div>

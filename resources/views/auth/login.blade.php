@@ -121,17 +121,12 @@
             <!-- FORM LOGIN -->
             <form action="{{ url('/login') }}" method="POST">
                 @csrf
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                
                 <div class="mb-2">
-                    <label>Email / NIM</label>
+                    <label>Email</label>
+                    @error('email')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-user"></i></span>
                         <input type="text" name="email" class="form-control" placeholder="Masukkan email" required>
@@ -139,6 +134,9 @@
                 </div>
                 <div class="mb-2">
                     <label>Kata sandi</label>
+                    @error('password')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-lock"></i></span>
                         <input type="password" name="password" id="password" class="form-control" placeholder="Masukkan password" required>

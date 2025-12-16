@@ -12,7 +12,20 @@
         <form action="{{ route('staf.tempatpkl.update', $tempatpkl->id) }}" method="POST">
             @csrf
             @method('PUT')
-            
+         <div class="mb-3">
+            <label for="mahasiswa_id" class="form-label">Mahasiswa</label>
+            <select class="form-select @error('mahasiswa_id') is-invalid @enderror" id="mahasiswa_id" name="mahasiswa_id">
+                <option value="">Pilih Mahasiswa</option>
+                @foreach($mahasiswas as $mahasiswa)
+                    <option value="{{ $mahasiswa->id }}" {{ old('mahasiswa_id', $tempatpkl->mahasiswa_id) == $mahasiswa->id ? 'selected' : '' }}>
+                        {{ $mahasiswa->nama }} ({{ $mahasiswa->nim }})
+                    </option>
+                @endforeach
+            </select>
+            @error('mahasiswa_id')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror  
+        </div>           
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="nama_perusahaan" class="form-label">Nama Perusahaan</label>

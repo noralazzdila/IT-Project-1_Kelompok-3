@@ -17,12 +17,17 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
+        $messages = [
+            'email.unique' => 'Email ini sudah terdaftar.',
+            'password.min' => 'Kata sandi minimal 8 karakter.',
+        ];
+
         $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:8|confirmed',
             'role' => 'required|string|in:mahasiswa,dosen,staf,koor_prodi,koor_pkl',
-        ]);
+        ], $messages);
 
         $isValidated = str_ends_with($request->email, '@mhs.politala.ac.id');
 

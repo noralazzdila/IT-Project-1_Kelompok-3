@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TempatPKL;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use App\Models\ActivityLog;
 use Illuminate\Support\Facades\Storage;
@@ -61,8 +62,6 @@ class TempatPKLController extends Controller
 
         return redirect()->route('tempatpkl.index')
                          ->with('success', 'Data Tempat PKL berhasil ditambahkan.');
-
-        
     }
 
     /**
@@ -78,7 +77,12 @@ class TempatPKLController extends Controller
      */
     public function edit(TempatPKL $tempatpkl)
     {
-        return view('tempatpkl.edit', compact('tempatpkl'));
+        $mahasiswas = Mahasiswa::whereNotNull('user_id')->get();
+        // Eager load the relationship and get the first associated student's ID
+        $tempatpkl->load('pengajuanPkl');
+        $selectedMahasiswaId = $tempatpkl->pengajuanPkl->first()->mahasiswa_id ?? null;
+
+        return view('tempatpkl.edit', compact('tempatpkl', 'mahasiswas', 'selectedMahasiswaId'));
     }
 
     /**
@@ -88,6 +92,7 @@ class TempatPKLController extends Controller
     {
         // Validate the request
         $request->validate([
+            'mahasiswa_id' => 'required|exists:users,id',
             'nama_perusahaan' => 'required|string|max:255',
             'alamat_perusahaan' => 'required|string',
             'jarak_lokasi' => 'nullable|numeric',
@@ -97,8 +102,35 @@ class TempatPKLController extends Controller
             'lingkungan_kerja' => 'required|string',
         ]);
 
-        // Update the record
-        $tempatpkl->update($request->all());
+        // 1. Update the TempatPKL details
+        $tempatpkl->update($request->only([
+            'nama_perusahaan',
+            'alamat_perusahaan',
+            'jarak_lokasi',
+            'reputasi_perusahaan',
+            'fasilitas',
+            'kesesuaian_program',
+            'lingkungan_kerja',
+        ]));
+
+        // 2. Update the associated PengajuanPKL
+        $pengajuan = $tempatpkl->pengajuanPkl->first();
+        if ($pengajuan) {
+            $pengajuan->update([
+                'mahasiswa_id' => $request->mahasiswa_id,
+                'nama_perusahaan' => $request->nama_perusahaan,
+                'alamat' => $request->alamat_perusahaan,
+            ]);
+        } else {
+            // This case handles data that might be inconsistent from before the fix
+            \App\Models\PengajuanPKL::create([
+                'mahasiswa_id' => $request->mahasiswa_id,
+                'tempat_pkl_id' => $tempatpkl->id,
+                'status' => 'diproses',
+                'nama_perusahaan' => $request->nama_perusahaan,
+                'alamat' => $request->alamat_perusahaan,
+            ]);
+        }
 
         return redirect()->route('tempatpkl.index')
                          ->with('success', 'Data Tempat PKL berhasil diperbarui.');

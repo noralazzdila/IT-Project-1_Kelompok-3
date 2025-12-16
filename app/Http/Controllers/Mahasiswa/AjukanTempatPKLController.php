@@ -39,83 +39,140 @@ class AjukanTempatPKLController extends Controller
         $user = Auth::user();
         $mahasiswa = $user->mahasiswa;
 
-        // Cek jika data mahasiswa ada
         if (!$mahasiswa) {
-            return redirect()->route('dashboard')->with('error', 'Data mahasiswa Anda tidak ditemukan. Harap hubungi administrator.');
+            // Redirect if the user has no associated student data, which is a critical error.
+            return redirect()->route('dashboard')->with('error', 'FATAL: Akun Anda tidak terhubung dengan data mahasiswa. Harap segera hubungi administrator.');
         }
 
-        // Ambil data nilai terakhir mahasiswa
+        // Ambil pengajuan PKL yang ada untuk mahasiswa ini
+        $pengajuan = PengajuanPKL::where('mahasiswa_id', $user->id)->first();
         $nilai = $mahasiswa->nilai()->latest()->first();
 
-        // Cek jika mahasiswa sudah pernah impor nilai
-        if (!$nilai) {
-            return redirect()->route('nilai.create')->with('warning', 'Anda harus mengimpor transkrip nilai Anda terlebih dahulu sebelum dapat mengajukan tempat PKL.');
-        }
-
-        // Cek status kelayakan mahasiswa
-        if ($nilai->status !== 'Memenuhi Syarat') {
+        // Siapkan data syarat jika ada nilai
+        $requirements = null;
+        if ($nilai) {
             $requirements = [
                 'IPK'         => ['required' => '>= 2.50', 'actual' => number_format($nilai->ipk, 2), 'status' => $nilai->ipk >= 2.5],
                 'Total SKS'   => ['required' => '>= 77', 'actual' => $nilai->total_sks, 'status' => $nilai->total_sks >= 77],
                 'SKS Nilai D' => ['required' => '<= 6', 'actual' => $nilai->sks_d, 'status' => $nilai->sks_d <= 6],
                 'Nilai E'     => ['required' => '= 0', 'actual' => $nilai->count_e, 'status' => $nilai->count_e == 0],
             ];
-            
-            $errorMessage = 'Anda belum memenuhi syarat untuk mengajukan PKL. Harap periksa kembali transkrip nilai Anda.';
-
-            return redirect()->route('mahasiswa.lihatdetailipk.index')
-                             ->with('error', $errorMessage)
-                             ->with('requirements', $requirements);
         }
 
-        // Jika semua syarat terpenuhi, tampilkan halaman pengajuan
-        $pengajuan = PengajuanPKL::where('mahasiswa_id', Auth::id())->first();
-
-        return view('mahasiswa.tempatpkl.ajukantempatpkl', compact('pengajuan'));
+        return view('mahasiswa.tempatpkl.ajukantempatpkl', compact('pengajuan', 'requirements'));
     }
 
     /**
-     * Upload PDF transkrip mahasiswa
+     * Upload PDF, proses, validasi, dan simpan nilai mahasiswa
      */
     public function uploadPdf(Request $request)
-{
-    try {
-        $request->validate([
-            'pdf' => 'required|mimes:pdf|max:2048',
-        ]);
+    {
+        $request->validate(['pdf' => 'required|mimes:pdf|max:2048']);
 
-        $filePath = $request->file('pdf')->store('pdf_transkip', 'public');
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
 
-        // Ambil mahasiswa terkait user login
-        $mahasiswa = Auth::user()->mahasiswa; // pakai relasi
         if (!$mahasiswa) {
-            Log::error('Data mahasiswa tidak ditemukan. Auth::id() = ' . Auth::id());
-            return response()->json([
-                'success' => false,
-                'message' => 'Data mahasiswa tidak ditemukan!'
-            ], 400);
+            return response()->json(['message' => 'Data mahasiswa tidak ditemukan.'], 404);
         }
 
-        // Simpan pengajuan PKL
-        $pengajuan = PengajuanPKL::updateOrCreate(
-            ['mahasiswa_id' => Auth::id()],
-            ['pdf_path' => $filePath, 'status' => 'uploaded']
-        );
+        try {
+            $file = $request->file('pdf');
+            $pdfPath = $file->store('pdf_transkip', 'public');
+            
+            // Path ke pdftotext, pastikan Poppler terinstall
+            $path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';
+            if (!file_exists($path_to_pdftotext)) {
+                throw new \Exception("Library Poppler (pdftotext.exe) tidak ditemukan.");
+            }
 
-        return response()->json([
-            'success' => true,
-            'file_path' => $filePath,
-            'message' => 'PDF berhasil di-upload!'
-        ]);
+            $text = (new \Spatie\PdfToText\Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
 
-    } catch (\Exception $e) {
-        Log::error($e->getMessage());
-        return response()->json([
-            'success' => false,
-            'message' => $e->getMessage()
-        ], 500);
+            // Ekstrak data dari teks PDF
+            $data = $this->extractDataFromPdfText($text);
+            $data['pdf_path'] = $pdfPath;
+
+            // Simpan atau update data nilai
+            $nilai = Nilai::updateOrCreate(
+                ['mahasiswa_id' => $mahasiswa->id],
+                $data
+            );
+
+            // Lakukan validasi syarat PKL
+            $isEligible = ($nilai->ipk >= 2.5 && $nilai->total_sks >= 77 && $nilai->sks_d <= 6 && $nilai->count_e == 0);
+            $status = $isEligible ? 'diterima' : 'ditolak';
+
+            // Simpan atau update status pengajuan
+            PengajuanPKL::updateOrCreate(
+                ['mahasiswa_id' => $user->id],
+                ['pdf_path' => $pdfPath, 'status' => $status]
+            );
+
+            if (!$isEligible) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validasi Gagal: Anda tidak memenuhi syarat untuk mengajukan PKL. Silakan periksa detail di bawah ini dan unggah transkrip yang telah diperbarui jika ada.',
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'PDF berhasil divalidasi! Anda sekarang dapat mengajukan tempat PKL.',
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error("PDF Upload/Processing failed for user {$user->id}: " . $e->getMessage());
+            return response()->json(['message' => 'Gagal memproses file PDF: ' . $e->getMessage()], 500);
+        }
     }
-}
+
+    /**
+     * Helper function untuk ekstrak data dari text PDF.
+     */
+    private function extractDataFromPdfText(string $text): array
+    {
+        $dataMahasiswa = [];
+        $patterns = [
+            'nama'      => '/Nama\s*:\s*(.*)/',
+            'nim'       => '/NIM\s*:\s*(\d+)/',
+            'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
+            'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
+            'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
+        ];
+
+        foreach ($patterns as $key => $pattern) {
+            $dataMahasiswa[$key] = preg_match($pattern, $text, $matches) ? trim($matches[1]) : null;
+        }
+
+        $sksD = 0;
+        $gradeCounts = ['A' => 0, 'B+' => 0, 'B' => 0, 'C+' => 0, 'C' => 0, 'D' => 0, 'E' => 0];
+        $coursePattern = '/^\d+\s+[A-Z0-9]+\s+(.*?)\s+([A-Z+]{1,2})\s+[\d.]+\s+(\d+)\s+[\d.]+/m';
+        
+        if (preg_match_all($coursePattern, $text, $courseLines, PREG_SET_ORDER)) {
+            foreach ($courseLines as $line) {
+                $grade = trim($line[2]);
+                $sks = (int) $line[3];
+                if (isset($gradeCounts[$grade])) $gradeCounts[$grade]++;
+                if ($grade === 'D') $sksD += $sks;
+            }
+        }
+
+        $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : 0;
+        
+        return [
+            'ipk' => (float) $ipkValue,
+            'total_sks' => (int) $dataMahasiswa['total_sks'],
+            'sks_d' => $sksD,
+            'count_a' => $gradeCounts['A'],
+            'count_b_plus' => $gradeCounts['B+'],
+            'count_b' => $gradeCounts['B'],
+            'count_c_plus' => $gradeCounts['C+'],
+            'count_c' => $gradeCounts['C'],
+            'count_d' => $gradeCounts['D'],
+            'count_e' => $gradeCounts['E'],
+        ];
+    }
+
 
 
     /**

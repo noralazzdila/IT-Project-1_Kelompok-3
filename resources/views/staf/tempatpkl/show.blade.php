@@ -17,6 +17,14 @@
         <div class="card-body p-4 detail-list">
             <dl>
                 <div class="row">
+                            <dt class="col-sm-4">Mahasiswa</dt>
+                            <dd class="col-sm-8">
+                                {{ optional($tempatpkl->mahasiswa)->nama }}
+                                @if(optional($tempatpkl->mahasiswa)->nim)
+                                    <span class="text-muted">({{ $tempatpkl->mahasiswa->nim }})</span>
+                                @endif
+                            </dd>
+                            </div>
                     <dt class="col-sm-4">Nama Perusahaan</dt>
                     <dd class="col-sm-8">{{ $tempatpkl->nama_perusahaan }}</dd>
                 </div>

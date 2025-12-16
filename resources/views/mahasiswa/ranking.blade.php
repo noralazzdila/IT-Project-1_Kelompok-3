@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('mahasiswa.layouts.app')
 
 @section('content')
 <div class="container">
@@ -9,7 +9,6 @@
             <tr>
                 <th>Rank</th>
                 <th>Nama Perusahaan</th>
-                <th>Alamat</th>
                 <th>Skor</th>
             </tr>
         </thead>
@@ -18,7 +17,6 @@
                 <tr>
                     <td>{{ $i + 1 }}</td>
                     <td>{{ $row['nama'] }}</td>
-                    <td>{{ $row['alamat'] }}</td>
                     <td>{{ number_format($row['skor'], 4) }}</td>
                 </tr>
             @endforeach

@@ -9,43 +9,61 @@ class TPKController extends Controller
 {
     public function hitung()
     {
-        // --- LOAD EXCEL ---
-        $file = public_path("Data.xlsx");
+        /* =====================================================
+         * 1. LOAD EXCEL
+         * ===================================================== */
+        $file = public_path('Data.xlsx');
         $spreadsheet = IOFactory::load($file);
 
-        // === SHEET 1: DATA ALTERNATIF ===
+        /* =====================================================
+         * 2. SHEET 1 – DATA ALTERNATIF
+         * Struktur Excel:
+         * A = Nama
+         * B = Jarak (KM)  -> COST
+         * C = Fasilitas  -> BENEFIT
+         * D = Program Magang -> BENEFIT
+         * E = Reputasi -> BENEFIT
+         * F = Lingkungan -> BENEFIT
+         * ===================================================== */
         $sheet1 = $spreadsheet->getSheet(0)->toArray();
         $sheet1 = array_slice($sheet1, 1); // hapus header
 
         $nama = [];
-        $alamat = [];
         $dataAlternatif = [];
 
         foreach ($sheet1 as $row) {
-            $nama[]   = $row[0];
-            $alamat[] = $row[1];
+            $nama[] = $row[0];
 
-            // Jarak bisa memiliki format "3,7"
-            $row[2] = floatval(str_replace(",", ".", $row[2]));
-
-            // Ambil mulai kolom Jarak → akhir kriteria
-            $dataAlternatif[] = array_slice($row, 2);
+            $dataAlternatif[] = [
+                floatval(str_replace(',', '.', $row[1])), // Jarak (COST)
+                floatval($row[2]), // Fasilitas
+                floatval($row[3]), // Program Magang
+                floatval($row[4]), // Reputasi
+                floatval($row[5]), // Lingkungan
+            ];
         }
 
-        // === SHEET 2: PAIRWISE AHP ===
+        /* =====================================================
+         * 3. SHEET 2 – PAIRWISE MATRIX (AHP)
+         * ===================================================== */
         $sheet2 = $spreadsheet->getSheet(1)->toArray();
-        $sheet2 = array_slice($sheet2, 1); // hapus header baris
-        $pairwise = [];
+        $sheet2 = array_slice($sheet2, 1); // hapus header
 
+        $pairwise = [];
         foreach ($sheet2 as $row) {
-            $pairwise[] = array_slice($row, 1); // hilangkan kolom teks
+            $cleanRow = [];
+            foreach (array_slice($row, 1) as $val) {
+                $cleanRow[] = floatval(str_replace(',', '.', $val));
+            }
+            $pairwise[] = $cleanRow;
         }
 
         $n = count($pairwise);
 
-        // --- NORMALISASI AHP ---
+        /* =====================================================
+         * 4. NORMALISASI AHP
+         * ===================================================== */
         $columnSum = array_fill(0, $n, 0);
-
         for ($j = 0; $j < $n; $j++) {
             for ($i = 0; $i < $n; $i++) {
                 $columnSum[$j] += $pairwise[$i][$j];
@@ -59,56 +77,83 @@ class TPKController extends Controller
             }
         }
 
-        // --- BOBOT KRITERIA ---
+        /* =====================================================
+         * 5. BOBOT KRITERIA (AHP)
+         * ===================================================== */
         $weights = [];
         for ($i = 0; $i < $n; $i++) {
-            $weights[$i] = array_sum($normalized[$i]) / $n;
+            $weights[$i] = round(array_sum($normalized[$i]) / $n, 6);
         }
 
-        // === SAW NORMALIZATION ===
+        // VALIDASI JUMLAH KRITERIA
+        if (count($weights) !== count($dataAlternatif[0])) {
+            dd('Jumlah bobot AHP dan kriteria SAW tidak sama');
+        }
+
+        /* =====================================================
+         * 6. NORMALISASI SAW
+         * ===================================================== */
+        $tipeKriteria = [
+            'cost',    // Jarak
+            'benefit', // Fasilitas
+            'benefit', // Program Magang
+            'benefit', // Reputasi
+            'benefit', // Lingkungan
+        ];
+
         $norm = [];
         $kolom = count($dataAlternatif[0]);
 
         for ($j = 0; $j < $kolom; $j++) {
             $colValues = array_column($dataAlternatif, $j);
 
-            if ($j == 0) {
-                // COST → Jarak
+            if ($tipeKriteria[$j] === 'cost') {
                 $min = min($colValues);
+
                 foreach ($colValues as $i => $v) {
-                    $norm[$i][$j] = $min / $v;
+                    if ($v == 0 || $min == 0) {
+                        $norm[$i][$j] = 0;
+                    } else {
+                        $norm[$i][$j] = $min / $v;
+                    }
                 }
-            } else {
-                // BENEFIT
+
+            } else { // BENEFIT
                 $max = max($colValues);
+
                 foreach ($colValues as $i => $v) {
-                    $norm[$i][$j] = $v / $max;
+                    if ($max == 0) {
+                        $norm[$i][$j] = 0;
+                    } else {
+                        $norm[$i][$j] = $v / $max;
+                    }
                 }
             }
         }
 
-        // === HITUNG SKOR SAW ===
+        /* =====================================================
+         * 7. HITUNG SKOR SAW
+         * ===================================================== */
         $scores = [];
-
         foreach ($norm as $i => $row) {
             $score = 0;
             foreach ($row as $j => $value) {
                 $score += $value * $weights[$j];
             }
-            $scores[$i] = $score;
+            $scores[$i] = round($score, 4);
         }
 
-        // === GABUNGKAN HASIL ===
+        /* =====================================================
+         * 8. GABUNG & SORT HASIL
+         * ===================================================== */
         $hasil = [];
         foreach ($scores as $i => $score) {
             $hasil[] = [
-                "nama" => $nama[$i],
-                "alamat" => $alamat[$i],
-                "skor" => $score,
+                'nama' => $nama[$i],
+                'skor' => $score,
             ];
         }
 
-        // SORT DESC
         usort($hasil, fn($a, $b) => $b['skor'] <=> $a['skor']);
 
         return view('mahasiswa.ranking', compact('hasil'));

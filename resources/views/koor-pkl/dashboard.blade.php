@@ -9,7 +9,7 @@
         <a href="#" class="text-decoration-none text-dark">
             <div class="card card-dashboard text-center p-3 shadow-sm">
                 <i class="fa fa-user-graduate mb-2"></i>
-                <h6>Mahasiswa Memenuhi Syarat PKL</h6>
+                <h7>Mahasiswa Memenuhi Syarat PKL</h7>
                 <h4>{{ $mahasiswaMemenuhiSyarat }}</h4>
             </div>
         </a>
@@ -18,7 +18,7 @@
         <a href="#" class="text-decoration-none text-dark">
             <div class="card card-dashboard text-center p-3 shadow-sm">
                 <i class="fa fa-file-signature mb-2"></i>
-                <h6>Acc Pengajuan Proposal</h6>
+                <h6>Proposal Yang Disetujui</h6>
                 <h4>{{ $proposalDisetujui }}</h4>
             </div>
         </a>
@@ -27,7 +27,7 @@
         <a href="#" class="text-decoration-none text-dark">
             <div class="card card-dashboard text-center p-3 shadow-sm">
                 <i class="fa fa-building-columns mb-2"></i>
-                <h6>Acc Pengajuan Tempat PKL</h6>
+                <h6>Tempat PKL Mahasiswa</h6>
                 <h4>{{ $tempatAktif }}</h4>
             </div>
         </a>
@@ -36,7 +36,7 @@
         <a href="#" class="text-decoration-none text-dark">
             <div class="card card-dashboard text-center p-3 shadow-sm">
                 <i class="fa fa-calendar-days mb-2"></i>
-                <h6>Seminar Bulan Ini</h6>
+                <h6>Jumlah Seminar Yang Terjadwal</h6>
                 <h4>{{ $seminarBulanIni }}</h4>
             </div>
         </a>

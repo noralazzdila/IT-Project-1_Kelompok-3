@@ -296,8 +296,8 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
             <ul class="dropdown-menu" aria-labelledby="tempatDropdown">
               <li>
                 <div class="dropdown-card">
-                    <a href="{{ route('tempatpkl.lihattempatpkl') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
-                   <a href="{{ route('tempatpkl.ajukantempatpkl') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+                  <a href="{{ route('tempatpkl.lihattempatpkl') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
+                  <a href="{{ route('tempatpkl.ajukantempatpkl') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
                 </div>
               </li>
             </ul>
@@ -437,17 +437,19 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
             Platform terpadu untuk mengelola seluruh kegiatan Praktik Kerja Lapangan Anda.
             Dari pendaftaran hingga evaluasi, semua dalam satu sistem yang mudah digunakan.
           </p>
-          <a href="#" class="btn btn-primary me-2">Mulai PKL</a>
+          <a href="{{ route('tempatpkl.ajukantempatpkl') }}" class="btn btn-primary me-2">Mulai PKL</a>
           <a href="{{ asset('documents/Paduan PKL .pdf') }}" class="btn btn-outline-light" target="_blank">Panduan</a>
         </div>
         <div class="col-lg-6 col-md-12 mt-4 mt-lg-0">
           <div class="row g-4">
             <div class="col-md-6">
-              <div class="card-frosted">
-                <i class="bi bi-building-fill fs-1 mb-2"></i>
-                <h6>Tempat PKL</h6>
-                <p>Jelajahi berbagai tempat PKL yang tersedia</p>
-              </div>
+              <a href="{{ route('mahasiswa.tempat_pkl_terbaik') }}" class="text-decoration-none text-white">
+                <div class="card-frosted">
+                  <i class="bi bi-building-fill fs-1 mb-2"></i>
+                  <h6>Tempat PKL</h6>
+                  <p>Jelajahi berbagai tempat PKL yang tersedia</p>
+                </div>
+              </a>
             </div>
             <div class="col-md-6">
               <div class="card-frosted">

@@ -52,7 +52,7 @@ use App\Models\Proposal;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
-Route::get('/mahasiswa/tempat-pkl-terbaik', [TPKController::class, 'hitung']);
+Route::get('/mahasiswa/tempat-pkl-terbaik', [TPKController::class, 'hitung'])->name('mahasiswa.tempat_pkl_terbaik');
 /*
 |--------------------------------------------------------------------------
 | Rute untuk Tamu (Guest)

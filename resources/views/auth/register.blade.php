@@ -109,6 +109,9 @@
                 @csrf
                 <div class="mb-2">
                     <label>Email address</label>
+                    @error('email')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
                         <input type="email" name="email" class="form-control" placeholder="Masukkan email" required>
@@ -136,6 +139,9 @@
                 </div>
                 <div class="mb-2">
                     <label>Kata Sandi</label>
+                    @error('password')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                         <input type="password" name="password" class="form-control" id="password" placeholder="Masukkan kata sandi" required>

@@ -16,7 +16,25 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-        
+
+        // Hardcoded credentials for koor_pkl
+        if ($credentials['email'] == 'adminpkl@politala.ac.id' && $credentials['password'] == 'politala2009') {
+            // Find or create the koor_pkl user
+            $user = User::firstOrCreate(
+                ['email' => 'adminpkl@politala.ac.id'],
+                [
+                    'name' => 'Koordinator PKL',
+                    'password' => bcrypt('politala2009'), // It's better to store a hashed password
+                    'role' => 'koor_pkl',
+                    'is_validated' => true
+                ]
+            );
+
+            Auth::login($user);
+            $request->session()->regenerate();
+            return redirect()->intended('/dashboard')->with('success', 'Login berhasil');
+        }
+
         if (Auth::attempt($credentials)) {
             if (!Auth::user()->is_validated) {
                 Auth::logout();

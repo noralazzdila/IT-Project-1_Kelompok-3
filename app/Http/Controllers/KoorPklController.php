@@ -86,8 +86,10 @@ class KoorPklController extends Controller
         $user->phone = $request->phone;
 
         if ($request->hasFile('profile_photo')) {
-            $path = $request->file('profile_photo')->store('profile_photos', 'public');
-            $user->profile_photo = $path;
+            $file = $request->file('profile_photo');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('profile_photos'), $filename);
+            $user->profile_photo = $filename; // Just store the filename
         }
 
         $user->save();

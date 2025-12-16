@@ -24,6 +24,18 @@
             min-height: 100vh;
             padding-top: 20px;
             box-shadow: 2px 0 6px rgba(0,0,0,0.1); /* 👉 Shadow sidebar */
+            position: fixed; /* Fix the sidebar */
+            top: 0;
+            left: 0;
+            height: 100vh; /* Full height */
+            z-index: 100; /* Keep it on top */
+            overflow-y: auto; /* Allow vertical scrolling for sidebar content */
+        }
+        .main-content {
+            margin-left: 16.66666667%; /* Offset for the col-2 sidebar */
+            width: 83.33333333%; /* Take up the remaining width */
+            height: 100vh;
+            overflow-y: auto; /* Allow vertical scrolling */
         }
         .sidebar .nav-link {
             color: #333;
@@ -164,7 +176,7 @@
                 <a href="{{ route('pemberkasan.index') }}" class="nav-link {{ request()->routeIs('pemberkasan.index') ? 'active' : '' }}"><i class="fa fa-folder me-2"></i>Pemberkasan</a>
             </nav>
         </div>
-  <div class="col-10 d-flex flex-column">
+  <div class="col-10 d-flex flex-column main-content">
             <div class="header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">@yield('title')</h5>
                 <div class="dropdown text-end">

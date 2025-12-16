@@ -79,7 +79,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center">
+                            <td colspan="8" class="text-center">
                                 <div class="alert alert-warning mb-0">
                                     Data tempat PKL tidak ditemukan atau belum tersedia.
                                 </div>

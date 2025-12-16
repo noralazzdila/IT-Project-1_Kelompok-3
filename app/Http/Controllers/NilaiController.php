@@ -260,8 +260,8 @@ class NilaiController extends Controller
             // Simpan file PDF yang diupload
             $pdfPath = $file->store('pdfs', 'public');
             // PERBAIKAN: Hapus fungsi config() dan langsung tulis path sebagai string                                                                   │
-//$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       │
-//$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       
+            //$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       │
+            //$path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';                                                                       
             $path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';
 
             if (!file_exists($path_to_pdftotext)) {

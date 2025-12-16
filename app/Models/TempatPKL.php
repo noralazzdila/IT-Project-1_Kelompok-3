@@ -41,5 +41,4 @@ class TempatPKL extends Model
     public function nilaiPKL() {
     return $this->hasOne(NilaiPKL::class);
 }
-
 }

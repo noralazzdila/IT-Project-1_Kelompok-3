@@ -44,6 +44,7 @@
                         <tr>
                             <th class="text-center">No</th>
                             <th>Perusahaan & Alamat</th>
+                            <th>Mahasiswa (Nama / NIM)</th>
                             <th class="text-center">Jarak (km)</th>
                             <th class="text-center">Reputasi</th>
                             <th>Fasilitas</th>
@@ -58,6 +59,12 @@
                                 <td>
                                     <strong>{{ $item->nama_perusahaan }}</strong><br>
                                     <small class="text-muted">{{ $item->alamat_perusahaan }}</small>
+                                </td>
+                                <td>
+                                    {{ optional($item->mahasiswa)->nama }}
+                                    @if(optional($item->mahasiswa)->nim)
+                                        <br><small class="text-muted">({{ $item->mahasiswa->nim }})</small>
+                                    @endif
                                 </td>
                                 <td class="text-center">{{ $item->jarak_lokasi ?? '-' }}</td>
                                 <td class="text-center">{{ $item->reputasi_perusahaan }}</td>
@@ -75,7 +82,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">
+                                <td colspan="8" class="text-center">
                                     <div class="alert alert-warning mb-0">
                                         Data tempat PKL tidak ditemukan atau belum tersedia.
                                     </div>

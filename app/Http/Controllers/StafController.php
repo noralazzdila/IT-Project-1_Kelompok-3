@@ -126,7 +126,7 @@ class StafController extends Controller
     //-- Tempat PKL Management --//
     public function tempatpkl_index(Request $request)
     {
-        $query = TempatPKL::query();
+        $query = TempatPKL::with('mahasiswa');
         if ($request->has('search') && $request->search != '') {
             $query->where('nama_perusahaan', 'like', '%' . $request->search . '%');
         }
@@ -139,12 +139,14 @@ class StafController extends Controller
 
     public function tempatpkl_create()
     {
-        return view('staf.tempatpkl.create');
+        $mahasiswas = Mahasiswa::all();
+        return view('staf.tempatpkl.create', compact('mahasiswas'));
     }
 
     public function tempatpkl_store(Request $request)
     {
         $request->validate([
+            'mahasiswa_id' => 'required|exists:mahasiswa,id',
             'nama_perusahaan' => 'required|string|max:255',
             'alamat_perusahaan' => 'required|string',
             'jarak_lokasi' => 'nullable|numeric',
@@ -164,12 +166,14 @@ class StafController extends Controller
 
     public function tempatpkl_edit(TempatPKL $tempatpkl)
     {
-        return view('staf.tempatpkl.edit', compact('tempatpkl'));
+        $mahasiswas = Mahasiswa::all();
+        return view('staf.tempatpkl.edit', compact('tempatpkl', 'mahasiswas'));
     }
 
     public function tempatpkl_update(Request $request, TempatPKL $tempatpkl)
     {
         $request->validate([
+            'mahasiswa_id' => 'required|exists:mahasiswa,id',
             'nama_perusahaan' => 'required|string|max:255',
             'alamat_perusahaan' => 'required|string',
             'jarak_lokasi' => 'nullable|numeric',
