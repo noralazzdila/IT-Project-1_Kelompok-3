@@ -38,7 +38,8 @@ class TempatPKLController extends Controller
      */
     public function create()
     {
-        return view('tempatpkl.create');
+        $mahasiswas = Mahasiswa::all();
+        return view('tempatpkl.create', compact('mahasiswas'));
     }
 
     /**
@@ -48,6 +49,7 @@ class TempatPKLController extends Controller
     {
         // Validate the request
         $request->validate([
+            'mahasiswa_id' => 'required|exists:users,id',
             'nama_perusahaan' => 'required|string|max:255',
             'alamat_perusahaan' => 'required|string',
             'jarak_lokasi' => 'nullable|numeric',
@@ -57,11 +59,20 @@ class TempatPKLController extends Controller
             'lingkungan_kerja' => 'required|string',
         ]);
 
-        // Create a new record
-        TempatPKL::create($request->all());
+        // 1. Create the TempatPKL
+        $tempatPkl = TempatPKL::create([
+            'nama_perusahaan' => $request->nama_perusahaan,
+            'alamat_perusahaan' => $request->alamat_perusahaan,
+            'jarak_lokasi' => $request->jarak_lokasi,
+            'reputasi_perusahaan' => $request->reputasi_perusahaan,
+            'fasilitas' => $request->fasilitas,
+            'kesesuaian_program' => $request->kesesuaian_program,
+            'lingkungan_kerja' => $request->lingkungan_kerja,
+        ]);
+
 
         return redirect()->route('tempatpkl.index')
-                         ->with('success', 'Data Tempat PKL berhasil ditambahkan.');
+                         ->with('success', 'Data Tempat PKL berhasil ditambahkan dan diajukan untuk mahasiswa.');
     }
 
     /**
@@ -77,7 +88,7 @@ class TempatPKLController extends Controller
      */
     public function edit(TempatPKL $tempatpkl)
     {
-        $mahasiswas = Mahasiswa::whereNotNull('user_id')->get();
+        $mahasiswas = Mahasiswa::all();
         // Eager load the relationship and get the first associated student's ID
         $tempatpkl->load('pengajuanPkl');
         $selectedMahasiswaId = $tempatpkl->pengajuanPkl->first()->mahasiswa_id ?? null;

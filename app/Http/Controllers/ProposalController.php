@@ -18,7 +18,7 @@ class ProposalController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Proposal::query();
+        $query = Proposal::with('dosen')->latest();
 
         // Pencarian berdasarkan nama mahasiswa atau judul proposal
         if ($request->has('search') && $request->search != '') {
@@ -31,7 +31,7 @@ class ProposalController extends Controller
             $query->where('status', $request->status);
         }
 
-        $proposals = $query->latest()->paginate(10);
+        $proposals = $query->paginate(10);
 
         return view('proposal.index', compact('proposals'));
     }

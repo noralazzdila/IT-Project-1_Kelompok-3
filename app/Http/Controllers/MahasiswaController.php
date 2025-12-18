@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Seminar;
-use Carbon\Carbon;
 
 class MahasiswaController extends Controller
 {
     public function index()
     {
-        return view('mahasiswa.mahasiswa');
+        $seminars = Seminar::where('tanggal', '>=', now()->toDateString())
+                            ->orderBy('tanggal')
+                            ->orderBy('jam_mulai')
+                            ->get();
+
+        return view('mahasiswa.mahasiswa', compact('seminars'));
     }
         public function indexMahasiswa()
     {

@@ -273,64 +273,25 @@ class NilaiController extends Controller
             }
             
             $text = (new Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
-            //$text = (new Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
-            // 1. Ekstrak data utama menggunakan Regex
-            $dataMahasiswa = [];
-            $patterns = [
-                'nama'      => '/Nama\s*:\s*(.*)/',
-                'nim'       => '/NIM\s*:\s*(\d+)/',
-                'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
-                'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
-                'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
-            ];
+            $extractedData = $this->extractDataFromPdfText($text);
 
-            foreach ($patterns as $key => $pattern) {
-                if (preg_match($pattern, $text, $matches)) {
-                    $dataMahasiswa[$key] = trim($matches[1]);
-                } else {
-                    $dataMahasiswa[$key] = null;
-                }
-            }
-            
-            // 2. Ekstrak Tabel Nilai dan hitung jumlah nilai & SKS D
-            $sksD = 0;
-            $gradeCounts = ['A' => 0, 'B+' => 0, 'B' => 0, 'C+' => 0, 'C' => 0, 'D' => 0, 'E' => 0];
-
-            // Pola Regex untuk menangkap baris mata kuliah
-            $coursePattern = '/^\d+\s+[A-Z0-9]+\s+(.*?)\s+([A-Z+]{1,2})\s+[\d.]+\s+(\d+)\s+[\d.]+/m';
-            if (preg_match_all($coursePattern, $text, $courseLines, PREG_SET_ORDER)) {
-                foreach ($courseLines as $line) {
-                    $grade = trim($line[2]);
-                    $sks = (int) $line[3];
-                    
-                    if (isset($gradeCounts[$grade])) {
-                        $gradeCounts[$grade]++;
-                    }
-                    if ($grade === 'D') {
-                        $sksD += $sks;
-                    }
-                }
-            }
-
-            // 3. Gabungkan semua data menjadi satu format JSON yang konsisten
-            $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : null;
             $data = [
-                'nim' => $dataMahasiswa['nim'],
-                'nama' => $dataMahasiswa['nama'],
+                'nim' => $extractedData['nim'],
+                'nama' => $extractedData['nama'],
                 'jurusan' => 'Teknologi Informasi',
-                'angkatan' => $dataMahasiswa['angkatan'],
-                'ipk' => (float) $ipkValue,
-                'count_a' => $gradeCounts['A'],
-                'count_b_plus' => $gradeCounts['B+'],
-                'count_b' => $gradeCounts['B'],
-                'count_c_plus' => $gradeCounts['C+'],
-                'count_c' => $gradeCounts['C'],
-                'count_d' => $gradeCounts['D'],
-                'sks_d' => $sksD,
-                'count_e' => $gradeCounts['E'],
-                'total_sks' => (int) $dataMahasiswa['total_sks'],
+                'angkatan' => $extractedData['angkatan'],
+                'ipk' => $extractedData['ipk'],
+                'count_a' => $extractedData['count_a'],
+                'count_b_plus' => $extractedData['count_b_plus'],
+                'count_b' => $extractedData['count_b'],
+                'count_c_plus' => $extractedData['count_c_plus'],
+                'count_c' => $extractedData['count_c'],
+                'count_d' => $extractedData['count_d'],
+                'sks_d' => $extractedData['sks_d'],
+                'count_e' => $extractedData['count_e'],
+                'total_sks' => $extractedData['total_sks'],
                 'sheet_name' => 'Imported from: ' . $file->getClientOriginalName(),
-                'pdf_path' => $pdfPath, // Tambahkan path PDF ke response
+                'pdf_path' => $pdfPath,
             ];
 
             return response()->json($data);
@@ -339,6 +300,59 @@ class NilaiController extends Controller
             Log::error('Gagal import PDF: ' . $e->getMessage());
             return response()->json(['error' => 'Gagal memproses file PDF: ' . $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Helper function untuk ekstrak data dari text PDF.
+     *
+     * @param string $text
+     * @return array
+     */
+    private function extractDataFromPdfText(string $text): array
+    {
+        $dataMahasiswa = [];
+        $patterns = [
+            'nama'      => '/Nama\s*:\s*(.*)/',
+            'nim'       => '/NIM\s*:\s*(\d+)/',
+            'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
+            'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
+            'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
+        ];
+
+        foreach ($patterns as $key => $pattern) {
+            $dataMahasiswa[$key] = preg_match($pattern, $text, $matches) ? trim($matches[1]) : null;
+        }
+
+        $sksD = 0;
+        $gradeCounts = ['A' => 0, 'B+' => 0, 'B' => 0, 'C+' => 0, 'C' => 0, 'D' => 0, 'E' => 0];
+        $coursePattern = '/^\d+\s+[A-Z0-9]+\s+(.*?)\s+([A-Z+]{1,2})\s+[\d.]+\s+(\d+)\s+[\d.]+/m';
+        
+        if (preg_match_all($coursePattern, $text, $courseLines, PREG_SET_ORDER)) {
+            foreach ($courseLines as $line) {
+                $grade = trim($line[2]);
+                $sks = (int) $line[3];
+                if (isset($gradeCounts[$grade])) $gradeCounts[$grade]++;
+                if ($grade === 'D') $sksD += $sks;
+            }
+        }
+
+        $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : 0;
+        
+        return [
+            'nim' => $dataMahasiswa['nim'],
+            'nama' => $dataMahasiswa['nama'],
+            'angkatan' => $dataMahasiswa['angkatan'],
+            'ipk' => (float) $ipkValue,
+            'count_a' => $gradeCounts['A'],
+            'count_b_plus' => $gradeCounts['B+'],
+            'count_b' => $gradeCounts['B'],
+            'count_c_plus' => $gradeCounts['C+'],
+            'count_c' => $gradeCounts['C'],
+            'count_d' => $gradeCounts['D'],
+            'sks_d' => $sksD,
+            'count_e' => $gradeCounts['E'],
+            'total_sks' => (int) $dataMahasiswa['total_sks'],
+        ];
     }
 
     public function servePdf($id)

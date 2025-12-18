@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+  
   <style>
     :root {
       --primary-color: #0d3b66;
@@ -20,16 +21,16 @@
     body {
       background-color: #f8f9fa;
       font-family: 'Poppins', sans-serif;
-      padding-top: 80px; /* Offset for fixed navbar */
+      padding-top: 80px;
     }
 
     /* --- Modern Navbar --- */
     .navbar {
-      background-color: rgba(13, 59, 102, 0.8); /* Semi-transparent */
-      backdrop-filter: blur(10px); /* Glassmorphism effect */
+      background-color: rgba(13, 59, 102, 0.8);
+      backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding: 0.7rem 1rem;
-      position: fixed; /* Fixed at the top */
+      position: fixed;
       top: 0;
       width: 100%;
       z-index: 1050;
@@ -50,10 +51,10 @@
     }
     
     .nav-link {
-        font-weight: 500;
-        border-radius: 8px;
-        margin: 0 4px;
-        padding: 8px 12px !important;
+      font-weight: 500;
+      border-radius: 8px;
+      margin: 0 4px;
+      padding: 8px 12px !important;
     }
 
     .nav-link:hover, .nav-link.active {
@@ -71,11 +72,11 @@
       border: none;
       background: transparent;
       padding: 0;
-      margin-top: 15px !important; /* Spacing from navbar */
+      margin-top: 15px !important;
     }
 
     .dropdown-menu.show {
-        animation: fadeIn 0.2s ease-out;
+      animation: fadeIn 0.2s ease-out;
     }
 
     .dropdown-card, .profile-card, .notif-card {
@@ -102,6 +103,7 @@
       display: flex;
       align-items: center;
     }
+    
     .dropdown-card a:hover {
       background-color: #eef4ff;
       color: #0056b3;
@@ -115,95 +117,218 @@
       object-fit: cover;
       border: 2px solid rgba(255,255,255,0.7);
     }
+    
     .profile-card {
       width: 280px;
       padding: 15px;
     }
-    .profile-card h6 { margin-bottom: 2px; font-weight: 600; color: var(--dark-text); }
-    .profile-card p { font-size: 13px; color: #6c757d; margin-bottom: 12px; }
-    .profile-actions a {
-      display: flex; align-items: center; text-decoration: none;
-      color: #495057; padding: 8px 10px; border-radius: 8px;
-      transition: all 0.2s ease; font-size: 14px;
+    
+    .profile-card h6 { 
+      margin-bottom: 2px; 
+      font-weight: 600; 
+      color: var(--dark-text); 
     }
-    .profile-actions a:hover { background-color: #f1f3f5; }
-    .profile-actions a.logout { color: #dc3545; font-weight: 500; }
-    .profile-actions hr { margin: 8px 0; }
+    
+    .profile-card p { 
+      font-size: 13px; 
+      color: #6c757d; 
+      margin-bottom: 12px; 
+    }
+    
+    .profile-actions a {
+      display: flex; 
+      align-items: center; 
+      text-decoration: none;
+      color: #495057; 
+      padding: 8px 10px; 
+      border-radius: 8px;
+      transition: all 0.2s ease; 
+      font-size: 14px;
+    }
+    
+    .profile-actions a:hover { 
+      background-color: #f1f3f5; 
+    }
+    
+    .profile-actions a.logout { 
+      color: #dc3545; 
+      font-weight: 500; 
+    }
+    
+    .profile-actions hr { 
+      margin: 8px 0; 
+    }
 
-    .notif-icon { font-size: 22px; }
+    .notif-icon { 
+      font-size: 22px; 
+    }
+    
     .notif-badge {
-      position: absolute; top: -5px; right: -8px;
-      background-color: #e44d5a; border-radius: 50%;
-      padding: 2px 6px; font-size: 10px; font-weight: bold;
+      position: absolute; 
+      top: -5px; 
+      right: -8px;
+      background-color: #e44d5a; 
+      border-radius: 50%;
+      padding: 2px 6px; 
+      font-size: 10px; 
+      font-weight: bold;
       border: 2px solid var(--primary-color);
     }
+    
     .notif-card {
-      width: 350px; padding: 0;
-      max-height: 400px; overflow-y: auto;
+      width: 350px; 
+      padding: 0;
+      max-height: 400px; 
+      overflow-y: auto;
     }
+    
     .notif-header {
-      padding: 12px 15px; display: flex; justify-content: space-between;
-      align-items: center; border-bottom: 1px solid #dee2e6;
+      padding: 12px 15px; 
+      display: flex; 
+      justify-content: space-between;
+      align-items: center; 
+      border-bottom: 1px solid #dee2e6;
     }
-    .notif-header h6 { font-size: 16px; margin: 0; font-weight: 600; color: var(--primary-color); }
-    .notif-header a { font-size: 13px; color: #0d6efd; text-decoration: none; }
+    
+    .notif-header h6 { 
+      font-size: 16px; 
+      margin: 0; 
+      font-weight: 600; 
+      color: var(--primary-color); 
+    }
+    
+    .notif-header a { 
+      font-size: 13px; 
+      color: #0d6efd; 
+      text-decoration: none; 
+    }
+    
     .notif-item {
-      padding: 12px 15px; border-bottom: 1px solid #f1f3f5;
-      transition: background-color 0.2s ease; cursor: pointer;
+      padding: 12px 15px; 
+      border-bottom: 1px solid #f1f3f5;
+      transition: background-color 0.2s ease; 
+      cursor: pointer;
     }
-    .notif-item:last-child { border-bottom: none; }
-    .notif-item:hover { background-color: #f8f9fa; }
-    .notif-item strong { color: var(--dark-text); font-size: 14px; font-weight: 600; }
-    .notif-item small { color: #6c757d; font-size: 12px; }
-    .notif-footer { text-align: center; padding: 12px 0; }
-    .notif-footer a { font-size: 14px; text-decoration: none; color: #0d6efd; font-weight: 500;}
+    
+    .notif-item:last-child { 
+      border-bottom: none; 
+    }
+    
+    .notif-item:hover { 
+      background-color: #f8f9fa; 
+    }
+    
+    .notif-item strong { 
+      color: var(--dark-text); 
+      font-size: 14px; 
+      font-weight: 600; 
+    }
+    
+    .notif-item small { 
+      color: #6c757d; 
+      font-size: 12px; 
+    }
+    
+    .notif-footer { 
+      text-align: center; 
+      padding: 12px 0; 
+    }
+    
+    .notif-footer a { 
+      font-size: 14px; 
+      text-decoration: none; 
+      color: #0d6efd; 
+      font-weight: 500;
+    }
 
     /* --- Hero Section --- */
     .hero {
-      height: calc(100vh - 80px); /* Full height minus navbar */
-      margin-top: -80px; /* Pull up to fill space behind navbar */
+      height: calc(100vh - 80px);
+      margin-top: -80px;
       position: relative;
       color: var(--light-text);
       display: flex;
       align-items: center;
       background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
     }
+    
     .hero::before {
-      content: ""; position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: linear-gradient(90deg, rgba(13, 59, 102, 0.85) 0%, rgba(0,0,0,0.4) 100%);
       z-index: 1;
     }
-    .hero .container { position: relative; z-index: 2; }
-    .hero h1 { font-size: 3.2rem; font-weight: 700; }
-    .hero p { font-size: 1.1rem; max-width: 500px; opacity: 0.9; }
-    .hero .btn { padding: 12px 28px; font-weight: 500; border-radius: 8px; }
-    .hero .btn-primary { background-color: #4ba3ff; border: none; }
+    
+    .hero .container { 
+      position: relative; 
+      z-index: 2; 
+    }
+    
+    .hero h1 { 
+      font-size: 3.2rem; 
+      font-weight: 700; 
+    }
+    
+    .hero p { 
+      font-size: 1.1rem; 
+      max-width: 500px; 
+      opacity: 0.9; 
+    }
+    
+    .hero .btn { 
+      padding: 12px 28px; 
+      font-weight: 500; 
+      border-radius: 8px; 
+    }
+    
+    .hero .btn-primary { 
+      background-color: #4ba3ff; 
+      border: none; 
+    }
 
     /* Frosted cards in hero */
     .hero .card-frosted {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(5px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 12px;
-        padding: 1.5rem;
-        text-align: center;
-        transition: all 0.3s ease;
-        color: var(--light-text);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: var(--light-text);
     }
+    
     .hero .card-frosted:hover {
-        transform: translateY(-8px);
-        background: rgba(255, 255, 255, 0.15);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
-    .hero .card-frosted i { color: #4ba3ff; }
-    .hero .card-frosted h6 { margin-top: 10px; font-weight: 600; color: #fff; }
-    .hero .card-frosted p { font-size: 0.9rem; color: #e0e0e0; margin-bottom: 0; }
+    
+    .hero .card-frosted i { 
+      color: #4ba3ff; 
+    }
+    
+    .hero .card-frosted h6 { 
+      margin-top: 10px; 
+      font-weight: 600; 
+      color: #fff; 
+    }
+    
+    .hero .card-frosted p { 
+      font-size: 0.9rem; 
+      color: #e0e0e0; 
+      margin-bottom: 0; 
+    }
 
     /* --- Main Content Cards --- */
     .main-content {
-        padding: 40px 0;
+      padding: 40px 0;
     }
+    
     .card {
       border-radius: 15px;
       border: 1px solid #e0e0e0;
@@ -211,12 +336,13 @@
       background-color: #ffffff;
       transition: all 0.3s ease;
     }
+    
     .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
     }
     
-    /* --- NEW: Ranking List Style --- */
+    /* --- Ranking List Style --- */
     .ranking-item {
       display: flex;
       align-items: center;
@@ -227,11 +353,13 @@
       margin-bottom: 12px;
       transition: all 0.2s ease-in-out;
     }
+    
     .ranking-item:hover {
       transform: translateY(-3px) scale(1.01);
       box-shadow: 0 6px 20px rgba(0,0,0,0.08);
       border-color: var(--primary-color);
     }
+    
     .ranking-item .ranking-number {
       font-size: 1.5rem;
       font-weight: 700;
@@ -239,6 +367,7 @@
       min-width: 40px;
       text-align: center;
     }
+    
     .ranking-item .ranking-logo {
       width: 50px;
       height: 50px;
@@ -249,23 +378,43 @@
       padding: 5px;
       border: 1px solid #dee2e6;
     }
+    
     .ranking-item .ranking-details {
       flex-grow: 1;
     }
+    
     .ranking-item .ranking-details h6 {
       font-weight: 600;
       color: var(--dark-text);
       margin-bottom: 2px;
     }
+    
     .ranking-item .ranking-details p {
       font-size: 0.85rem;
       color: #6c757d;
       margin-bottom: 0;
     }
-    .ranking-item[data-rank="1"] .ranking-number { color: #FFD700; /* Gold */ }
-    .ranking-item[data-rank="2"] .ranking-number { color: #C0C0C0; /* Silver */ }
-    .ranking-item[data-rank="3"] .ranking-number { color: #CD7F32; /* Bronze */ }
-
+    
+    .ranking-item .rating-stars {
+      color: #ffd700;
+      font-size: 0.9rem;
+      margin-right: 10px;
+    }
+    
+    /* Score Badge */
+    .score-badge {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+    
+    .ranking-item[data-rank="1"] .ranking-number { color: #FFD700; }
+    .ranking-item[data-rank="2"] .ranking-number { color: #C0C0C0; }
+    .ranking-item[data-rank="3"] .ranking-number { color: #CD7F32; }
   </style>
 </head>
 <body>
@@ -298,6 +447,7 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
                 <div class="dropdown-card">
                   <a href="{{ route('tempatpkl.lihattempatpkl') }}"><i class="bi bi-search me-2"></i>Lihat Tempat PKL</a>
                   <a href="{{ route('tempatpkl.ajukantempatpkl') }}"><i class="bi bi-plus-circle me-2"></i>Ajukan Tempat PKL</a>
+                  <a href="{{ route('penilaian.index') }}"><i class="bi bi-building-fill me-2"></i>Nilai Tempat PKL Anda</a>
                 </div>
               </li>
             </ul>
@@ -308,7 +458,6 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
               <li>
                 <div class="dropdown-card">
                   <a href="{{ route('dosen.daftardosen') }}"><i class="bi bi-person-lines-fill me-2"></i>Daftar Dosen</a>
-                  <a href="{{ route('dosen.dosenpembimbing') }}"><i class="bi bi-person-check-fill me-2"></i>Dosen Pembimbing</a>
                 </div>
               </li>
             </ul>
@@ -478,87 +627,192 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
     </div>
   </section>
 
+  <!-- MAIN CONTENT -->
   <div class="container main-content">
-    <div class="row"> 
+    <div class="row">
+      <!-- LEFT: RANKING TEMPAT PKL TERFAVORIT -->
       <div class="col-md-8">
         <div class="card p-4 mb-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Tempat PKL Terfavorit</h5>
-              <a href="{{ route('mahasiswa.lihatsemua') }}" class="btn btn-sm btn-outline-primary">Lihat Semua <i class="bi bi-arrow-right-short"></i></a>
+            <h5 class="mb-0">
+              <i class="bi bi-trophy-fill text-warning me-2"></i>
+              Tempat PKL Terfavorit
+            </h5>
+            <a href="{{ route('mahasiswa.tempatpkl.lihat') }}" class="btn btn-sm btn-outline-primary">
+              Lihat Semua <i class="bi bi-arrow-right-short"></i>
+            </a>
           </div>
 
-          <div class="ranking-list">
-            <div class="ranking-item" data-rank="1">
-              <div class="ranking-number">1</div>
-              <img src="https://placehold.co/100x100/E30613/FFFFFF?text=Telkom" alt="Logo Telkom" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PT. Telkom Indonesia</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. A. Yani Km. 6, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="2">
-              <div class="ranking-number">2</div>
-              <img src="https://placehold.co/100x100/00A5E0/FFFFFF?text=B.Kalsel" alt="Logo Bank Kalsel" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Bank Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Lambung Mangkurat No.1, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="3">
-              <div class="ranking-number">3</div>
-              <img src="https://placehold.co/100x100/009647/FFFFFF?text=GoJek" alt="Logo Go-Jek" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Go-Jek Office Banjarmasin</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Gatot Subroto, Banjarmasin</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="4">
-              <div class="ranking-number">4</div>
-              <img src="https://placehold.co/100x100/231F20/FFFFFF?text=Kominfo" alt="Logo Kominfo" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>Dinas Kominfo Kalsel</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Dharma Praja, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
-            </div>
-            <div class="ranking-item" data-rank="5">
-              <div class="ranking-number">5</div>
-              <img src="https://placehold.co/100x100/00AEEF/FFFFFF?text=PLN" alt="Logo PLN" class="ranking-logo">
-              <div class="ranking-details">
-                <h6>PLN Wilayah Kalselteng</h6>
-                <p><i class="bi bi-geo-alt-fill"></i> Jl. Panglima Batur, Banjarbaru</p>
-              </div>
-              <a href="#" class="ms-auto btn btn-sm btn-light">Detail</a>
+          <div class="ranking-list" id="rankingList">
+            <div class="alert alert-info text-center" id="rankingPlaceholder">
+              <i class="bi bi-info-circle me-2"></i>
+              Belum ada tempat PKL yang dinilai. 
+              <a href="{{ route('penilaian.index') }}" class="alert-link">Beri penilaian sekarang!</a>
             </div>
           </div>
-
         </div>
       </div>
 
+      <!-- RIGHT: SIDEBAR -->
       <div class="col-md-4">
         <div class="card p-3 mb-3">
           <h6>Hello, Selamat Datang</h6>
-          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 <a href="{{ route('mahasiswa.lihatdetailipk.index') }}">Lihat Detail</a>.</p>
+          <p class="mb-0">Saat ini Anda berada di Semester 3 dengan IPK 0,00 
+            <a href="{{ route('mahasiswa.lihatdetailipk.index') }}">Lihat Detail</a>.
+          </p>
         </div>
 
         <div class="card p-3">
-          <h6>Kalender Akademik</h6> 
-            <iframe 
+          <h6>Kalender Akademik</h6>
+          <iframe 
             src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
             style="border: 1px solid #ddd; border-radius: 10px;" 
             width="100%" 
             height="350" 
             frameborder="0" 
             scrolling="no">
-        </iframe> 
+          </iframe>
         </div>
+
+        <div class="card p-3 mt-4">
+            <h6>Jadwal Seminar Mendatang</h6>
+            <div id="upcomingSeminarsList" class="list-group">
+                <!-- Seminar list will be rendered here by JavaScript -->
+                <div class="text-center text-muted py-3" id="seminarPlaceholder">Tidak ada jadwal seminar mendatang.</div>
+            </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Seminar Details Modal -->
+  <div class="modal fade" id="seminarDetailsModal" tabindex="-1" aria-labelledby="seminarDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="seminarDetailsModalLabel">Detail Seminar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Tanggal:</strong> <span id="modalSeminarDate"></span></p>
+          <p><strong>Judul:</strong> <span id="modalSeminarJudul"></span></p>
+          <p><strong>Waktu:</strong> <span id="modalSeminarTime"></span></p>
+          <p><strong>Ruang:</strong> <span id="modalSeminarRuang"></span></p>
+          <p><strong>Mahasiswa:</strong> <span id="modalSeminarMahasiswa"></span></p>
+          <p><strong>Pembimbing:</strong> <span id="modalSeminarPembimbing"></span></p>
+          <p><strong>Penguji:</strong> <span id="modalSeminarPenguji"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+  <script>
+    // Seminar data from Laravel controller
+    const seminars = @json($seminars);
+    
+
+    function renderUpcomingSeminars() {
+        const listContainer = document.getElementById('upcomingSeminarsList');
+        const placeholder = document.getElementById('seminarPlaceholder');
+        listContainer.innerHTML = ''; // Clear previous list
+
+        if (seminars.length === 0) {
+            placeholder.style.display = 'block';
+            return;
+        } else {
+            placeholder.style.display = 'none';
+        }
+
+        seminars.forEach(sem => {
+            const seminarItem = document.createElement('a');
+            seminarItem.href = '#';
+            seminarItem.classList.add('list-group-item', 'list-group-item-action');
+            seminarItem.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-1">${sem.judul}</h6>
+                    <small class="text-muted">${new Date(sem.tanggal).toLocaleDateString('id-ID', {day: '2-digit', month: 'short'})}</small>
+                </div>
+                <p class="mb-1 small">Waktu: ${sem.jam_mulai.slice(0, 5)} - ${sem.jam_selesai.slice(0, 5)} | Ruang: ${sem.ruang}</p>
+            `;
+            seminarItem.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSeminarDetails(sem);
+            });
+            listContainer.appendChild(seminarItem);
+        });
+    }
+
+    function showSeminarDetails(sem) {
+        const modalEl = document.getElementById('seminarDetailsModal');
+        const bsModal = new bootstrap.Modal(modalEl);
+
+        document.getElementById('modalSeminarDate').textContent = new Date(sem.tanggal).toLocaleDateString('id-ID', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+        document.getElementById('modalSeminarJudul').textContent = sem.judul;
+        document.getElementById('modalSeminarTime').textContent = `${sem.jam_mulai.slice(0, 5)} - ${sem.jam_selesai.slice(0, 5)}`;
+        document.getElementById('modalSeminarRuang').textContent = sem.ruang;
+        document.getElementById('modalSeminarMahasiswa').textContent = sem.nama_mahasiswa || '-';
+        document.getElementById('modalSeminarPembimbing').textContent = sem.nama_pembimbing || '-';
+        document.getElementById('modalSeminarPenguji').textContent = sem.nama_penguji || '-';
+
+        bsModal.show();
+    }
+
+    // Ambil ranking yang sudah dihitung di halaman penilaian (localStorage 'sawResults')
+    function renderRankingFromLocal() {
+      const rankingContainer = document.getElementById('rankingList');
+      const placeholder = document.getElementById('rankingPlaceholder');
+      if (!rankingContainer) return;
+
+      const sawResults = JSON.parse(localStorage.getItem('sawResults') || '[]');
+
+      if (!sawResults.length) {
+        if (placeholder) placeholder.style.display = 'block';
+        return;
+      }
+
+      if (placeholder) placeholder.style.display = 'none';
+
+      let html = '';
+      sawResults.slice(0, 5).forEach((tempat) => {
+        html += `
+          <div class="ranking-item" data-rank="${tempat.rank}">
+            <div class="ranking-number">${tempat.rank}</div>
+            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(tempat.nama)}&background=random&size=100" 
+                 alt="Logo ${tempat.nama}" class="ranking-logo">
+            <div class="ranking-details">
+              <h6>${tempat.nama}</h6>
+              <p><i class="bi bi-geo-alt-fill"></i> ${tempat.alamat || '-'}</p>
+              <div class="d-flex align-items-center">
+                <span class="score-badge">SAW: ${(tempat.finalScore ?? 0).toFixed(4)}</span>
+                <small class="text-muted ms-2">
+                  ${(tempat.jumlah_penilai ?? 0)} penilaian
+                </small>
+              </div>
+            </div>
+            <a href="{{ route('mahasiswa.tempatpkl.lihat') }}" class="ms-auto btn btn-sm btn-light">Detail</a>
+          </div>
+        `;
+      });
+
+      rankingContainer.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderRankingFromLocal();
+      renderUpcomingSeminars(); // Render the seminar list
+
+      // Pastikan dropdown berfungsi
+      document.querySelectorAll('.dropdown-toggle').forEach(function(element) {
+        new bootstrap.Dropdown(element);
+      });
+    });
+
+    // Refresh ranking data every 15 seconds
+    setInterval(renderRankingFromLocal, 15000);
+  </script>

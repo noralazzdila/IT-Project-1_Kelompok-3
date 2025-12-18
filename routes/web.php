@@ -51,7 +51,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Models\Proposal;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
+Route::get('/ajukan-tempat-pkl', [AjukanTempatPKLController::class, 'create'])->name('tempatpkl.ajukantempatpkl');
+    Route::post('/upload-pdf', [AjukanTempatPKLController::class, 'uploadPdf'])->name('tempatpkl.uploadPdf');
+    Route::post('/store', [AjukanTempatPKLController::class, 'store'])->name('mahasiswa.tempatpkl.store');
+    Route::delete('/mahasiswa/tempat-pkl/reset', [AjukanTempatPKLController::class, 'resetUpload'])->name('tempatpkl.reset');
 Route::get('/mahasiswa/tempat-pkl-terbaik', [TPKController::class, 'hitung'])->name('mahasiswa.tempat_pkl_terbaik');
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +100,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/test-notifikasi',[DashboardController::class, 'testNotifikasiDashboard'])->name('dashboard.test.notifikasi');
     Route::get('/dashboard/mahasiswa', [MahasiswaController::class, 'index'])->name('dashboard.mahasiswa');
     Route::get('/koor-pkl/dashboard', [KoorPklController::class, 'index'])->name('koor.dashboard');
+    Route::get('/koor-pkl/spk', [KoorPklController::class, 'spk'])->name('koor.spk');
     Route::get('/koor-pkl/profil', [KoorPklController::class, 'showProfile'])->name('koor.profil');
     Route::post('/koor-pkl/profil', [KoorPklController::class, 'updateProfile'])->name('koor.profil.update');
     Route::get('/dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
@@ -380,9 +384,11 @@ Route::middleware('auth')->group(function () {
 
     // Bimbingan - Mahasiswa
     Route::prefix('mahasiswa')->middleware(['auth', 'role:mahasiswa'])->group(function () {
-    Route::get('/bimbingan', [MahasiswaBimbinganController::class, 'index'])->name('mahasiswa.bimbingan.index');
-    Route::get('/lihat-tempat-pkl', [MahasiswaTempatPKLController::class, 'index'])->name('tempatpkl.lihattempatpkl');
-    Route::get('/aktivitas', [\App\Http\Controllers\Mahasiswa\AktivitasController::class, 'index'])->name('aktivitas.index');
+        Route::get('/mahasiswa/lihat-tempat-pkl', [MahasiswaTempatPKLController::class, 'index'])->name('mahasiswa.tempatpkl.lihat');
+        Route::get('/mahasiswa/bimbingan', [MahasiswaBimbinganController::class, 'index'])->name('mahasiswa.bimbingan.index');
+        Route::get('/mahasiswa/bimbingan/create', [MahasiswaBimbinganController::class, 'create'])->name('mahasiswa.bimbingan.create');
+        Route::post('/mahasiswa/bimbingan', [MahasiswaBimbinganController::class, 'store'])->name('mahasiswa.bimbingan.store');
+        Route::get('/lihat-tempat-pkl', [MahasiswaTempatPKLController::class, 'index'])->name('tempatpkl.lihattempatpkl');    Route::get('/aktivitas', [\App\Http\Controllers\Mahasiswa\AktivitasController::class, 'index'])->name('aktivitas.index');
     Route::post('/aktivitas/store', [\App\Http\Controllers\Mahasiswa\AktivitasController::class, 'store'])->name('aktivitas.store');
     
     // ======================
@@ -398,7 +404,7 @@ Route::middleware('auth')->group(function () {
     $proposal = Proposal::findOrFail($id); // <--- pastikan model Proposal
 
     // Pastikan hanya owner yang bisa lihat
-    if ($proposal->nim !== Auth::user()->nim) {
+    if ($proposal->nim !== Auth::user()->mahasiswa->nim) {
         abort(403, 'Forbidden');
     }
 
@@ -467,6 +473,18 @@ Route::middleware('auth')->group(function () {
     
 })
     ->name('notifikasi.baca');
+    
+    // Rute sementara untuk reset status pengajuan PKL
+    Route::get('/mahasiswa/reset-pkl-ajuan-temp', function() {
+        $pengajuan = \App\Models\PengajuanPKL::where('mahasiswa_id', auth::id())->first();
+        if ($pengajuan) {
+            // Juga hapus nilai terkait jika alur mengharuskan upload ulang dari awal
+            // \App\Models\Nilai::where('mahasiswa_id', $pengajuan->mahasiswa_id)->delete();
+            $pengajuan->delete();
+            return 'Status pengajuan PKL Anda telah direset. Silakan kembali ke halaman <a href="' . route('tempatpkl.ajukantempatpkl') . '">Ajukan Tempat PKL</a> dan coba lagi.';
+        }
+        return 'Tidak ada status pengajuan PKL yang ditemukan untuk direset.';
+    })->name('mahasiswa.reset_pkl');
 });
 
     Route::middleware(['auth','role:koordinator'])->prefix('koordinator')->group(function() {
@@ -477,3 +495,8 @@ Route::middleware('auth')->group(function () {
 });
 
     Route::get('/koorprodi/nilai', [KoorprodiController::class, 'nilai_index'])->name('koorprodi.nilai.index');
+Route::middleware(['auth', 'role:koor_pkl'])->prefix('api/koor')->name('koor.api.')->group(function () {
+    Route::get('/criteria-weights', [\App\Http\Controllers\Api\SpkController::class, 'getCriteriaWeights'])->name('criteria.weights');
+    Route::post('/ahp-calculate', [\App\Http\Controllers\Api\SpkController::class, 'saveAhpComparisonsAndCalculate'])->name('ahp.calculate');
+    Route::post('/saw-calculate', [\App\Http\Controllers\Api\SpkController::class, 'calculateSaw'])->name('saw.calculate');
+});Route::get('/penilaian-tempat-pkl', [App\Http\Controllers\PenilaianTempatPklController::class, 'index'])->name('penilaian.index')->middleware('auth');

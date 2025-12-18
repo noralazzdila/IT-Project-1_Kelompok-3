@@ -12,8 +12,20 @@ class Mahasiswa extends Model
     protected $table = 'mahasiswa'; 
 
     protected $fillable = [
-    'nim', 'nama', 'jurusan', 'angkatan', 'user_id'
-];
+        'nim',
+        'nama',
+        'user_id',
+        'jenis_kelamin',
+        'tanggal_lahir',
+        'prodi',
+        'kelas',
+        'tahun_angkatan',
+        'dosen_pembimbing',
+        'tempat_pkl',
+        'status_pkl',
+        'no_hp',
+        'email',
+    ];
 
 
     public function nilai()

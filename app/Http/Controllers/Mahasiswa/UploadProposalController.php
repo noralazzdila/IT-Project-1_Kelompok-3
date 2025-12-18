@@ -12,7 +12,8 @@ class UploadProposalController extends Controller
 {
     public function index()
     {
-        $proposals = Proposal::where('nim', Auth::user()->nim)
+        $proposals = Proposal::where('nim', Auth::user()->mahasiswa->nim)
+            ->with('dosen') // Eager load the dosen relationship
             ->latest()
             ->get();
 
@@ -24,7 +25,7 @@ class UploadProposalController extends Controller
     $user = Auth::user(); // user login
 
     // Cegah upload dobel
-    $cek = Proposal::where('nim', $user->nim)->exists();
+    $cek = Proposal::where('nim', $user->mahasiswa->nim)->exists();
     if ($cek) {
         return back()->withErrors(['proposal' => 'Anda sudah pernah upload proposal']);
     }
@@ -40,7 +41,7 @@ class UploadProposalController extends Controller
         ->store('proposals', 'public');
 
     Proposal::create([
-        'nim' => $user->nim,
+        'nim' => $user->mahasiswa->nim,
         'nama_mahasiswa' => $user->name,
         'judul_proposal' => $request->judul_proposal,
         'pembimbing' => $request->pembimbing,

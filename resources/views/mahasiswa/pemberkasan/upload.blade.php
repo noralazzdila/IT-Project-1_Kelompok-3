@@ -156,36 +156,48 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $pemberkasan->mahasiswa?->nama ?? Auth::user()->name }}</td>
                                 <td>
-                                    @if ($pemberkasan->is_lengkap)
-                                        <span class="badge bg-success">Lengkap</span>
+                                    @if ($pemberkasan->status == 'Lengkap')
+                                        <span class="badge bg-success">{{ $pemberkasan->status }}</span>
+                                    @elseif ($pemberkasan->status == 'Tidak Lengkap')
+                                        <span class="badge bg-danger">{{ $pemberkasan->status }}</span>
                                     @else
-                                        <span class="badge bg-warning text-dark">Belum Lengkap</span>
+                                        <span class="badge bg-warning text-dark">{{ $pemberkasan->status }}</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if ($pemberkasan->form_bimbingan_path)
-                                    <a href="{{ route('pemberkasan.view', ['file' => basename($pemberkasan->form_bimbingan_path)]) }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
+                                    <a href="{{ route('mahasiswa.pemberkasan.view', ['type' => 'form_bimbingan', 'id' => $pemberkasan->id]) }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
                                         <i class="fa-solid fa-file-pdf me-1"></i> Form Bimbingan
                                     </a>
+                                    @else
+                                        <span class="text-muted">Form Bimbingan (Belum diupload)</span>
                                     @endif
                                     
                                     @if ($pemberkasan->sertifikat_path)
-                                    <a href="{{ route('pemberkasan.view', ['file' => basename($pemberkasan->sertifikat_path)]) }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
+                                    <a href="{{ route('mahasiswa.pemberkasan.view', ['type' => 'sertifikat', 'id' => $pemberkasan->id]) }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
                                         <i class="fa-solid fa-file-pdf me-1"></i> Sertifikat
                                     </a>
+                                    @else
+                                        <span class="text-muted">Sertifikat (Belum diupload)</span>
                                     @endif
                                     
                                     @if ($pemberkasan->laporan_final_path)
-                                    <a href="{{ route('pemberkasan.view', ['file' => basename($pemberkasan->laporan_final_path)]) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ route('mahasiswa.pemberkasan.view', ['type' => 'laporan_final', 'id' => $pemberkasan->id]) }}" target="_blank" class="btn btn-outline-primary btn-sm">
                                         <i class="fa-solid fa-file-pdf me-1"></i> Laporan Final
                                     </a>
+                                    @else
+                                        <span class="text-muted">Laporan Final (Belum diupload)</span>
                                     @endif
 
                                 </td>
                                 <td class="text-center">
+                                    @if ($pemberkasan->status != 'Lengkap')
                                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $pemberkasan->id }}">
                                         <i class="fa-solid fa-upload me-1"></i> Upload
                                     </button>
+                                    @else
+                                        <span class="text-success">Sudah Lengkap</span>
+                                    @endif
                                 </td>
                             </tr>
 
@@ -240,36 +252,54 @@
         </div>
 
         <!-- MODAL UPLOAD BARU -->
+        @if ($pemberkasans->isEmpty())
         <div class="modal fade" id="uploadBerkasBaru" tabindex="-1">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">Upload Berkas Pemberkasan</h5>
+                        <h5 class="modal-title">Upload Semua Berkas Pemberkasan</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <form action="{{ route('mahasiswa.pemberkasan.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
-                            <label class="form-label fw-semibold">Tipe Dokumen</label>
-                            <select name="type" class="form-control" required>
-                                <option value="form_bimbingan">Form Bimbingan</option>
-                                <option value="sertifikat">Sertifikat PKL</option>
-                                <option value="laporan_final">Laporan Final</option>
-                            </select>
+                            <p class="text-muted mb-3">Mohon upload ketiga berkas (Form Bimbingan, Sertifikat PKL, dan Laporan Final) secara bersamaan jika sudah tersedia.</p>
 
-                            <label class="form-label fw-semibold mt-3">File (PDF)</label>
-                            <input type="file" name="file" class="form-control" accept="application/pdf" required>
+                            <div class="mb-3">
+                                <label for="form_bimbingan_file" class="form-label fw-semibold">Form Bimbingan (PDF)</label>
+                                <input type="file" name="form_bimbingan_file" class="form-control" accept="application/pdf">
+                                @error('form_bimbingan_file')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="sertifikat_file" class="form-label fw-semibold">Sertifikat PKL (PDF)</label>
+                                <input type="file" name="sertifikat_file" class="form-control" accept="application/pdf">
+                                @error('sertifikat_file')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="laporan_final_file" class="form-label fw-semibold">Laporan Final (PDF)</label>
+                                <input type="file" name="laporan_final_file" class="form-control" accept="application/pdf">
+                                @error('laporan_final_file')
+                                    <div class="text-danger mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Upload</button>
+                            <button type="submit" class="btn btn-primary">Upload Semua</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+        @endif
 
     </main>
 

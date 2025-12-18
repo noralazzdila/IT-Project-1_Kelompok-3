@@ -29,11 +29,13 @@ class ProfilController extends Controller
             'email' => ['required','email','max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|string|max:20',
             'profile_photo' => 'nullable|image|max:2048', // max 2MB
+            'nim' => ['required', 'string', 'max:20', Rule::unique('mahasiswa')->ignore($user->mahasiswa->id ?? null, 'id')],
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->identifier = $request->nim; // Sync identifier with nim
 
         if($request->hasFile('profile_photo')){
             $path = $request->file('profile_photo')->store('profile_photos','public');
@@ -41,6 +43,21 @@ class ProfilController extends Controller
         }
 
         $user->save();
+
+        // Update Mahasiswa nim
+        if ($user->mahasiswa) {
+            $user->mahasiswa->nim = $request->nim;
+            $user->mahasiswa->save();
+        } else {
+            // If Mahasiswa record doesn't exist, create one
+            \App\Models\Mahasiswa::create([
+                'user_id' => $user->id,
+                'nim' => $request->nim,
+                'nama' => $user->name,
+                'prodi' => 'Teknik Informatika', // Default value, should be handled better
+                'tahun_angkatan' => date('Y'), // Default value
+            ]);
+        }
 
         return redirect()->back()->with('success','Profil berhasil diperbarui!');
     }

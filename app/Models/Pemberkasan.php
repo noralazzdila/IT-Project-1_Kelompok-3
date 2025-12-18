@@ -27,6 +27,7 @@ class Pemberkasan extends Model
         'sertifikat_path',     // Path ke file Sertifikat PKL
         'laporan_final_path',  // Path ke file Laporan Final
         'is_lengkap',          // Kolom boolean untuk status kelengkapan
+        'status',              // Kolom string untuk status (Menunggu, Lengkap, Tidak Lengkap)
         'tanggal_verifikasi',
         // Tambahkan kolom lain di sini
     ];

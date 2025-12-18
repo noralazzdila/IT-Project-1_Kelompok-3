@@ -115,9 +115,11 @@
                         <i class="fa-solid fa-file-lines me-2"></i>Status Proposal PKL
                     </h5>
 
+                    @if($proposals->isEmpty())
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadProposalBaru">
                         <i class="fa-solid fa-upload me-1"></i> Upload Proposal Baru
                     </button>
+                    @endif
                 </div>
 
                 <div class="table-responsive">
@@ -126,10 +128,9 @@
                             <tr>
                                 <th class="text-center" style="width:50px;">No</th>
                                 <th>Judul Proposal</th>
-                                <th>Status</th>
                                 <th>Pembimbing</th>
                                 <th>Proposal</th>
-                                <th class="text-center" style="width:180px;">Aksi</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -137,8 +138,8 @@
         <tr>
             <td class="text-center">{{ $loop->iteration }}</td> <!-- No -->
             <td>{{ $proposal->judul_proposal }}</td>           <!-- Judul Proposal -->
-            <td>{{ ucfirst($proposal->status ?? '-') }}</td>  <!-- Status -->
-            <td>{{ $proposal->pembimbing }}</td>             <!-- Pembimbing -->
+            
+            <td>{{ $proposal->dosen->nama ?? 'N/A' }}</td>             <!-- Pembimbing -->
             <td>
                 @if ($proposal->file_proposal)
                     <a href="{{ route('proposal.lihat', $proposal->id) }}" target="_blank" class="btn btn-outline-primary btn-sm">
@@ -148,8 +149,9 @@
                     <span class="text-muted">Belum upload</span>
                 @endif
             </td> <!-- Proposal -->
-            <td class="text-center"> <!-- Aksi -->
-                @if ($proposal->file_proposal)
+            <td>{{ ucfirst($proposal->status ?? '-') }}</td>  <!-- Status -->
+            <!-- Aksi <td class="text-center">  -->
+                {{-- @if ($proposal->file_proposal)
                     <button class="btn btn-secondary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#uploadProposal{{ $proposal->id }}">
                         <i class="fa-solid fa-upload me-1"></i> Upload Ulang
                     </button>
@@ -157,7 +159,7 @@
                     <button class="btn btn-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#uploadProposal{{ $proposal->id }}">
                         <i class="fa-solid fa-upload me-1"></i> Upload Proposal
                     </button>
-                @endif
+                @endif --}}
 
                 @if ($proposal->status == 'diterima')
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $proposal->id }}">
@@ -188,6 +190,7 @@
     </main>
 
     <!-- Modal Upload Proposal Baru -->
+    @if($proposals->isEmpty())
     <div class="modal fade" id="uploadProposalBaru" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -211,6 +214,7 @@
             </div>
         </div>
     </div>
+    @endif
 
     <!-- Modal Loop untuk Upload Proposal & Upload Berkas -->
     @foreach ($proposals as $proposal)

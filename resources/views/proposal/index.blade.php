@@ -66,14 +66,18 @@
                             <small class="text-muted">{{ $proposal->nim }}</small>
                         </td>
                         <td>{{ Str::limit($proposal->judul_proposal, 35) }}</td>
-                        <td>{{ $proposal->pembimbing }}</td>
+                        <td>{{ $proposal->dosen->nama ?? 'N/A' }}</td>
                         <td>{{ $proposal->tempat_pkl }}</td>
                         <td class="text-center">
                             @php
                                 $badgeClass = '';
-                                if ($proposal->status == 'Menunggu') $badgeClass = 'bg-warning text-dark';
-                                elseif ($proposal->status == 'Disetujui') $badgeClass = 'bg-success';
-                                elseif ($proposal->status == 'Ditolak') $badgeClass = 'bg-danger';
+                                if ($proposal->status == 'Menunggu') {
+                                    $badgeClass = 'bg-warning text-dark';
+                                } elseif ($proposal->status == 'Disetujui') {
+                                    $badgeClass = 'bg-success text-white';
+                                } elseif ($proposal->status == 'Ditolak') {
+                                    $badgeClass = 'bg-danger text-white';
+                                }
                             @endphp
                             <span class="badge {{ $badgeClass }}">{{ $proposal->status }}</span>
                         </td>

@@ -40,5 +40,13 @@ class Bimbingan extends Model
     protected $casts = [
         'tanggal_bimbingan' => 'date',
     ];
+
+    /**
+     * Get the Dosen (lecturer) associated with the bimbingan.
+     */
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class, 'dosen_pembimbing');
+    }
 }
 

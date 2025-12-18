@@ -151,6 +151,7 @@
         }
 
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="wrapper">
@@ -163,6 +164,7 @@
             </div>
             <nav class="nav flex-column px-2">
                 <a href="{{ route('koor.dashboard') }}" class="nav-link {{ request()->routeIs('koor.dashboard') ? 'active' : '' }}"><i class="fa fa-home me-2"></i> Beranda</a>
+                <a href="{{ route('koor.spk') }}" class="nav-link {{ request()->routeIs('koor.spk') ? 'active' : '' }}"><i class="fa fa-cogs me-2"></i> SPK</a>
                 <a href="{{ route('user.index') }}" class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}"><i class="fa fa-users me-2"></i>User</a>
                 <a href="{{ route('nilai.index') }}" class="nav-link {{ request()->routeIs('nilai.index') ? 'active' : '' }}"><i class="fa fa-graduation-cap me-2"></i>Nilai</a>
                 <a href="{{ route('tempatpkl.index') }}" class="nav-link {{ request()->routeIs('tempatpkl.index') ? 'active' : '' }}"><i class="fa fa-building me-2"></i>Tempat PKL</a>
@@ -201,5 +203,6 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @yield('page-scripts')
 </body>
 </html>

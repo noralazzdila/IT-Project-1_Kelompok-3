@@ -43,4 +43,12 @@ class Proposal extends Model
 
     return back()->with('success', 'Notifikasi email terkirim!');
 }
+
+    /**
+     * Get the supervising lecturer (dosen) for the proposal.
+     */
+    public function dosen()
+    {
+        return $this->belongsTo(Dosen::class, 'pembimbing');
+    }
 }

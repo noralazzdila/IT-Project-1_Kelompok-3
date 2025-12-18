@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Mahasiswa;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\TempatPKL;
-use App\Models\Mahasiswa;
-use App\Models\PengajuanPKL;
+use App\Models\ActivityLog;
+use App\Notifications\NotifikasiPKL;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-
+use App\Models\PengajuanPKL;
+use App\Models\Mahasiswa; // Pastikan model Mahasiswa diimpor
+use App\Models\Nilai; // Pastikan model Nilai diimpor
+use Illuminate\Support\Facades\Log; // Untuk logging error
+use Illuminate\Support\Facades\Storage;
+use App\Models\SuratPengantar;
 class AjukanTempatPKLController extends Controller
 {
     /**
@@ -40,7 +44,6 @@ class AjukanTempatPKLController extends Controller
         $mahasiswa = $user->mahasiswa;
 
         if (!$mahasiswa) {
-            // Redirect if the user has no associated student data, which is a critical error.
             return redirect()->route('dashboard')->with('error', 'FATAL: Akun Anda tidak terhubung dengan data mahasiswa. Harap segera hubungi administrator.');
         }
 
@@ -50,6 +53,7 @@ class AjukanTempatPKLController extends Controller
 
         // Siapkan data syarat jika ada nilai
         $requirements = null;
+        $isEligible = false; // Default
         if ($nilai) {
             $requirements = [
                 'IPK'         => ['required' => '>= 2.50', 'actual' => number_format($nilai->ipk, 2), 'status' => $nilai->ipk >= 2.5],
@@ -57,9 +61,10 @@ class AjukanTempatPKLController extends Controller
                 'SKS Nilai D' => ['required' => '<= 6', 'actual' => $nilai->sks_d, 'status' => $nilai->sks_d <= 6],
                 'Nilai E'     => ['required' => '= 0', 'actual' => $nilai->count_e, 'status' => $nilai->count_e == 0],
             ];
+            $isEligible = ($nilai->ipk >= 2.5 && $nilai->total_sks >= 77 && $nilai->sks_d <= 6 && $nilai->count_e == 0);
         }
 
-        return view('mahasiswa.tempatpkl.ajukantempatpkl', compact('pengajuan', 'requirements'));
+        return view('mahasiswa.tempatpkl.ajukantempatpkl', compact('pengajuan', 'requirements', 'isEligible'));
     }
 
     /**
@@ -77,10 +82,19 @@ class AjukanTempatPKLController extends Controller
         }
 
         try {
+            // Hapus file PDF lama jika ada
+            $existingPengajuan = PengajuanPKL::where('mahasiswa_id', $user->id)->first();
+            if ($existingPengajuan && $existingPengajuan->pdf_path) {
+                $oldFilePath = storage_path('app/public/' . $existingPengajuan->pdf_path);
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+            }
+
             $file = $request->file('pdf');
             $pdfPath = $file->store('pdf_transkip', 'public');
             
-            // Path ke pdftotext, pastikan Poppler terinstall
+            // Path ke pdftotext
             $path_to_pdftotext = 'C:\poppler-windows-25.07.0-0\bin\pdftotext.exe';
             if (!file_exists($path_to_pdftotext)) {
                 throw new \Exception("Library Poppler (pdftotext.exe) tidak ditemukan.");
@@ -88,7 +102,7 @@ class AjukanTempatPKLController extends Controller
 
             $text = (new \Spatie\PdfToText\Pdf($path_to_pdftotext))->setPdf($file->getPathname())->text();
 
-            // Ekstrak data dari teks PDF
+            // Ekstrak data dari teks PDF (Ini data asli dari file)
             $data = $this->extractDataFromPdfText($text);
             $data['pdf_path'] = $pdfPath;
 
@@ -100,13 +114,13 @@ class AjukanTempatPKLController extends Controller
 
             // Lakukan validasi syarat PKL
             $isEligible = ($nilai->ipk >= 2.5 && $nilai->total_sks >= 77 && $nilai->sks_d <= 6 && $nilai->count_e == 0);
-            $status = $isEligible ? 'diterima' : 'ditolak';
 
-            // Simpan atau update status pengajuan
-            PengajuanPKL::updateOrCreate(
+            // Update PengajuanPKL record with pdf_path. Do NOT set application status here.
+            // If PengajuanPKL doesn't exist, create it with a default status for the application lifecycle.
+            PengajuanPKL::firstOrCreate(
                 ['mahasiswa_id' => $user->id],
-                ['pdf_path' => $pdfPath, 'status' => $status]
-            );
+                ['pdf_path' => $pdfPath, 'status' => 'belum_diajukan'] // Default status for a new application
+            )->update(['pdf_path' => $pdfPath]); // Update pdf_path if it already exists
 
             if (!$isEligible) {
                 return response()->json([
@@ -118,6 +132,7 @@ class AjukanTempatPKLController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'PDF berhasil divalidasi! Anda sekarang dapat mengajukan tempat PKL.',
+                'isEligible' => true // Return eligibility status to frontend
             ]);
 
         } catch (\Exception $e) {
@@ -136,7 +151,7 @@ class AjukanTempatPKLController extends Controller
             'nama'      => '/Nama\s*:\s*(.*)/',
             'nim'       => '/NIM\s*:\s*(\d+)/',
             'angkatan'  => '/Tahun Masuk\s*:\s*(\d{4})/',
-            'ipk'       => '/(?:Index Prestasi Kumulatif \(IPK\)|IPK)\s*:\s*([\d,.]+)/i',
+            'ipk'       => '/(?:Index Prestasi Kumulatif \$IPK\$|IPK)\s*:\s*([\d,.]+)/i',
             'total_sks' => '/(?:Jumlah SKS Yang Diambil|Jumlah SKS)\s*:\s*(\d+)/i'
         ];
 
@@ -160,6 +175,9 @@ class AjukanTempatPKLController extends Controller
         $ipkValue = $dataMahasiswa['ipk'] ? str_replace(',', '.', $dataMahasiswa['ipk']) : 0;
         
         return [
+            'nim' => $dataMahasiswa['nim'],
+            'nama' => $dataMahasiswa['nama'],
+            'angkatan' => $dataMahasiswa['angkatan'],
             'ipk' => (float) $ipkValue,
             'total_sks' => (int) $dataMahasiswa['total_sks'],
             'sks_d' => $sksD,
@@ -173,39 +191,66 @@ class AjukanTempatPKLController extends Controller
         ];
     }
 
-
-
     /**
      * Simpan data tempat PKL (tahap 2)
      */
     public function store(Request $request)
     {
+        // 1. Validasi Input sesuai dengan field SuratPengantar
         $request->validate([
-            'nama_perusahaan' => 'required|string|max:255',
-            'bidang' => 'required|string|max:255',
-            'alamat' => 'required|string',
-            'nama_pic' => 'nullable|string|max:255',
-            'telepon_pic' => 'nullable|string|max:20',
-            'pdf_path' => 'required|string'
+            'nama_perusahaan' => 'required|string|max:255', // Akan dipetakan ke tempat_pkl di SuratPengantar
+            'bidang'          => 'nullable|string|max:255', // Tidak ada di SuratPengantar, akan diabaikan atau digunakan di tempat lain jika diperlukan
+            'alamat'          => 'required|string', // Akan dipetakan ke alamat_perusahaan di SuratPengantar
+            'nama_pic'        => 'nullable|string|max:255', // Tidak ada di SuratPengantar
+            'telepon_pic'     => 'nullable|string|max:20', // Tidak ada di SuratPengantar
         ]);
 
-        $mahasiswa = Mahasiswa::where('mahasiswa_id', Auth::id())->first();
+        $user = Auth::user();
+        $mahasiswa = $user->mahasiswa;
 
-        // Update pengajuan mahasiswa tahap 2
-        $pengajuan = PengajuanPKL::updateOrCreate(
-            ['mahasiswa_id' => Auth::id()],
-            [
-                'nama_perusahaan' => $request->nama_perusahaan,
-                'bidang' => $request->bidang,
-                'alamat' => $request->alamat,
-                'nama_pic' => $request->nama_pic,
-                'telepon_pic' => $request->telepon_pic,
-                'pdf_path' => $request->pdf_path,
-                'status' => 'diproses'
-            ]
-        );
+        if (!$mahasiswa) {
+            return redirect()->back()->with('error', 'Data mahasiswa tidak ditemukan.');
+        }
 
-        return redirect()->route('tempatpkl.ajukantempatpkl')
-            ->with('success', 'Pengajuan tempat PKL berhasil dikirim!');
+        // 2. Cari Pengajuan PKL yang sudah ada untuk mendapatkan pdf_path transkrip
+        $pengajuan = PengajuanPKL::where('mahasiswa_id', $user->id)->first();
+
+        if (!$pengajuan || !$pengajuan->pdf_path) {
+            return redirect()->back()->with('error', 'Anda harus mengupload transkrip nilai terlebih dahulu.');
+        }
+
+        // 3. Buat entri baru di tabel SuratPengantar
+        SuratPengantar::create([
+            'nim'               => $mahasiswa->nim,
+            'nama_mahasiswa'    => $mahasiswa->nama,
+            'prodi'             => $mahasiswa->prodi ?? 'Teknologi Informasi', // Ambil dari mahasiswa atau default
+            'tempat_pkl'        => $request->nama_perusahaan,
+            'alamat_perusahaan' => $request->alamat,
+            'tanggal_pengajuan' => now(),
+            'status'            => 'menunggu_verifikasi', // Status awal surat pengantar
+            'file_surat'        => $pengajuan->pdf_path, // Menggunakan PDF transkrip sebagai 'file_surat' awal
+        ]);
+
+        // 4. Update status PengajuanPKL
+        $pengajuan->update(['status' => 'surat_diajukan']); // Update status pengajuan PKL
+
+        // 5. Catat aktivitas
+        ActivityLog::create([
+            'user_id'  => $user->id,
+            'activity' => $user->name . ' mengajukan surat pengantar PKL untuk ' . $request->nama_perusahaan,
+            'type'     => 'pengajuan_surat_pengantar',
+        ]);
+
+        // 6. Kirim notifikasi ke Koordinator
+        $koorPkl = User::where('role', 'koor_pkl')->first();
+        if ($koorPkl) {
+            $koorPkl->notify(new NotifikasiPKL(
+                'Pengajuan Surat Pengantar PKL Baru',
+                $user->name . ' telah mengajukan surat pengantar PKL untuk ' . $request->nama_perusahaan . '.',
+                route('koor.dashboard') // Sesuaikan route dashboard koor
+            ));
+        }
+
+        return redirect()->route('dashboard.mahasiswa')->with('success', 'Pengajuan surat pengantar PKL berhasil dikirim!');
     }
 }

@@ -118,7 +118,12 @@
     <main class="container mt-4 mb-5">
 
         <div class="d-flex justify-content-between flex-wrap align-items-center mb-3">
-            <h4 class="fw-bold text-primary">Data Bimbingan Saya</h4>
+            <div class="d-flex gap-3 align-items-center">
+                <h4 class="fw-bold text-primary mb-0">Data Bimbingan Saya</h4>
+                <a href="{{ route('mahasiswa.bimbingan.create') }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus-circle me-1"></i> Tambah Bimbingan
+                </a>
+            </div>
 
             {{-- Filter & Search --}}
             <form action="{{ route('mahasiswa.bimbingan.index') }}" method="GET" class="d-flex gap-2">
@@ -167,14 +172,14 @@
                                     <td class="text-center">{{ $bimbingans->firstItem() + $index }}</td>
                                     <td>{{ \Carbon\Carbon::parse($bimbingan->tanggal_bimbingan)->isoFormat('D MMM Y') }}</td>
                                     <td>{{ $bimbingan->topik_bimbingan }}</td>
-                                    <td>{{ $bimbingan->dosen_pembimbing }}</td>
+                                    <td>{{ $bimbingan->dosen->nama ?? 'N/A' }}</td>
                                     <td>
                                         @if($bimbingan->status == 'Disetujui')
                                             <span class="badge badge-success-custom">{{ $bimbingan->status }}</span>
                                         @elseif($bimbingan->status == 'Revisi')
                                             <span class="badge badge-warning-custom">{{ $bimbingan->status }}</span>
                                         @else
-                                            <span class="badge badge-secondary-custom">{{ $bimbingan->status }}</span>
+                                            <span class="badge bg-info text-dark">{{ $bimbingan->status }}</span>
                                         @endif
                                     </td>
                                     <td>{{ $bimbingan->catatan }}</td>

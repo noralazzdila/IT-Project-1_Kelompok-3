@@ -12,12 +12,22 @@ use App\Models\TempatPKL;
 use App\Models\PengajuanPKL;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Models\Criteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 
 class KoorPklController extends Controller
 {
+    /**
+     * Menampilkan halaman SPK untuk Koordinator PKL.
+     */
+    public function spk()
+    {
+        $criteria = Criteria::orderBy('code', 'asc')->get();
+        return view('koor-pkl.spk', compact('criteria'));
+    }
+
     /**
      * Dashboard Koordinator PKL
      */
