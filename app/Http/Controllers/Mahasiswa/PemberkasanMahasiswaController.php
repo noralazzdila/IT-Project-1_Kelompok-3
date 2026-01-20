@@ -141,15 +141,20 @@ class PemberkasanMahasiswaController extends Controller
                 $filePath = $pemberkasan->laporan_final_path;
                 break;
             default:
-                abort(404);
+                abort(404, 'Tipe file tidak valid.');
         }
 
+        // Periksa apakah path ada dan file benar-benar ada di storage
         if (!$filePath || !Storage::disk('public')->exists($filePath)) {
-            abort(404);
+            abort(404, 'File tidak ditemukan.');
         }
 
-        // Tampilkan file di browser
-        $absolutePath = storage_path('app/public/' . $filePath);
-        return response()->file($absolutePath);
+        // Ambil konten file dan tipe MIME dari storage
+        $fileContents = Storage::disk('public')->get($filePath);
+        $mimeType = Storage::disk('public')->mimeType($filePath);
+
+        // Buat response untuk menampilkan file di browser
+        return response($fileContents)
+            ->header('Content-Type', $mimeType);
     }
 }

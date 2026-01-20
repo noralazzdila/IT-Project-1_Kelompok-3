@@ -428,17 +428,27 @@ Route::middleware('auth')->group(function () {
     // Proses upload pemberkasan
     Route::post('/pemberkasan/store', [PemberkasanMahasiswaController::class, 'store'])
         ->name('mahasiswa.pemberkasan.store');
+        
+Route::middleware(['auth', 'role:mahasiswa'])
+    ->prefix('mahasiswa')
+    ->name('mahasiswa.')
+    ->group(function () {
 
-    Route::get('/pemberkasan/view/{file}', function($file){
-    $path = storage_path('app/public/pemberkasan/' . $file);
+        Route::get(
+            '/pemberkasan/upload',
+            [PemberkasanMahasiswaController::class, 'index']
+        )->name('pemberkasan.upload');
 
-    if (!file_exists($path)) {
-        abort(404);
-    }
+        Route::post(
+            '/pemberkasan/upload',
+            [PemberkasanMahasiswaController::class, 'store']
+        )->name('pemberkasan.store');
 
-    return response()->file($path); // akan membuka PDF di browser
-})->name('pemberkasan.view');
-
+        Route::get(
+            '/pemberkasan/file/{type}/{id}',
+            [PemberkasanMahasiswaController::class, 'viewFile']
+        )->name('pemberkasan.view');
+    });
     Route::get('/ajukan-tempat-pkl', [AjukanTempatPKLController::class, 'create'])->name('tempatpkl.ajukantempatpkl');
     Route::post('/upload-pdf', [AjukanTempatPKLController::class, 'uploadPdf'])->name('tempatpkl.uploadPdf');
     Route::post('/store', [AjukanTempatPKLController::class, 'store'])->name('tempatpkl.store');

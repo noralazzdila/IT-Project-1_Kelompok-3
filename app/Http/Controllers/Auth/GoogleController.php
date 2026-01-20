@@ -35,10 +35,15 @@ class GoogleController extends Controller
                 $user->assignRole('mahasiswa'); // default role mahasiswa
             }
 
+            // Simpan atau perbarui token
+            $user->google_access_token = $googleUser->token;
+            $user->google_refresh_token = $googleUser->refreshToken;
+            $user->save();
+
             // Login ke sistem
             Auth::login($user);
 
-            return redirect()->intended('/dashboard');
+            return redirect('/dashboard/mahasiswa');
         } catch (\Exception $e) {
             return redirect('/login')->with('error', 'Gagal login dengan Google');
         }

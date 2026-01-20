@@ -18,11 +18,11 @@
         <div class="row mb-4">
           <div class="col-md-6">
             <h6><i class="fa-solid fa-id-card me-2 text-primary"></i>Nama Mahasiswa</h6>
-            <p class="fw-semibold">Rizky Pratama</p>
+            <p class="fw-semibold">Rifki Pratama</p>
           </div>
           <div class="col-md-6">
             <h6><i class="fa-solid fa-hashtag me-2 text-primary"></i>NIM</h6>
-            <p class="fw-semibold">2301020001</p>
+            <p class="fw-semibold">2301301014</p>
           </div>
         </div>
 

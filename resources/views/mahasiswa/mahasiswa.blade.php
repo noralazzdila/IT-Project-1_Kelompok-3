@@ -665,7 +665,7 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
         <div class="card p-3">
           <h6>Kalender Akademik</h6>
           <iframe 
-            src="https://calendar.google.com/calendar/embed?src=rifki.pratama%40mhs.politala.ac.id&ctz=Asia%2FMakassar" 
+            src="https://calendar.google.com/calendar/embed?src=c_f21bae049afe9e0a296d1bc906ee80d3a9fd6d8b48a50a76db87701b31cd32b4%40group.calendar.google.com&ctz=Asia%2FMakassar" 
             style="border: 1px solid #ddd; border-radius: 10px;" 
             width="100%" 
             height="350" 
@@ -712,7 +712,7 @@ $notifications = Auth::check() ? Auth::user()->unreadNotifications : collect();
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Seminar data from Laravel controller
-    const seminars = @json($seminars);
+   
     
 
     function renderUpcomingSeminars() {

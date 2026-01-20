@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Exception;
 use App\Services\GoogleSheetService;
+use App\Services\GoogleCalendarService;
 
 class StafController extends Controller
 {
@@ -209,7 +210,7 @@ class StafController extends Controller
             return view('staf.seminar.create');
         }
 
-        public function seminar_store(Request $request)
+        public function seminar_store(Request $request, GoogleCalendarService $calendarService)
         {
             $request->validate([
                 'nama_mahasiswa' => 'required|string|max:255',
@@ -223,7 +224,18 @@ class StafController extends Controller
                 'ruang' => 'required|string|max:100',
             ]);
 
-            Seminar::create($request->all());
+            $seminar = Seminar::create($request->all());
+
+            // Integrasi Google Calendar
+            try {
+                $mahasiswa = Mahasiswa::where('nim', $request->nim)->first();
+                if ($mahasiswa && $mahasiswa->user && $mahasiswa->user->google_refresh_token) {
+                    $calendarService->createEventForUser($mahasiswa->user, $seminar);
+                }
+            } catch (\Exception $e) {
+                // Log the error and continue without interrupting the user
+                Log::error('Failed to create Google Calendar event: ' . $e->getMessage());
+            }
 
             return redirect()->route('staf.seminar.index')->with('success', 'Jadwal Seminar berhasil ditambahkan.');
         }

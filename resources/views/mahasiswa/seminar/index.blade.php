@@ -109,11 +109,7 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
                     <h5 class="fw-bold text-primary mb-0"><i class="fa-solid fa-calendar-check me-2"></i>Daftar Jadwal Seminar PKL</h5>
 
-                    <div class="d-flex" style="gap:8px;">
-                        <a href="{{ route('seminar.index') }}" class="btn btn-primary">
-                            <i class="fa fa-calendar me-1"></i> Halaman Koordinator
-                        </a>
-                    </div>
+                    
                 </div>
 
                 @if($seminars->isEmpty())
@@ -130,7 +126,7 @@
                                     <th>Judul</th>
                                     <th style="width:220px;">Jadwal</th>
                                     <th>Ruang</th>
-                                    <th style="width:140px;">Aksi</th>
+                                 
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,11 +143,7 @@
                                             <small class="text-muted">{{ date('H:i', strtotime($seminar->jam_mulai)) }} - {{ date('H:i', strtotime($seminar->jam_selesai)) }}</small>
                                         </td>
                                         <td>{{ $seminar->ruang }}</td>
-                                        <td>
-                                            <a href="{{ route('seminar.show', $seminar->id) }}" class="btn btn-primary btn-sm">
-                                                <i class="fa fa-eye me-1"></i> Lihat
-                                            </a>
-                                        </td>
+                                       
                                     </tr>
                                 @endforeach
                             </tbody>

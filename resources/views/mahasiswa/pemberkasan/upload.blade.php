@@ -144,9 +144,8 @@
                             <tr>
                                 <th class="text-center">No</th>
                                 <th>Mahasiswa</th>
-                                <th>Status</th>
                                 <th>File</th>
-                                <th class="text-center">Aksi</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
 
@@ -155,15 +154,7 @@
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $pemberkasan->mahasiswa?->nama ?? Auth::user()->name }}</td>
-                                <td>
-                                    @if ($pemberkasan->status == 'Lengkap')
-                                        <span class="badge bg-success">{{ $pemberkasan->status }}</span>
-                                    @elseif ($pemberkasan->status == 'Tidak Lengkap')
-                                        <span class="badge bg-danger">{{ $pemberkasan->status }}</span>
-                                    @else
-                                        <span class="badge bg-warning text-dark">{{ $pemberkasan->status }}</span>
-                                    @endif
-                                </td>
+                                
                                 <td>
                                     @if ($pemberkasan->form_bimbingan_path)
                                     <a href="{{ route('mahasiswa.pemberkasan.view', ['type' => 'form_bimbingan', 'id' => $pemberkasan->id]) }}" target="_blank" class="btn btn-outline-primary btn-sm me-1">
@@ -188,17 +179,17 @@
                                     @else
                                         <span class="text-muted">Laporan Final (Belum diupload)</span>
                                     @endif
-
-                                </td>
-                                <td class="text-center">
-                                    @if ($pemberkasan->status != 'Lengkap')
-                                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal{{ $pemberkasan->id }}">
-                                        <i class="fa-solid fa-upload me-1"></i> Upload
-                                    </button>
+                                    <td>
+                                    @if ($pemberkasan->status == 'Lengkap')
+                                        <span class="badge bg-success">{{ $pemberkasan->status }}</span>
+                                    @elseif ($pemberkasan->status == 'Tidak Lengkap')
+                                        <span class="badge bg-danger">{{ $pemberkasan->status }}</span>
                                     @else
-                                        <span class="text-success">Sudah Lengkap</span>
+                                        <span class="badge bg-warning text-dark">{{ $pemberkasan->status }}</span>
                                     @endif
                                 </td>
+                                </td>
+                                
                             </tr>
 
                             <!-- MODAL PER ITEM -->

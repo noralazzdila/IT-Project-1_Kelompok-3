@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Notifications\NotifikasiPKL;
 use App\Models\User;
+use App\Services\GoogleCalendarService;
+use App\Models\Mahasiswa;
+use App\Http\Controllers\SeminarCalendarController;
+
 
 class SeminarController extends Controller
 {
@@ -21,7 +25,7 @@ class SeminarController extends Controller
         return view('seminar.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, GoogleCalendarService $calendarService)
     {
         $request->validate([
             'nama_mahasiswa'    => 'required|string|max:255',
@@ -35,7 +39,19 @@ class SeminarController extends Controller
             'ruang'             => 'required|string|max:50',
         ]);
 
-        Seminar::create($request->all());
+        $seminar = Seminar::create($request->all());
+
+            // Integrasi Google Calendar
+            try {
+                $mahasiswa = Mahasiswa::where('nim', $request->nim)->first();
+                if ($mahasiswa && $mahasiswa->user && $mahasiswa->user->google_refresh_token) {
+                    $calendarService->createEventForUser($mahasiswa->user, $seminar);
+                }
+            } catch (\Exception $e) {
+                // Log the error and continue without interrupting the user
+                Log::error('Failed to create Google Calendar event: ' . $e->getMessage());
+            }
+
 
         return redirect()->route('seminar.index')->with('success', 'Jadwal seminar berhasil ditambahkan.');
     }
@@ -88,5 +104,16 @@ class SeminarController extends Controller
         );
 
         return back()->with('success', 'Notifikasi berhasil dikirim');
+    }
+    public function approve($id)
+    {
+    $seminar = Seminar::with(['mahasiswa','dosen'])->findOrFail($id);
+    $seminar->status = 'Disetujui';
+    $seminar->save();
+
+    app(SeminarCalendarController::class)
+        ->insertSeminar($seminar);
+
+    return back()->with('success','Seminar disetujui & masuk Google Calendar');
     }
 }

@@ -9,7 +9,6 @@ use App\Models\Penguji;
 use App\Models\Dosen;
 use App\Models\SuratPengantar;
 use App\Models\Pemberkasan;
-use App\Models\Mahasiswa;
 use App\Models\TempatPKL;
 use App\Models\Nilai;
 use App\Models\Proposal;
@@ -18,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use App\Services\GoogleCalendarService;
+use App\Models\Mahasiswa;
 
 class KoorProdiController extends Controller
 {
